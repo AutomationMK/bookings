@@ -5,7 +5,7 @@
 This is a simple web application for handling hotel bookings.
 A go backend is used and is inspired by following along
 tsawler's go web applications udemy course. His own repository
-can be found at https://github.com/tsalwer/bookings-app
+can be found at https://github.com/tsawler/bookings-app
 
 This project is mostly focused on showcasing the golang 
 backend features including the following backend methods...
