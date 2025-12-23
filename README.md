@@ -2,14 +2,14 @@
 
 ## Description
 
-This is a simple web application for handling hotel bookings
+This is a simple web application for handling hotel bookings.
 A go backend is used and is inspired by following along
 tsawler's go web applications udemy course. His own repository
 can be found at https://github.com/tsalwer/bookings-app
 
 This project is mostly focused on showcasing the golang 
 backend features including the following backend methods...
-* Creation and handling of the http routing 
+* Creation and handling of http routes
 * Creation and implementation of Middleware for routes
 * Serving static files to the website
 * Implementing a template rendering function for go tmpl files
@@ -20,22 +20,21 @@ backend features including the following backend methods...
 * Authenticating users and setting up an Admin user
 
 Anywhere along the way I implemented any personal changes on
-my end based on my own knowledge of web design. Such as
-using tailwindcss for generating the styles of the website.
+my end based on my own knowledge of web design/development.
+Such as using tailwindcss for generating the styles of the website.
 
 ## Getting Started
 
 ### Dependencies
 
-* github.com/alexedwards/scs/v2 v2.9.0 (for session management)
-* github.com/go-chi/chi v1.5.5 (for a routing framework)
-* github.com/justinas/nosurf v1.2.0 (for CSRF protection)
-* @tailwindcss/cli v4.1.18 (as a css framework tool)
-* tailwindcss v4.1.18 (as a css framework tool)
+* [scs](github.com/alexedwards/scs/v2) v2.9.0 (for session management)
+* [chi](github.com/go-chi/chi) v1.5.5 (for a routing framework)
+* [nosurf](github.com/justinas/nosurf) v1.2.0 (for CSRF protection)
+* [tailwindcss](https://github.com/tailwindlabs/tailwindcss) v4.1.18 (as a css framework tool)
 
 ### Installing manually
 
-TODO: Add more information an installing and running the source code as the project progresses
+TODO: Add more information on installing and running the source code as the project progresses
 
 ### Authors
 
