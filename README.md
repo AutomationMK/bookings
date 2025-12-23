@@ -27,9 +27,9 @@ Such as using tailwindcss for generating the styles of the website.
 
 ### Dependencies
 
-* [scs](github.com/alexedwards/scs/v2) v2.9.0 (for session management)
-* [chi](github.com/go-chi/chi) v1.5.5 (for a routing framework)
-* [nosurf](github.com/justinas/nosurf) v1.2.0 (for CSRF protection)
+* [scs](https://github.com/alexedwards/scs/v2) v2.9.0 (for session management)
+* [chi](https://github.com/go-chi/chi) v1.5.5 (for a routing framework)
+* [nosurf](https://github.com/justinas/nosurf) v1.2.0 (for CSRF protection)
 * [tailwindcss](https://github.com/tailwindlabs/tailwindcss) v4.1.18 (as a css framework tool)
 
 ### Installing manually
