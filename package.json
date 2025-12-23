@@ -1,0 +1,17 @@
+{
+  "name": "bookings",
+  "version": "1.0.0",
+  "description": "A simple hotel booking application",
+  "license": "ISC",
+  "author": "Max",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
+    "watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}
