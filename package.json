@@ -2,7 +2,7 @@
   "name": "bookings",
   "version": "1.0.0",
   "description": "A simple hotel booking application",
-  "license": "ISC",
+  "license": "MIT",
   "author": "Max",
   "type": "commonjs",
   "main": "index.js",
