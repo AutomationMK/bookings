@@ -1,6 +1,82 @@
 {{template "base" .}}
 
 {{define "content"}}
+<div class="relative h-[80vh] w-full">
+    <!-- slide -->
+    <figure class="slide absolute h-full w-full">
+        <img src="/static/images/outside.png" alt="Resort" class="h-full w-full relative contrast-20 object-cover">
+        <figcaption class="absolute flex flex-col gap-4 max-w-96 top-1/2 left-2/4 -translate-y-2/4 -translate-x-2/4">
+            <div class="flex flex-col gap-2">
+                <h2
+                    class="text-3xl md:text-5xl text-center text-amber-100 font-bold text-shadow-md text-shadow-stone-700">
+                    Find your
+                    peace
+                </h2>
+                <p class="text-base md:text-lg text-center text-amber-100 text-shadow-md text-shadow-stone-700">With up
+                    to two
+                    suites we have what you
+                    are looking for
+                </p>
+            </div>
+            <a href="#"
+                class="bg-amber-100 flex justify-center py-2 text-lg text-stone-800 font-bold rounded-full border-4 border-amber-100 hover:bg-stone-700/30 hover:text-amber-100 transition">Book
+                Today</a>
+        </figcaption>
+    </figure>
+    <figure class="slide absolute h-full w-full">
+        <img src="/static/images/tray.png" alt="Resort" class="h-full w-full relative contrast-20 object-cover">
+        <figcaption class="absolute flex flex-col gap-4 max-w-96 top-1/2 left-2/4 -translate-y-2/4 -translate-x-2/4">
+            <div class="flex flex-col gap-2">
+                <h2
+                    class="text-3xl md:text-5xl text-center text-amber-100 font-bold text-shadow-md text-shadow-stone-700">
+                    Enjoy delicious
+                    cuisine
+                </h2>
+                <p class="text-base md:text-lg text-center text-amber-100 text-shadow-md text-shadow-stone-700">
+                    Our Michelin Star chefs will have you wanting more
+                </p>
+            </div>
+            <a href="#"
+                class="bg-amber-100 flex justify-center py-2 text-lg text-stone-800 font-bold rounded-full border-4 border-amber-100 hover:bg-stone-700/30 hover:text-amber-100 transition">Book
+                Today</a>
+        </figcaption>
+    </figure>
+    <!-- slide -->
+    <figure class="slide absolute h-full w-full">
+        <img src="/static/images/woman-laptop.png" alt="Woman relaxing with a coffee in front of her computer"
+            class="h-full w-full relative contrast-20 object-cover">
+        <figcaption class="absolute flex flex-col gap-4 max-w-96 top-1/2 left-2/4 -translate-y-2/4 -translate-x-2/4">
+            <div class="flex flex-col gap-2">
+                <h2
+                    class="text-3xl md:text-5xl text-center text-amber-100 font-bold text-shadow-md text-shadow-stone-700">
+                    High speed internet
+                </h2>
+                <p class="text-base md:text-lg text-center text-amber-100 text-shadow-md text-shadow-stone-700">
+                    For business or pleasure we have blazing fast internet
+                </p>
+            </div>
+            <a href="#"
+                class="bg-amber-100 flex justify-center py-2 text-lg text-stone-800 font-bold rounded-full border-4 border-amber-100 hover:bg-stone-700/30 hover:text-amber-100 transition">Book
+                Today</a>
+        </figcaption>
+    </figure>
+    <!-- slide buttons -->
+    <div class="sm:container sm:mx-auto relative h-full w-full">
+        <div class="slide_btn slide_btn-left group">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor"
+                class="h-8 text-stone-700 stroke-2 md:stroke-3 group-hover:text-amber-100 transition">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+        </div>
+        <div class="slide_btn slide_btn-right group">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="h-8 text-stone-700 stroke-2 group-hover:text-amber-100 transition">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+        </div>
+    </div>
+</div>
 <div class="container mx-auto">
     <div class="flex flex-col gap-2 px-4">
         <h1 class="text-2xl">This is the homepage</h1>
