@@ -90,3 +90,38 @@ dotContainer.addEventListener("click", function (e) {
   }
   goToSlide(curSlide);
 });
+
+// implement touch swiping of slider
+var xDown = null;
+
+const getTouches = function (e) {
+  return e.touches;
+};
+
+const handleTouchStart = function (e) {
+  const firstTouch = e.touches[0];
+  xDown = firstTouch.clientX;
+};
+
+const handleTouchSlide = function (e) {
+  if (!xDown) {
+    return;
+  }
+
+  var xUp = e.touches[0].clientX;
+
+  var xDiff = xDown - xUp;
+
+  if (xDiff > 5 && curSlide < maxSlide) {
+    // right slide
+    nextSlide();
+  } else if (xDiff < -5 && curSlide > 0) {
+    // left slide
+    prevSlide();
+  }
+  // reset global value
+  xDown = null;
+};
+
+document.addEventListener("touchstart", handleTouchStart, false);
+document.addEventListener("touchmove", handleTouchSlide, false);
