@@ -32,4 +32,16 @@
   .slide_btn-right {
     @apply right-4;
   }
+
+  .dots {
+    @apply absolute flex gap-10 bottom-[5%] left-2/4 -translate-x-2/4;
+  }
+
+  .dots_dot {
+    @apply border-none bg-amber-100 h-5 w-5 rounded-full cursor-pointer transition;
+  }
+
+  .dots_dot-active {
+    @apply bg-stone-700;
+  }
 }
