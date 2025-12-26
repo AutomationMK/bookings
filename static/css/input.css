@@ -6,7 +6,7 @@
   }
 
   .nav.open {
-    @apply translate-x-0;
+    @apply z-20 translate-x-0;
   }
 
   .hamburger {
@@ -15,5 +15,21 @@
 
   .hamburger.close {
     @apply before:rotate-45 before:translate-y-1 after:w-2/3 after:-rotate-45 after:-translate-y-1;
+  }
+
+  .slide {
+    @apply ease-in-out duration-300;
+  }
+
+  .slide_btn {
+    @apply absolute top-2/4 -translate-y-2/4 p-1 z-10 border-3 border-amber-100 bg-amber-100 rounded-full hover:bg-stone-700/30 transition md:p-3;
+  }
+
+  .slide_btn-left {
+    @apply left-4;
+  }
+
+  .slide_btn-right {
+    @apply right-4;
   }
 }
