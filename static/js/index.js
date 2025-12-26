@@ -1,8 +1,10 @@
 const nav = document.querySelector(".nav");
 const hamburger = document.querySelector(".hamburger");
+const slider = document.querySelector(".slider");
 const slides = document.querySelectorAll(".slide");
 const btnLeft = document.querySelector(".slide_btn-left");
 const btnRight = document.querySelector(".slide_btn-right");
+const dotContainer = document.querySelector(".dots");
 
 //////////////////////////////////////
 // Mobile Navigation
@@ -18,6 +20,27 @@ hamburger.addEventListener("click", () => {
 let curSlide = 0;
 const maxSlide = slides.length - 1;
 
+// create dot slider elements based on amount of slides
+const createDots = function () {
+  slides.forEach(function (_, i) {
+    dotContainer.insertAdjacentHTML(
+      "beforeend",
+      `<button class="dots_dot" data-slide="${i}"></button>`,
+    );
+  });
+};
+
+// activate a dot to show which slide is active
+const activateDot = function (index) {
+  document
+    .querySelectorAll(".dots_dot")
+    .forEach((dot) => dot.classList.remove("dots_dot-active"));
+
+  document
+    .querySelector(`.dots_dot[data-slide="${index}"]`)
+    .classList.add("dots_dot-active");
+};
+
 // move to slide with 0 based indexing
 const goToSlide = function (index) {
   // check if index is out of bounds
@@ -25,6 +48,7 @@ const goToSlide = function (index) {
   if (index > maxSlide) curSlide = index = 0;
   if (index < 0) curSlide = index = maxSlide;
 
+  activateDot(index);
   slides.forEach(
     (s, i) => (s.style.transform = `translateX(${100 * (i - index)}%)`),
   );
@@ -42,7 +66,8 @@ const prevSlide = function () {
   goToSlide(curSlide);
 };
 
-// initialize the slider
+// initialize the slider and dots
+createDots();
 goToSlide(0);
 
 // run button click listeners for slider buttons
@@ -56,4 +81,12 @@ document.addEventListener("keydown", function (e) {
   } else if (e.key === "ArrowLeft") {
     prevSlide();
   }
+});
+
+// run listener for click on dots
+dotContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("dots_dot")) {
+    curSlide = Number(e.target.dataset.slide);
+  }
+  goToSlide(curSlide);
 });
