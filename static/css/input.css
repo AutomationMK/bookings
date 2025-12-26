@@ -34,7 +34,7 @@
     }
 
     .dots {
-        @apply absolute flex gap-10 bottom-[5%] left-2/4 -translate-x-2/4;
+        @apply absolute flex gap-10 bottom-[5%] left-2/4 -translate-x-2/4 z-10;
     }
 
     .dots_dot {
