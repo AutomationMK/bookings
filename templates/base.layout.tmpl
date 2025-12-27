@@ -77,16 +77,98 @@
                     <li class="h-fit flex justify-center py-2 order-first lg:order-last">
                         <a href="/make-reservation"
                             class="flex items-center px-4 py-2 text-3xl lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">Book
-                            today</a>
+                            Today</a>
                     </li>
                 </ul>
                 <div class="hamburger lg:hidden"></div>
             </div>
         </div>
     </nav>
+
     {{block "content" .}}
 
     {{end}}
+
+    <footer class="bg-amber-100">
+        <div
+            class="container mx-auto grid gap-4 grid-cols-2 grid-rows-2 justify-items-center items-center px-4 py-16 max-w-8xl">
+            <div class="flex flex-col sm:flex-row items-center gap-2 px-5 py-2 h-fit bg-stone-700 rounded-md w-fit">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 text-amber-200" viewBox="0 0 512 512">
+                    <path
+                        d="M384 240H96V136a40.12 40.12 0 0140-40h240a40.12 40.12 0 0140 40v104zM48 416V304a64.19 64.19 0 0164-64h288a64.19 64.19 0 0164 64v112"
+                        fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="32" />
+                    <path
+                        d="M48 416v-8a24.07 24.07 0 0124-24h368a24.07 24.07 0 0124 24v8M112 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16M256 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16"
+                        fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="32" />
+                </svg>
+                <p class="text-xl text-center text-amber-200 font-bold lg:text-2xl">Relax Resort</p>
+            </div>
+            <div class="flex flex-col sm:row-start-2 gap-6 items-center group">
+                <h3
+                    class="relative text-lg text-stone-500 font-bold px-2 group-hover:text-stone-800 transition lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-stone-500 before:-bottom-1 before:left-2/4 before:-translate-x-2/4 group-hover:before:bg-stone-800 before:transition">
+                    Socials</h3>
+                <div class="grid grid-cols-2 sm:flex items-center gap-6">
+                    <a href="#">
+                        <img src="/static/images/logos/x-logo-black.png" alt="X logo" class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/logos/whatsapp_Digital_Glyph_Green.png" alt="whatsapp logo"
+                            class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/logos/Instagram_Glyph_Gradient.png" alt="Instagram logo"
+                            class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/logos/Facebook_Logo_Primary.png" alt="Facebook logo"
+                            class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                </div>
+            </div>
+            <div
+                class="grid row-start-2 col-span-2 sm:row-start-1 sm:col-start-2 sm:row-span-2 grid-cols-2 grid-row-2 gap-8  lg:gap-12 w-full">
+                <div class="flex flex-col gap-4 items-center group">
+                    <h3
+                        class="relative text-lg text-stone-500 font-bold px-2 group-hover:text-stone-800 transition lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-stone-500 before:-bottom-1 before:left-2/4 before:-translate-x-2/4 group-hover:before:bg-stone-800 before:transition">
+                        Company</h3>
+                    <ul class="flex flex-col items-center gap-2">
+                        <li>
+                            <a href="/about"
+                                class="block text-center text-md text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">About</a>
+                        </li>
+                        <li>
+                            <a href="/contact"
+                                class="block text-center text-md text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex flex-col gap-4 items-center group">
+                    <h3
+                        class="relative text-lg text-stone-500 font-bold px-2 group-hover:text-stone-800 transition lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-stone-500 before:-bottom-1 before:left-2/4 before:-translate-x-2/4 group-hover:before:bg-stone-800 before:transition">
+                        Rooms</h3>
+                    <ul class="flex flex-col items-center gap-2">
+                        <li>
+                            <a href="/rooms/generals-quarters"
+                                class="block text-center text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">General's
+                                Quarters</a>
+                        </li>
+                        <li>
+                            <a href="/rooms/majors-suite"
+                                class="block text-center text-md text-center text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">Major's
+                                Suite</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex col-span-2 items-center justify-center">
+                    <a href="/make-reservation"
+                        class="flex items-center px-4 py-2 text-lg lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">Book
+                        Today</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     {{block "js" .}}
 
