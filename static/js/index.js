@@ -94,10 +94,6 @@ dotContainer.addEventListener("click", function (e) {
 // implement touch swiping of slider
 var xDown = null;
 
-const getTouches = function (e) {
-    return e.touches;
-};
-
 const handleTouchStart = function (e) {
     const firstTouch = e.touches[0];
     xDown = firstTouch.clientX;
@@ -123,5 +119,5 @@ const handleTouchSlide = function (e) {
     xDown = null;
 };
 
-document.addEventListener("touchstart", handleTouchStart, false);
-document.addEventListener("touchmove", handleTouchSlide, false);
+slider.addEventListener("touchstart", handleTouchStart);
+slider.addEventListener("touchmove", handleTouchSlide);
