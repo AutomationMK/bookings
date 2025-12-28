@@ -50,12 +50,17 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Generals handles the room page
-func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "generals.page.tmpl", &models.TemplateData{})
+// Rooms handles the Rooms page
+func (m *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "rooms.page.tmpl", &models.TemplateData{})
 }
 
-// Majors handles the room page
-func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "majors.page.tmpl", &models.TemplateData{})
+// Deluxe handles the Deluxe room page
+func (m *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "deluxe-room.page.tmpl", &models.TemplateData{})
+}
+
+// Premium handles the Premium suite page
+func (m *Repository) Premium(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "premium-suite.page.tmpl", &models.TemplateData{})
 }
