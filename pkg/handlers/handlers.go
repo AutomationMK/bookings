@@ -50,6 +50,11 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Contact handles the contact page
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{})
+}
+
 // Rooms handles the Rooms page
 func (m *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "rooms.page.tmpl", &models.TemplateData{})
