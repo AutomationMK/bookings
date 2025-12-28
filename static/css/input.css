@@ -48,11 +48,11 @@
     }
 
     .slide_btn {
-        @apply absolute top-2/4 -translate-y-2/4 p-1 z-10 border-3 border-amber-100 bg-amber-100 rounded-md hover:bg-stone-700/30 transition md:p-3;
+        @apply absolute top-2/4 -translate-y-2/4 p-1 z-10 border-3 border-amber-100 bg-amber-100 rounded-md hover:bg-stone-700/30 transition md:p-2;
     }
 
     .slide_btn_logo {
-        @apply h-8 text-stone-700 stroke-2 md:stroke-3 group-hover:text-amber-100 transition;
+        @apply h-4 md:h-6 text-stone-700 stroke-2 md:stroke-3 group-hover:text-amber-100 transition;
     }
 
     .slide_btn-left {
@@ -64,11 +64,11 @@
     }
 
     .dots {
-        @apply absolute flex gap-10 bottom-[5%] left-2/4 -translate-x-2/4 z-10;
+        @apply absolute flex gap-6 bottom-[5%] left-2/4 -translate-x-2/4 z-10;
     }
 
     .dots_dot {
-        @apply border-none bg-amber-100 h-6 w-6 lg:h-8 lg:w-8 rounded-md cursor-pointer transition;
+        @apply border-none bg-amber-100 h-4 w-4 lg:h-6 lg:w-6 rounded-md cursor-pointer transition;
     }
 
     .dots_dot-active {
