@@ -1,0 +1,79 @@
+{{template "base" .}}
+
+{{define "content"}}
+<figure class="flex h-[calc(100vh-5.5rem)] relative">
+    <img src="/static/images/contact.jpg" alt="Hotel" class="absolute contrast-30 h-full w-full object-cover">
+    <figcaption
+        class="z-10 absolute top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4 container mx-auto flex flex-col gap-6 px-4 py-10">
+        <h2
+            class="text-4xl md:text-5xl lg:text-6xl text-amber-100 font-bold text-center text-shadow-md text-shadow-stone-800">
+            Contact Us</h2>
+        <p class="text-amber-100 text-center md:text-lg lg:text-2xl text-shadow-md text-shadow-stone-800">Lorem ipsum
+            dolor sit amet consectetur, adipisicing
+            elit.
+            Quo odit unde sit voluptatum at modi suscipit
+            harum veritatis explicabo, dignissimos mollitia, fugit accusantium, natus alias possimus dolorem rem
+            officiis quam?</p>
+        <div class="grid grid-cols-2 gap-8 2xl:grid-cols-4">
+            <div class="flex flex-col gap-6 items-center">
+                <h3
+                    class="relative text-2xl md:text-3xl lg:text-4xl text-amber-100 text-shadow-md text-shadow-stone-800 font-bold px-2 lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-amber-100 before:-bottom-1 before:left-2/4 before:-translate-x-2/4">
+                    Socials</h3>
+                <div class="grid grid-cols-2 lg:grid-cols-4 sm:flex items-center gap-6">
+                    <a href="#">
+                        <img src="/static/images/logos/x-logo-black.png" alt="X logo" class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/logos/whatsapp_Digital_Glyph_Green.png" alt="whatsapp logo"
+                            class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/logos/Instagram_Glyph_Gradient.png" alt="Instagram logo"
+                            class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/logos/Facebook_Logo_Primary.png" alt="Facebook logo"
+                            class="h-8 w-8 sm:h-10 sm:w-10">
+                    </a>
+                </div>
+            </div>
+            <div class="flex flex-col gap-6 items-center">
+                <h3
+                    class="relative text-2xl md:text-3xl lg:text-4xl text-amber-100 text-shadow-md text-shadow-stone-800 font-bold px-2 lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-amber-100 before:-bottom-1 before:left-2/4 before:-translate-x-2/4">
+                    Phone
+                </h3>
+                <a href="#" class="text-lg md:text-xl lg:text-2xl text-amber-100 text-shadow-md text-shadow-stone-800">
+                    123-456-7890
+                </a>
+            </div>
+            <div class="flex flex-col col-span-full sm:col-span-1 gap-6 items-center">
+                <h3
+                    class="relative text-2xl md:text-3xl lg:text-4xl text-amber-100 text-shadow-md text-shadow-stone-800 font-bold px-2 lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-amber-100 before:-bottom-1 before:left-2/4 before:-translate-x-2/4">
+                    Email
+                </h3>
+                <a href="#" class="text-lg md:text-xl lg:text-2xl text-amber-100 text-shadow-md text-shadow-stone-800">
+                    relax-resort@example.com
+                </a>
+            </div>
+            <div class="flex flex-col col-span-full sm:col-span-1 gap-6 items-center">
+                <h3
+                    class="relative text-2xl md:text-3xl lg:text-4xl text-amber-100 text-shadow-md text-shadow-stone-800 font-bold px-2 lg:text-2xl before:content-[''] before:absolute before:h-0.5 before:w-full before:bg-amber-100 before:-bottom-1 before:left-2/4 before:-translate-x-2/4">
+                    Location
+                </h3>
+                <div class="flex flex-col items-center gap-2">
+                    <p class="text-lg md:text-xl lg:text-2xl text-amber-100 text-shadow-md text-shadow-stone-800">
+                        123 Main St.
+                    </p>
+                    <p class="text-lg md:text-xl lg:text-2xl text-amber-100 text-shadow-md text-shadow-stone-800">
+                        City, State
+                    </p>
+                    <p class="text-lg md:text-xl lg:text-2xl text-amber-100 text-shadow-md text-shadow-stone-800">
+                        United States 12345
+                    </p>
+                </div>
+            </div>
+        </div>
+    </figcaption>
+</figure>
+
+{{end}}
