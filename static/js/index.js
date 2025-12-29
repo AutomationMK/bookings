@@ -9,10 +9,12 @@ const dotContainer = document.querySelector(".dots");
 //////////////////////////////////////
 // Mobile Navigation
 //////////////////////////////////////
-hamburger.addEventListener("click", () => {
-    nav.classList.toggle("open");
-    hamburger.classList.toggle("close");
-});
+if (hamburger !== null) {
+    hamburger.addEventListener("click", () => {
+        nav.classList.toggle("open");
+        hamburger.classList.toggle("close");
+    });
+}
 
 //////////////////////////////////////
 // Slider
@@ -66,31 +68,6 @@ const prevSlide = function () {
     goToSlide(curSlide);
 };
 
-// initialize the slider and dots
-createDots();
-goToSlide(0);
-
-// run button click listeners for slider buttons
-btnRight.addEventListener("click", nextSlide);
-btnLeft.addEventListener("click", prevSlide);
-
-// run keypad listeners for sliders
-document.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowRight") {
-        nextSlide();
-    } else if (e.key === "ArrowLeft") {
-        prevSlide();
-    }
-});
-
-// run listener for click on dots
-dotContainer.addEventListener("click", function (e) {
-    if (e.target.classList.contains("dots_dot")) {
-        curSlide = Number(e.target.dataset.slide);
-    }
-    goToSlide(curSlide);
-});
-
 // implement touch swiping of slider
 var xDown = null;
 
@@ -119,5 +96,33 @@ const handleTouchSlide = function (e) {
     xDown = null;
 };
 
-slider.addEventListener("touchstart", handleTouchStart);
-slider.addEventListener("touchmove", handleTouchSlide);
+// validate if a slider is on the page
+if (slider !== null) {
+    // initialize the slider and dots
+    createDots();
+    goToSlide(0);
+
+    // run button click listeners for slider buttons
+    btnRight.addEventListener("click", nextSlide);
+    btnLeft.addEventListener("click", prevSlide);
+
+    // run keypad listeners for sliders
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") {
+            nextSlide();
+        } else if (e.key === "ArrowLeft") {
+            prevSlide();
+        }
+    });
+
+    // run listener for click on dots
+    dotContainer.addEventListener("click", function (e) {
+        if (e.target.classList.contains("dots_dot")) {
+            curSlide = Number(e.target.dataset.slide);
+        }
+        goToSlide(curSlide);
+    });
+
+    slider.addEventListener("touchstart", handleTouchStart);
+    slider.addEventListener("touchmove", handleTouchSlide);
+}
