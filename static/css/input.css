@@ -74,4 +74,57 @@
     .dots_dot-active {
         @apply bg-stone-700;
     }
+
+    /********** date picker styles **********/
+    .date_picker {
+        @apply relative;
+    }
+
+    .calendar_box {
+        @apply z-10 border-2 border-stone-500 shadow-md shadow-stone-800/20 ease-in-out overflow-hidden duration-300 max-w-0 max-h-0 group-hover:max-w-full group-hover:max-h-96 w-96 aspect-square absolute bottom-0 left-0 translate-y-full rounded-b-md;
+    }
+
+    .calendar {
+        @apply bg-white absolute top-0 w-full h-full grid grid-cols-7 bg-white [&>*]:border-2 [&>*]:border-stone-500 rounded-b-md ease-in-out duration-500;
+    }
+
+    .calendar_month_box {
+        @apply flex items-center justify-center p-1 col-span-5 bg-amber-100;
+    }
+
+    .calendar_month_heading {
+        @apply md:text-sm lg:text-lg font-bold text-stone-700;
+    }
+
+    .calendar_arrow_box-right {
+        @apply flex items-center justify-center p-1 bg-amber-100 hover:bg-white transition;
+    }
+
+    .calendar_arrow_box-left {
+        @apply flex items-center justify-center p-1 bg-amber-100 hover:bg-white transition;
+    }
+
+    .calendar_arrow_logo {
+        @apply h-full text-stone-700;
+    }
+
+    .weekday_box {
+        @apply flex items-center justify-center p-1 bg-white;
+    }
+
+    .date_box {
+        @apply flex items-center justify-center p-1 bg-white hover:bg-amber-100 transition;
+    }
+
+    .date_box-active {
+        @apply bg-amber-100;
+    }
+
+    .date_text {
+        @apply text-xs font-bold sm:text-base lg:text-lg text-stone-700;
+    }
+
+    .date_text-fade {
+        @apply text-xs sm:text-base lg:text-lg text-stone-400;
+    }
 }
