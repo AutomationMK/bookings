@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/AutomationMK/bookings/pkg/config"
@@ -62,7 +63,10 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 
 // PostAvailability handles post data from search-availability page
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Posted to search availability"))
+	arrive_date := r.Form.Get("arrive_date")
+	departure_date := r.Form.Get("departure_date")
+
+	w.Write([]byte(fmt.Sprintf("start date is %s and end date is %s", arrive_date, departure_date)))
 }
 
 // Contact handles the contact page
