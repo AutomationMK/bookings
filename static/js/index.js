@@ -132,168 +132,167 @@ if (slider !== null) {
 //////////////////////////////////////
 const datePickers = document.querySelectorAll(".date_picker");
 
-if (datePickers !== null) {
-    class Cal {
-        curMonth;
-        inputBox;
-        nextMonth;
-        prevMonth;
+class Cal {
+    curMonth;
+    inputBox;
+    nextMonth;
+    prevMonth;
 
-        // these are global references to bind
-        // functions used by the class event handlers
-        // I would not have the ability to remove
-        // the event listeners otherwise since bind
-        // invokes a new reference everytime its called
-        handleClickNextCal;
-        handleClickPrevCal;
-        handleDateSelect;
+    // these are global references to bind
+    // functions used by the class event handlers
+    // I would not have the ability to remove
+    // the event listeners otherwise since bind
+    // invokes a new reference everytime its called
+    handleClickNextCal;
+    handleClickPrevCal;
+    handleDateSelect;
 
-        constructor(inputBox) {
-            this.curMonth = new Date();
-            this.inputBox = inputBox;
+    constructor(inputBox) {
+        this.curMonth = new Date();
+        this.inputBox = inputBox;
 
-            this.curMonth.setDate(1);
+        this.curMonth.setDate(1);
 
-            this.prevMonth = new Date();
-            this.nextMonth = new Date();
-            this.#decMonth(this.prevMonth);
-            this.#incMonth(this.nextMonth);
+        this.prevMonth = new Date();
+        this.nextMonth = new Date();
+        this.#decMonth(this.prevMonth);
+        this.#incMonth(this.nextMonth);
 
-            this.#makeCal(this.prevMonth, "beforeend");
-            this.#makeCal(this.curMonth, "beforeend");
-            this.#makeCal(this.nextMonth, "beforeend");
-            this.updateCal();
+        this.#makeCal(this.prevMonth, "beforeend");
+        this.#makeCal(this.curMonth, "beforeend");
+        this.#makeCal(this.nextMonth, "beforeend");
+        this.updateCal();
 
-            // these are funtion references used by
-            // class event listeners
-            this.handlePrevCal = this.prevCal.bind(this);
-            this.handleNextCal = this.nextCal.bind(this);
-            this.handleDateSelect = ((e) => {
-                this.selectDate(e);
-            }).bind(this);
+        // these are funtion references used by
+        // class event listeners
+        this.handlePrevCal = this.prevCal.bind(this);
+        this.handleNextCal = this.nextCal.bind(this);
+        this.handleDateSelect = ((e) => {
+            this.selectDate(e);
+        }).bind(this);
 
-            this.setDateHandlers();
-            this.setButtons();
+        this.setDateHandlers();
+        this.setButtons();
+    }
+
+    #incMonth(date) {
+        date.setDate(1);
+        let d = date.getDate();
+        date.setMonth(date.getMonth() + 1);
+        if (date.getDate() !== d) {
+            date.setDate(0);
+        }
+    }
+
+    #decMonth(date) {
+        date.setDate(1);
+        let d = date.getDate();
+        date.setMonth(date.getMonth() - 1);
+        if (date.getDate() !== d) {
+            date.setDate(0);
+        }
+    }
+
+    // move to calendar with 0 based indexing
+    updateCal() {
+        const curCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.curMonth.getMonth()}"]`,
+        );
+
+        const prevCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
+        );
+
+        const nextCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.nextMonth.getMonth()}"]`,
+        );
+
+        curCalendar.style.transform = `translateX(0%)`;
+        prevCalendar.style.transform = `translateX(${100 * -1}%)`;
+        nextCalendar.style.transform = `translateX(${100 * 1}%)`;
+    }
+
+    selectDate(e) {
+        let date = e.target.dataset.date;
+        if (!date) {
+            date = e.target.parentElement.dataset.date;
         }
 
-        #incMonth(date) {
-            date.setDate(1);
-            let d = date.getDate();
-            date.setMonth(date.getMonth() + 1);
-            if (date.getDate() !== d) {
-                date.setDate(0);
-            }
-        }
+        const inputText =
+            this.inputBox.parentElement.querySelector(".date_picker_input");
+        inputText.value = date;
+    }
 
-        #decMonth(date) {
-            date.setDate(1);
-            let d = date.getDate();
-            date.setMonth(date.getMonth() - 1);
-            if (date.getDate() !== d) {
-                date.setDate(0);
-            }
-        }
+    // create date select handlers
+    setDateHandlers() {
+        const curCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.curMonth.getMonth()}"]`,
+        );
 
-        // move to calendar with 0 based indexing
-        updateCal() {
-            const curCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.curMonth.getMonth()}"]`,
-            );
+        const dateBoxes = curCalendar.querySelectorAll(".date_box");
+        dateBoxes.forEach((box) => {
+            box.addEventListener("click", this.handleDateSelect);
+        });
+    }
 
-            const prevCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
-            );
+    // create date select handlers
+    resetDateHandlers() {
+        const curCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.curMonth.getMonth()}"]`,
+        );
 
-            const nextCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.nextMonth.getMonth()}"]`,
-            );
+        const dateBoxes = curCalendar.querySelectorAll(".date_box");
+        dateBoxes.forEach((box) => {
+            box.removeEventListener("click", this.handleDateSelect);
+        });
+    }
 
-            curCalendar.style.transform = `translateX(0%)`;
-            prevCalendar.style.transform = `translateX(${100 * -1}%)`;
-            nextCalendar.style.transform = `translateX(${100 * 1}%)`;
-        }
+    // move to next cal
+    nextCal() {
+        this.resetDateHandlers();
+        this.resetButtons();
+        const prevCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
+        );
+        prevCalendar.remove();
 
-        selectDate(e) {
-            let date = e.target.dataset.date;
-            if (!date) {
-                date = e.target.parentElement.dataset.date;
-            }
+        this.#incMonth(this.curMonth);
+        this.#incMonth(this.nextMonth);
+        this.#incMonth(this.prevMonth);
 
-            const inputText =
-                this.inputBox.parentElement.querySelector(".date_picker_input");
-            inputText.value = date;
-        }
+        this.#makeCal(this.nextMonth, "beforeend");
 
-        // create date select handlers
-        setDateHandlers() {
-            const curCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.curMonth.getMonth()}"]`,
-            );
+        this.updateCal();
+        this.setDateHandlers();
+        this.setButtons();
+    }
 
-            const dateBoxes = curCalendar.querySelectorAll(".date_box");
-            dateBoxes.forEach((box) => {
-                box.addEventListener("click", this.handleDateSelect);
-            });
-        }
+    // move to previous cal
+    prevCal() {
+        this.resetDateHandlers();
+        this.resetButtons();
+        const nextCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.nextMonth.getMonth()}"]`,
+        );
+        nextCalendar.remove();
 
-        // create date select handlers
-        resetDateHandlers() {
-            const curCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.curMonth.getMonth()}"]`,
-            );
+        this.#decMonth(this.curMonth);
+        this.#decMonth(this.nextMonth);
+        this.#decMonth(this.prevMonth);
 
-            const dateBoxes = curCalendar.querySelectorAll(".date_box");
-            dateBoxes.forEach((box) => {
-                box.removeEventListener("click", this.handleDateSelect);
-            });
-        }
+        this.#makeCal(this.prevMonth, "beforeend");
 
-        // move to next cal
-        nextCal() {
-            this.resetDateHandlers();
-            this.resetButtons();
-            const prevCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
-            );
-            prevCalendar.remove();
+        this.updateCal();
+        this.setDateHandlers();
+        this.setButtons();
+    }
 
-            this.#incMonth(this.curMonth);
-            this.#incMonth(this.nextMonth);
-            this.#incMonth(this.prevMonth);
+    #makeCal(date, insertSetting) {
+        const monthText = date.toLocaleString("default", { month: "long" });
 
-            this.#makeCal(this.nextMonth, "beforeend");
-
-            this.updateCal();
-            this.setDateHandlers();
-            this.setButtons();
-        }
-
-        // move to previous cal
-        prevCal() {
-            this.resetDateHandlers();
-            this.resetButtons();
-            const nextCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.nextMonth.getMonth()}"]`,
-            );
-            nextCalendar.remove();
-
-            this.#decMonth(this.curMonth);
-            this.#decMonth(this.nextMonth);
-            this.#decMonth(this.prevMonth);
-
-            this.#makeCal(this.prevMonth, "beforeend");
-
-            this.updateCal();
-            this.setDateHandlers();
-            this.setButtons();
-        }
-
-        #makeCal(date, insertSetting) {
-            const monthText = date.toLocaleString("default", { month: "long" });
-
-            this.inputBox.insertAdjacentHTML(
-                `${insertSetting}`,
-                `
+        this.inputBox.insertAdjacentHTML(
+            `${insertSetting}`,
+            `
                 <div
                     class="calendar" data-month="${date.getMonth()}">
                     <div class="calendar_arrow_box-left">
@@ -349,122 +348,110 @@ if (datePickers !== null) {
                         </p>
                     </div>
                 </div>`,
-            );
+        );
 
-            this.fillCalDates(date);
-        }
+        this.fillCalDates(date);
+    }
 
-        fillCalDates(date) {
-            const monthFirstDate = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                1,
-                0,
-                0,
-            );
+    fillCalDates(date) {
+        const monthFirstDate = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            1,
+            0,
+            0,
+        );
 
-            const monthLastDate = new Date(
-                date.getFullYear(),
-                date.getMonth() + 1,
-                0,
-                0,
-                0,
-            );
+        const monthLastDate = new Date(
+            date.getFullYear(),
+            date.getMonth() + 1,
+            0,
+            0,
+            0,
+        );
 
-            const firstCalDate = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                -(monthFirstDate.getDay() - 1),
-                0,
-                0,
-            );
+        const firstCalDate = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            -(monthFirstDate.getDay() - 1),
+            0,
+            0,
+        );
 
-            const lastCalDate = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                monthLastDate.getDate() + 6 - monthLastDate.getDay(),
-                0,
-                0,
-            );
+        const lastCalDate = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            monthLastDate.getDate() + 6 - monthLastDate.getDay(),
+            0,
+            0,
+        );
 
-            const numberOfDates =
-                monthLastDate.getDate() +
-                monthFirstDate.getDay() +
-                lastCalDate.getDay() -
-                monthLastDate.getDay();
+        const numberOfDates =
+            monthLastDate.getDate() +
+            monthFirstDate.getDay() +
+            lastCalDate.getDay() -
+            monthLastDate.getDay();
 
-            const calendar = this.inputBox.querySelector(
-                `.calendar[data-month="${date.getMonth()}"]`,
-            );
+        const calendar = this.inputBox.querySelector(
+            `.calendar[data-month="${date.getMonth()}"]`,
+        );
 
-            let curDate = new Date(firstCalDate);
-            let dateStr = curDate.toLocaleDateString(undefined, "YYYY-MM-DD");
-            for (let i = 0; i < numberOfDates; i++) {
-                dateStr = curDate.toLocaleDateString(undefined, "YYYY-MM-DD");
-                if (curDate.getMonth() !== date.getMonth()) {
-                    calendar.insertAdjacentHTML(
-                        "beforeend",
-                        `
+        let curDate = new Date(firstCalDate);
+        let dateStr = curDate.toLocaleDateString(undefined, "YYYY-MM-DD");
+        for (let i = 0; i < numberOfDates; i++) {
+            dateStr = curDate.toLocaleDateString(undefined, "YYYY-MM-DD");
+            if (curDate.getMonth() !== date.getMonth()) {
+                calendar.insertAdjacentHTML(
+                    "beforeend",
+                    `
                     <div class="date_box" data-date="${dateStr}">
                         <p class="date_text-fade">
                             ${curDate.getDate()}
                         </p>
                     </div>
 `,
-                    );
-                } else {
-                    calendar.insertAdjacentHTML(
-                        "beforeend",
-                        `
+                );
+            } else {
+                calendar.insertAdjacentHTML(
+                    "beforeend",
+                    `
                     <div class="date_box" data-date="${dateStr}">
                         <p class="date_text">
                             ${curDate.getDate()}
                         </p>
                     </div>
 `,
-                    );
-                }
-                curDate.setDate(curDate.getDate() + 1);
+                );
             }
-        }
-
-        setButtons() {
-            const curCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.curMonth.getMonth()}"]`,
-            );
-            const rightBtn = curCalendar.querySelector(
-                ".calendar_arrow_box-right",
-            );
-            rightBtn.addEventListener("click", this.handleNextCal);
-
-            const leftBtn = curCalendar.querySelector(
-                ".calendar_arrow_box-left",
-            );
-            leftBtn.addEventListener("click", this.handlePrevCal);
-        }
-
-        resetButtons() {
-            const curCalendar = this.inputBox.querySelector(
-                `.calendar[data-month="${this.curMonth.getMonth()}"]`,
-            );
-            const rightBtn = curCalendar.querySelector(
-                ".calendar_arrow_box-right",
-            );
-            rightBtn.removeEventListener("click", this.handleNextCal);
-
-            const leftBtn = curCalendar.querySelector(
-                ".calendar_arrow_box-left",
-            );
-            leftBtn.removeEventListener("click", this.handlePrevCal);
+            curDate.setDate(curDate.getDate() + 1);
         }
     }
 
-    datePickers.forEach((datePicker) => {
-        const dateInputBox = datePicker.querySelector(".calendar_box");
+    setButtons() {
+        const curCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.curMonth.getMonth()}"]`,
+        );
+        const rightBtn = curCalendar.querySelector(".calendar_arrow_box-right");
+        rightBtn.addEventListener("click", this.handleNextCal);
 
-        let cal = new Cal(dateInputBox);
-    });
+        const leftBtn = curCalendar.querySelector(".calendar_arrow_box-left");
+        leftBtn.addEventListener("click", this.handlePrevCal);
+    }
 
-    //slider.addEventListener("touchstart", handleTouchStart);
-    //slider.addEventListener("touchmove", handleTouchSlide);
+    resetButtons() {
+        const curCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.curMonth.getMonth()}"]`,
+        );
+        const rightBtn = curCalendar.querySelector(".calendar_arrow_box-right");
+        rightBtn.removeEventListener("click", this.handleNextCal);
+
+        const leftBtn = curCalendar.querySelector(".calendar_arrow_box-left");
+        leftBtn.removeEventListener("click", this.handlePrevCal);
+    }
 }
+
+datePickers.forEach((datePicker) => {
+    const dateInputBox = datePicker.querySelector(".calendar_box");
+
+    let cal = new Cal(dateInputBox);
+});
