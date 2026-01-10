@@ -1,6 +1,58 @@
 {{template "base" .}}
 
+{{define "js"}}
+<script type="module" src="/static/js/modal.js"></script>
+{{end}}
+
 {{define "content"}}
+<script type="module">
+    import Modal from "/static/js/modal.js";
+
+    let modal = new Modal();
+    modal.addHtml(`
+        <div
+            class="absolute top-2/5 -translate-y-2/4 left-2/4 -translate-x-2/4 container px-4 rounded-md flex justify-center">
+            <form action="/search-availability" method="POST"
+                class="relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20">
+                <button class="modal-close-btn absolute flex flex-col justify-center py-1 top-4 right-5 w-6 h-6 rounded-md before:bg-stone-800 after:w-full after:h-0.5 sm:h-10 sm:w-10 sm:py-2 after:bg-stone-800 before:w-full before:h-0.5 before:rotate-45 before:translate-y-0.5 after:-rotate-45 border-2 border-stone-800 hover:before:scale-75 before:ease-in-out before:duration-300 before:rounded-full after:rounded-full hover:after:scale-75 after:ease-in-out after:duration-300"></button>
+                <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold">Search for Availability
+                </h2>
+                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+                <div
+                    class="date_picker group grid grid-cols-[1fr_20px_1fr] px-4 py-4 w-full h-fit items-center justify-items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
+                    <label for="arrive_date" class="sm:text-lg text-stone-800">
+                        Arrive date
+                    </label>
+                    <p class="text-lg text-stone-800">-</p>
+                    <label for="departure_date" class="sm:text-lg text-stone-800">
+                        Departure date
+                    </label>
+                    <input required readonly type="text" name="arrive_date" id="arrive_date" placeholder="MM/DD/YYYY"
+                        class="start-date-input sm:text-lg text-stone-800 w-full text-center">
+                    <p class="text-lg text-stone-800">-</p>
+                    <input required readonly type="text" name="departure_date" id="departure_date" placeholder="MM/DD/YYYY"
+                        class="end-date-input sm:text-lg text-stone-800 w-full text-center">
+                    <div class="calendar_box"></div>
+                </div>
+                <button type="submit"
+                    class="bg-stone-700 border-3 border-stone-700 lg:col-span-full rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">
+                    Check Availability
+                </button>
+            </form>
+        </div>
+    `)
+
+    document.querySelector(".book-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.open();
+    });
+    document.querySelector(".modal-close-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.close();
+    });
+</script>
+<script defer src="/static/js/datePicker.js"></script>
+<div class="fixed hide-modalbox h-screen w-screen modalbox z-20"></div>
 <section class="flex flex-col gap-10 items-center pb-20">
     <div class="slider relative h-full w-full max-w-4xl overflow-hidden rounded-b-md shadow-lg shadow-stone-800/20">
         <!-- slide -->
@@ -39,10 +91,10 @@
         <h2 class="text-2xl md:text-3xl lg:text-4xl text-stone-800 font-bold text-center">
             Premium Suite | King Bed
         </h2>
-        <a href="/make-reservation"
-            class="flex items-center w-fit px-4 py-2 text-lg lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">
+        <button
+            class="book-btn flex items-center w-fit px-4 py-2 text-lg lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">
             Book Room
-        </a>
+        </button>
         <div class="md:col-span-full xl:col-span-1 grid gap-2 lg:gap-4">
             <h3 class="text-lg text-stone-800 font-semibold md:text-xl lg:text-2xl text-center">
                 350 sq ft / Garden View
