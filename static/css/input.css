@@ -127,4 +127,21 @@
     .date_text-fade {
         @apply text-xs sm:text-base lg:text-lg text-stone-400;
     }
+
+    /********** date picker styles **********/
+    .hide-modal {
+        @apply opacity-0;
+    }
+
+    .hide-modalbox {
+        @apply max-w-0 max-h-0;
+    }
+
+    .show-modal {
+        @apply opacity-100 z-20;
+    }
+
+    .show-modalbox {
+        @apply max-w-full max-h-full;
+    }
 }
