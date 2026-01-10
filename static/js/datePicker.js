@@ -126,11 +126,9 @@ class Cal {
                     dateDifStart = Math.abs(
                         this.startDay.getTime() - date.getTime(),
                     );
-                    console.log(dateDifStart);
                     dateDifEnd = Math.abs(
                         this.endDay.getTime() - date.getTime(),
                     );
-                    console.log(dateDifEnd);
 
                     if (dateDifStart <= dateDifEnd) {
                         this.startDay = date;
