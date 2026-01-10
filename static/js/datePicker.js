@@ -6,6 +6,8 @@ class Cal {
     inputBox;
     nextMonth;
     prevMonth;
+    startDay;
+    endDay;
 
     // these are global references to bind
     // functions used by the class event handlers
@@ -17,6 +19,9 @@ class Cal {
     handleDateSelect;
 
     constructor(inputBox) {
+        this.startDay = null;
+        this.endDay = null;
+
         this.curMonth = new Date();
         this.inputBox = inputBox;
 
@@ -42,6 +47,10 @@ class Cal {
 
         this.setDateHandlers();
         this.setButtons();
+    }
+
+    #incDay(date) {
+        date.setDate(date.getDate() + 1);
     }
 
     #incMonth(date) {
@@ -82,14 +91,133 @@ class Cal {
     }
 
     selectDate(e) {
-        let date = e.target.dataset.date;
-        if (!date) {
-            date = e.target.parentElement.dataset.date;
+        let dateData = e.target.dataset.date;
+        let date = null;
+        if (!dateData) {
+            dateData = e.target.parentElement.dataset.date;
+            date = new Date(dateData);
+        } else {
+            date = new Date(dateData);
         }
 
-        const inputText =
-            this.inputBox.parentElement.querySelector(".date_picker_input");
-        inputText.value = date;
+        const inputTextStart =
+            this.inputBox.parentElement.querySelector(".start-date-input");
+
+        const inputTextEnd =
+            this.inputBox.parentElement.querySelector(".end-date-input");
+
+        let dateDifStart = 0;
+        let dateDifEnd = 0;
+
+        if (this.startDay === null) {
+            this.startDay = new Date(date);
+        } else {
+            if (this.startDay.getTime() === date.getTime()) {
+                return;
+            } else if (
+                this.endDay !== null &&
+                this.endDay.getTime() === date.getTime()
+            ) {
+                return;
+            } else {
+                if (this.endDay === null) {
+                    this.endDay = new Date(date);
+                } else {
+                    dateDifStart = Math.abs(
+                        this.startDay.getTime() - date.getTime(),
+                    );
+                    console.log(dateDifStart);
+                    dateDifEnd = Math.abs(
+                        this.endDay.getTime() - date.getTime(),
+                    );
+                    console.log(dateDifEnd);
+
+                    if (dateDifStart <= dateDifEnd) {
+                        this.startDay = date;
+                    } else if (dateDifStart > dateDifEnd) {
+                        this.endDay = date;
+                    }
+                }
+            }
+        }
+
+        if (this.startDay !== null) {
+            inputTextStart.value = this.startDay.toLocaleDateString(
+                undefined,
+                "YYYY-MM-DD",
+            );
+        }
+        if (this.endDay !== null) {
+            inputTextEnd.value = this.endDay.toLocaleDateString(
+                undefined,
+                "YYYY-MM-DD",
+            );
+        }
+
+        this.highlightDates();
+    }
+
+    highlightDates() {
+        this.inputBox.querySelectorAll(".date_box").forEach((el) => {
+            el.classList.remove("date_box-active");
+            el.classList.add("date_box-inactive");
+        });
+
+        let startDayStr = "";
+        let endDayStr = "";
+        let startDateEl = null;
+        let endDateEl = null;
+
+        if (this.startDay === null && this.endDay === null) return;
+
+        if (this.startDay !== null) {
+            startDayStr = this.startDay.toLocaleDateString(
+                undefined,
+                "YYYY-MM-DD",
+            );
+            startDateEl = this.inputBox.querySelectorAll(
+                `.date_box[data-date="${startDayStr}"]`,
+            );
+        }
+
+        if (this.endDay !== null) {
+            endDayStr = this.endDay.toLocaleDateString(undefined, "YYYY-MM-DD");
+            endDateEl = this.inputBox.querySelectorAll(
+                `.date_box[data-date="${endDayStr}"]`,
+            );
+        }
+
+        let currentDate = new Date(this.startDay);
+        let currentDateStr = "";
+        let currentDateEl = null;
+
+        if (endDateEl === null) {
+            startDateEl.forEach((el) => {
+                el.classList.remove("date_box-inactive");
+                el.classList.add("date_box-active");
+            });
+        } else {
+            while (currentDate.getTime() !== this.endDay.getTime()) {
+                currentDateStr = currentDate.toLocaleDateString(
+                    undefined,
+                    "YYYY-MM-DD",
+                );
+                currentDateEl = this.inputBox.querySelectorAll(
+                    `.date_box[data-date="${currentDateStr}"]`,
+                );
+
+                currentDateEl.forEach((el) => {
+                    el.classList.remove("date_box-inactive");
+                    el.classList.add("date_box-active");
+                });
+
+                this.#incDay(currentDate);
+            }
+            endDateEl.forEach((el) => {
+                el.classList.remove("date_box-inactive");
+                el.classList.add("date_box-active");
+            });
+        }
     }
 
     // create date select handlers
@@ -134,6 +262,7 @@ class Cal {
         this.updateCal();
         this.setDateHandlers();
         this.setButtons();
+        this.highlightDates();
     }
 
     // move to previous cal
@@ -154,6 +283,7 @@ class Cal {
         this.updateCal();
         this.setDateHandlers();
         this.setButtons();
+        this.highlightDates();
     }
 
     #makeCal(date, insertSetting) {
