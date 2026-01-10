@@ -138,7 +138,7 @@
     }
 
     .hide-modalbox {
-        @apply max-w-0 max-h-0;
+        @apply max-w-0 max-h-0 delay-600;
     }
 
     .show-modal {
