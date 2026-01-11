@@ -148,4 +148,9 @@
     .show-modalbox {
         @apply max-w-full max-h-full;
     }
+
+    /********** date picker styles **********/
+    .is-invalid {
+        @apply shadow-red-800/70;
+    }
 }
