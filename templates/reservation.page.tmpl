@@ -12,7 +12,7 @@
         <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold">
             Make Reservation
         </h2>
-        <div class="flex flex-col gap-2 justify-center items-center">
+        <div class="flex flex-col gap-2 justify-end items-center">
             {{with .Form.Errors.Get "first_name"}}
             <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
             {{end}}
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 justify-center items-center">
+        <div class="flex flex-col gap-2 justify-end items-center">
             {{with .Form.Errors.Get "last_name"}}
             <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
             {{end}}
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 justify-center items-center">
+        <div class="flex flex-col gap-2 justify-end items-center">
             {{with .Form.Errors.Get "email"}}
             <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
             {{end}}
@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 justify-center items-center">
+        <div class="flex flex-col gap-2 justify-end items-center">
             {{with .Form.Errors.Get "phone"}}
             <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
             {{end}}
