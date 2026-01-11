@@ -31,6 +31,7 @@ Such as using tailwindcss for generating the styles of the website.
 * [chi](https://github.com/go-chi/chi) v1.5.5 (for a routing framework)
 * [nosurf](https://github.com/justinas/nosurf) v1.2.0 (for CSRF protection)
 * [tailwindcss](https://github.com/tailwindlabs/tailwindcss) v4.1.18 (as a css framework tool)
+* [govalidator](https://github.com/asaskevich/govalidator) v11.0.1 (for form validation)
 
 ### Installing manually
 
