@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/AutomationMK/bookings/internal/config"
+	"github.com/AutomationMK/bookings/internal/forms"
 	"github.com/AutomationMK/bookings/internal/models"
 	"github.com/AutomationMK/bookings/internal/render"
 )
@@ -55,7 +56,13 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reserve handles the make-reservation page
 func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// PostReserve handles the posting of a reservation form
+func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 }
 
 // Availability handles the search-availability page
