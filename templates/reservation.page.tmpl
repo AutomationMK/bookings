@@ -21,8 +21,8 @@
                 {{else}}
                 class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20"
                 {{end}}>
-                <div class=" flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4
-                border-stone-500">
+                <div
+                    class=" flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4 border-stone-500">
                     <label for="first_name" class="text-lg text-stone-800">
                         First name
                     </label>
@@ -34,8 +34,14 @@
             </div>
         </div>
         <div class="flex flex-col gap-2 justify-center items-center">
-            <div
-                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
+            {{with .Form.Errors.Get "last_name"}}
+            <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
+            {{end}}
+            <div {{with .Form.Errors.Get "last_name" }}
+                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md is-invalid"
+                {{else}}
+                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20"
+                {{end}}>
                 <div
                     class="flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4 border-stone-500">
                     <label for="last_name" class="text-lg text-stone-800">
@@ -49,8 +55,14 @@
             </div>
         </div>
         <div class="flex flex-col gap-2 justify-center items-center">
-            <div
-                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
+            {{with .Form.Errors.Get "email"}}
+            <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
+            {{end}}
+            <div {{with .Form.Errors.Get "email" }}
+                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md is-invalid"
+                {{else}}
+                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20"
+                {{end}}>
                 <div
                     class="flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4 border-stone-500">
                     <label for="email" class="text-lg text-stone-800">
@@ -64,8 +76,14 @@
             </div>
         </div>
         <div class="flex flex-col gap-2 justify-center items-center">
-            <div
-                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
+            {{with .Form.Errors.Get "phone"}}
+            <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
+            {{end}}
+            <div {{with .Form.Errors.Get "phone" }}
+                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md is-invalid"
+                {{else}}
+                class="grid sm:grid-cols-[1fr_2fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20"
+                {{end}}>
                 <div
                     class="flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4 border-stone-500">
                     <label for="phone" class="text-lg text-stone-800">
