@@ -8,88 +8,96 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/static/css/output.css">
     <script defer src="/static/js/index.js"></script>
+    <script type="module" src="/static/js/notify.js"></script>
     <title>Document</title>
     {{block "css" .}}
 
     {{end}}
 
     {{block "js" .}}
-
     {{end}}
 </head>
 
 <body class="overflow-x-hidden">
-    <nav class="h-22 bg-amber-100 lg:relative">
-        <div class="container mx-auto px-4 h-full flex justify-between">
-            <div class="py-3 z-30">
-                <div class="flex items-center gap-2 px-5 py-2 h-full bg-stone-700 rounded-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-full text-amber-200" viewBox="0 0 512 512">
-                        <path
-                            d="M384 240H96V136a40.12 40.12 0 0140-40h240a40.12 40.12 0 0140 40v104zM48 416V304a64.19 64.19 0 0164-64h288a64.19 64.19 0 0164 64v112"
-                            fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="32" />
-                        <path
-                            d="M48 416v-8a24.07 24.07 0 0124-24h368a24.07 24.07 0 0124 24v8M112 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16M256 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16"
-                            fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="32" />
-                    </svg>
-                    <p class="text-xl text-amber-200 font-bold lg:text-2xl">Relax Resort</p>
+    <script type="module">
+        import Notice from "/static/js/notify.js";
+        let notice = new Notice(".msg-box");
+
+        notice.notify("This is a warning message", "error");
+    </script>
+    <div class="flex flex-col msg-box">
+        <nav class="h-22 bg-amber-100 lg:relative">
+            <div class="container mx-auto px-4 h-full flex justify-between">
+                <div class="py-3 z-30">
+                    <div class="flex items-center gap-2 px-5 py-2 h-full bg-stone-700 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-full text-amber-200" viewBox="0 0 512 512">
+                            <path
+                                d="M384 240H96V136a40.12 40.12 0 0140-40h240a40.12 40.12 0 0140 40v104zM48 416V304a64.19 64.19 0 0164-64h288a64.19 64.19 0 0164 64v112"
+                                fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="32" />
+                            <path
+                                d="M48 416v-8a24.07 24.07 0 0124-24h368a24.07 24.07 0 0124 24v8M112 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16M256 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16"
+                                fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="32" />
+                        </svg>
+                        <p class="text-xl text-amber-200 font-bold lg:text-2xl">Relax Resort</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <ul class="nav">
+                        <li>
+                            <a href="/"
+                                class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">Home</a>
+                        </li>
+                        <li>
+                            <a href="/about"
+                                class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">About</a>
+                        </li>
+                        <li
+                            class="flex flex-col h-fit relative lg:static lg:justify-center items-center gap-1 lg:h-full group ml-9 lg:ml-0">
+                            <div class="flex items-center gap-1">
+                                <h3
+                                    class="text-3xl text-stone-500 font-bold group-hover:text-stone-800 transition lg:text-2xl">
+                                    Rooms
+                                </h3>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-11 text-stone-500 group-hover:rotate-90 group-hover:text-stone-800 transition"
+                                    viewBox="0 0 512 512">
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144" />
+                                </svg>
+                            </div>
+                            <ul
+                                class="overflow-hidden flex flex-col gap-4 max-h-0 max-w-0 border-t-2 border-stone-500 rounded-b-sm lg:bg-amber-100 lg:absolute lg:bottom-0 lg:translate-y-full group-hover:max-h-fit group-hover:max-w-fit group-hover:px-2 group-hover:py-4 ease-in-out duration-100 lg:gap-4 group-hover:lg:px-4 group-hover:lg:py-6">
+                                <li>
+                                    <a href="/rooms/premium-suite"
+                                        class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">
+                                        Premium Suite
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/rooms/deluxe-room"
+                                        class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">
+                                        Deluxe Room
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/contact"
+                                class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">Contact</a>
+                        </li>
+                        <li class="h-fit flex justify-center py-2 order-first lg:order-last">
+                            <a href="/search-availability"
+                                class="flex items-center px-4 py-2 text-3xl lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">Book
+                                Today</a>
+                        </li>
+                    </ul>
+                    <div class="hamburger lg:hidden"></div>
                 </div>
             </div>
-            <div class="flex gap-4">
-                <ul class="nav">
-                    <li>
-                        <a href="/"
-                            class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">Home</a>
-                    </li>
-                    <li>
-                        <a href="/about"
-                            class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">About</a>
-                    </li>
-                    <li
-                        class="flex flex-col h-fit relative lg:static lg:justify-center items-center gap-1 lg:h-full group ml-9 lg:ml-0">
-                        <div class="flex items-center gap-1">
-                            <h3
-                                class="text-3xl text-stone-500 font-bold group-hover:text-stone-800 transition lg:text-2xl">
-                                Rooms
-                            </h3>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-11 text-stone-500 group-hover:rotate-90 group-hover:text-stone-800 transition"
-                                viewBox="0 0 512 512">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="48" d="M184 112l144 144-144 144" />
-                            </svg>
-                        </div>
-                        <ul
-                            class="overflow-hidden flex flex-col gap-4 max-h-0 max-w-0 border-t-2 border-stone-500 rounded-b-sm lg:bg-amber-100 lg:absolute lg:bottom-0 lg:translate-y-full group-hover:max-h-fit group-hover:max-w-fit group-hover:px-2 group-hover:py-4 ease-in-out duration-100 lg:gap-4 group-hover:lg:px-4 group-hover:lg:py-6">
-                            <li>
-                                <a href="/rooms/premium-suite"
-                                    class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">
-                                    Premium Suite
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/rooms/deluxe-room"
-                                    class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">
-                                    Deluxe Room
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/contact"
-                            class="text-3xl text-stone-500 font-bold hover:text-stone-800 transition lg:text-2xl">Contact</a>
-                    </li>
-                    <li class="h-fit flex justify-center py-2 order-first lg:order-last">
-                        <a href="/search-availability"
-                            class="flex items-center px-4 py-2 text-3xl lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">Book
-                            Today</a>
-                    </li>
-                </ul>
-                <div class="hamburger lg:hidden"></div>
-            </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
     {{block "content" .}}
 
