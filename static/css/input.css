@@ -153,4 +153,37 @@
     .is-invalid {
         @apply shadow-red-800/70;
     }
+
+    /********** notify styles **********/
+    .error-msg {
+        @apply bg-red-100;
+    }
+
+    .error-msg > h2 {
+        @apply text-red-900;
+    }
+
+    .warning-msg {
+        @apply bg-yellow-200;
+    }
+
+    .warning-msg > h2 {
+        @apply text-yellow-900;
+    }
+
+    .success-msg {
+        @apply bg-green-100;
+    }
+
+    .success-msg > h2 {
+        @apply text-green-900;
+    }
+
+    .notify-open {
+        @apply max-h-fit py-6;
+    }
+
+    .notify-close {
+        @apply max-h-0;
+    }
 }
