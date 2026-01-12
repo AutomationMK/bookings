@@ -57,7 +57,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 // Reserve handles the make-reservation page
 func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 	var emptyReservation models.Reservation
-	data := make(map[string]interface{})
+	data := make(map[string]any)
 	data["reservation"] = emptyReservation
 
 	render.RenderTemplate(w, r, "reservation.page.tmpl", &models.TemplateData{
@@ -88,7 +88,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	form.IsEmail("email")
 
 	if !form.Valid() {
-		data := make(map[string]interface{})
+		data := make(map[string]any)
 		data["reservation"] = reservation
 
 		render.RenderTemplate(w, r, "reservation.page.tmpl", &models.TemplateData{
@@ -113,7 +113,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	}
 
 	m.App.Session.Remove(r.Context(), "reservation")
-	data := make(map[string]interface{})
+	data := make(map[string]any)
 	data["reservation"] = reservation
 
 	render.RenderTemplate(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
