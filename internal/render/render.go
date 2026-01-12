@@ -81,7 +81,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	// range through all files ending with *.page.templ
 	for _, page := range pages {
 		name := filepath.Base(page)
-		ts, err := template.New(name).ParseFiles(page)
+		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
 			return myCache, err
 		}
