@@ -3,19 +3,19 @@ export default class Notice {
     noticeEl;
     messageEl;
 
-    constructor(msgBox) {
-        this.msgBox = document.querySelector(`${msgBox}`);
+    constructor(msgBoxSel, id) {
+        this.msgBox = document.querySelector(`${msgBoxSel}`);
 
         this.msgBox.insertAdjacentHTML(
             "beforeend",
             `
-            <div class="notice flex w-screen h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
+            <div id="${id}" class="flex w-screen h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
                 <h2 class="text-2xl font-bold"></h2>
             </div>
             `,
         );
 
-        this.noticeEl = this.msgBox.querySelector(".notice");
+        this.noticeEl = this.msgBox.querySelector(`#${id}`);
         this.messageEl = this.noticeEl.querySelector("h2");
     }
 
