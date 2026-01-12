@@ -20,6 +20,21 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	err := run()
+
+	fmt.Printf("Starting application on port %s\n", portNumber)
+	//_ = http.ListenAndServe(portNumber, nil)
+
+	srv := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+
+	err = srv.ListenAndServe()
+	log.Fatal(err)
+}
+
+func run() error {
 	// change this to true when in production
 	app.InProduction = false
 
@@ -48,14 +63,5 @@ func main() {
 	// give render acess to our app config var
 	render.NewTemplate(&app)
 
-	fmt.Printf("Starting application on port %s\n", portNumber)
-	//_ = http.ListenAndServe(portNumber, nil)
-
-	srv := &http.Server{
-		Addr:    portNumber,
-		Handler: routes(&app),
-	}
-
-	err = srv.ListenAndServe()
-	log.Fatal(err)
+	return nil
 }
