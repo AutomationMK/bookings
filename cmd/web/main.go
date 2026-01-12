@@ -21,6 +21,9 @@ var session *scs.SessionManager
 
 func main() {
 	err := run()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
@@ -51,6 +54,7 @@ func run() error {
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
+		return err
 	}
 
 	app.TemplateCache = tc
