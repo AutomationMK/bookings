@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/AutomationMK/bookings/internal/config"
 	"github.com/AutomationMK/bookings/internal/handlers"
+	"github.com/AutomationMK/bookings/internal/models"
 	"github.com/AutomationMK/bookings/internal/render"
 
 	"github.com/alexedwards/scs/v2"
@@ -21,6 +23,9 @@ func main() {
 	// change this to true when in production
 	app.InProduction = false
 
+	// specify special structs that will be stored in the session
+	gob.Register(models.Reservation{})
+	// initialize a session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
