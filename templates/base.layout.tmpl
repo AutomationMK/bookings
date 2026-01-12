@@ -21,11 +21,16 @@
 <body class="overflow-x-hidden">
     <script type="module">
         import Notice from "/static/js/notify.js";
-        let notice = new Notice(".msg-box");
+        let flash = new Notice(".msg-box", "flash");
+        let warning = new Notice(".msg-box", "warning");
+        let error = new Notice(".msg-box", "error");
 
-        notice.notify("This is a warning message", "error");
+
+        flash.notify("this is the flash message", "success");
+        warning.notify("this is a warning message", "warning");
+        error.notify("This is an error message", "error");
     </script>
-    <div class="flex flex-col msg-box">
+    <div class="absolute flex flex-col msg-box z-20">
         <nav class="h-22 bg-amber-100 lg:relative">
             <div class="container mx-auto px-4 h-full flex justify-between">
                 <div class="py-3 z-30">
@@ -99,9 +104,11 @@
         </nav>
     </div>
 
-    {{block "content" .}}
+    <main class="mt-22">
+        {{block "content" .}}
 
-    {{end}}
+        {{end}}
+    </main>
 
     <footer class="bg-amber-100">
         <div
