@@ -15,22 +15,37 @@
     {{end}}
 
     {{block "js" .}}
+
     {{end}}
 </head>
 
 <body class="overflow-x-hidden">
+
+    {{with .Flash}}
     <script type="module">
         import Notice from "/static/js/notify.js";
         let flash = new Notice(".msg-box", "flash");
-        let warning = new Notice(".msg-box", "warning");
-        let error = new Notice(".msg-box", "error");
-
-
-        flash.notify("this is the flash message", "success");
-        warning.notify("this is a warning message", "warning");
-        error.notify("This is an error message", "error");
+        flash.notify("{{.}}", "success");
     </script>
-    <div class="absolute flex flex-col msg-box z-20">
+    {{end}}
+
+    {{with .Warning}}
+    <script type="module">
+        import Notice from "/static/js/notify.js";
+        let warning = new Notice(".msg-box", "warning");
+        warning.notify("{{.}}", "warning");
+    </script>
+    {{end}}
+
+    {{with .Error}}
+    <script type="module">
+        import Notice from "/static/js/notify.js";
+        let error = new Notice(".msg-box", "error");
+        error.notify("{{.}}", "error");
+    </script>
+    {{end}}
+
+    <div class="absolute flex flex-col msg-box z-20 w-full">
         <nav class="h-22 bg-amber-100 lg:relative">
             <div class="container mx-auto px-4 h-full flex justify-between">
                 <div class="py-3 z-30">
