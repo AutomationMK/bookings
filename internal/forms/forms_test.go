@@ -90,7 +90,7 @@ func TestForm_MinLength(t *testing.T) {
 	if form.MinLength("a", len(postValue)+1) {
 		t.Error("has length smaller than minimum length but still passed")
 	}
-	if form.MinLength("x", 10) {
+	if form.MinLength("non-exist", 10) {
 		t.Error("passed with non-existent field")
 	}
 }
@@ -106,11 +106,15 @@ func TestForm_IsEmail(t *testing.T) {
 
 	form.IsEmail("good_email")
 	form.IsEmail("bad_email")
+	form.IsEmail("non-exist")
 
 	if form.Errors.Get("good_email") != "" {
 		t.Error("has good email but has an error")
 	}
 	if form.Errors.Get("bad_email") == "" {
 		t.Error("has bad email but has no error")
+	}
+	if form.Errors.Get("non-exist") == "" {
+		t.Error("has non-existent field but has no error")
 	}
 }
