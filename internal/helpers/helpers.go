@@ -16,3 +16,7 @@ func NewHelpers(a *config.AppConfig) {
 func ClientError(w http.ResponseWriter, status int) {
 
 }
+
+func ServerError(w http.ResponseWriter, err error) {
+
+}
