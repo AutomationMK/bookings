@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"strings"
 	"testing"
 )
 
@@ -79,24 +78,16 @@ func TestForm_MinLength(t *testing.T) {
 	postValue := "test"
 	postedData.Add("a", postValue)
 
-	// create a test post request with encoded post data
-	r := httptest.NewRequest(http.MethodPost, "/submit", strings.NewReader(postedData.Encode()))
-
-	// set request header for form handling
-	r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	// populate r.Form and r.PostForm with url.Values
-	r.ParseForm()
-
 	// create *Form to use for testing
-	form := New(r.PostForm)
+	form := New(postedData)
 
-	if !form.MinLength("a", len(postValue), r) {
+	if !form.MinLength("a", len(postValue)) {
 		t.Error("has length exactly the size of minimum legth but did not pass")
 	}
-	if !form.MinLength("a", len(postValue)-1, r) {
+	if !form.MinLength("a", len(postValue)-1) {
 		t.Error("has length larger than minimum length but did not pass")
 	}
-	if form.MinLength("a", len(postValue)+1, r) {
+	if form.MinLength("a", len(postValue)+1) {
 		t.Error("has length smaller than minimum length but still passed")
 	}
 }
@@ -107,16 +98,8 @@ func TestForm_IsEmail(t *testing.T) {
 	postedData.Add("good_email", "johnsmith@example.com")
 	postedData.Add("bad_email", "johnsmith@")
 
-	// create a test post request with encoded post data
-	r := httptest.NewRequest(http.MethodPost, "/submit", strings.NewReader(postedData.Encode()))
-
-	// set request header for form handling
-	r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	// populate r.Form and r.PostForm with url.Values
-	r.ParseForm()
-
 	// create *Form to use for testing
-	form := New(r.PostForm)
+	form := New(postedData)
 
 	form.IsEmail("good_email")
 	form.IsEmail("bad_email")
