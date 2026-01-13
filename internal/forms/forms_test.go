@@ -7,6 +7,20 @@ import (
 	"testing"
 )
 
+func TestNew(t *testing.T) {
+	var form any
+	r := httptest.NewRequest("POST", "/some-route", nil)
+	form = New(r.PostForm)
+
+	// check if return is *Form
+	switch v := form.(type) {
+	case *Form:
+		// do nothing test passed
+	default:
+		t.Errorf("type is not *Form, type is %T", v)
+	}
+}
+
 func TestForm_Valid(t *testing.T) {
 	r := httptest.NewRequest("POST", "/some-route", nil)
 	form := New(r.PostForm)
