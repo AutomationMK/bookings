@@ -59,7 +59,7 @@ func TestForm_Required(t *testing.T) {
 func TestForm_Has(t *testing.T) {
 	// add dummy post data to test
 	postedData := url.Values{}
-	postedData.Add("a", "test_value")
+	postedData.Add("a", "test")
 
 	// create a test post request with encoded post data
 	r := httptest.NewRequest(http.MethodPost, "/submit", strings.NewReader(postedData.Encode()))
@@ -78,5 +78,33 @@ func TestForm_Has(t *testing.T) {
 	}
 	if form.Has("b", r) {
 		t.Error("shows field existing but in should not")
+	}
+}
+
+func TestForm_MinLength(t *testing.T) {
+	// add dummy post data to test
+	postedData := url.Values{}
+	postValue := "test"
+	postedData.Add("a", postValue)
+
+	// create a test post request with encoded post data
+	r := httptest.NewRequest(http.MethodPost, "/submit", strings.NewReader(postedData.Encode()))
+
+	// set request header for form handling
+	r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	// populate r.Form and r.PostForm with url.Values
+	r.ParseForm()
+
+	// create *Form to use for testing
+	form := New(r.PostForm)
+
+	if !form.MinLength("a", len(postValue), r) {
+		t.Error("has length exactly the size of minimum legth but did not pass")
+	}
+	if !form.MinLength("a", len(postValue)-1, r) {
+		t.Error("has length larger than minimum length but did not pass")
+	}
+	if form.MinLength("a", len(postValue)+1, r) {
+		t.Error("has length smaller than minimum length but still passed")
 	}
 }
