@@ -1,15 +1,13 @@
 package forms
 
 import (
-	"net/http/httptest"
 	"net/url"
 	"testing"
 )
 
 func TestNew(t *testing.T) {
 	var form any
-	r := httptest.NewRequest("POST", "/some-route", nil)
-	form = New(r.PostForm)
+	form = New(url.Values{})
 
 	// check if return is *Form
 	switch v := form.(type) {
