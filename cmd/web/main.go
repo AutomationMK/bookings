@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/config"
@@ -18,6 +19,7 @@ import (
 var portNumber = ":8080"
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
 
 func main() {
 	err := run()
@@ -39,6 +41,9 @@ func main() {
 func run() error {
 	// change this to true when in production
 	app.InProduction = false
+
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
 
 	// specify special structs that will be stored in the session
 	gob.Register(models.Reservation{})
