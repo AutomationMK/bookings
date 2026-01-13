@@ -2,7 +2,7 @@ package forms
 
 import "testing"
 
-func TestAdd(t *testing.T) {
+func TestErrors_Add(t *testing.T) {
 	var err = errors(map[string][]string{})
 	testField := "test"
 	testMsg := "This is a test"
