@@ -10,6 +10,7 @@ import (
 
 	"github.com/AutomationMK/bookings/internal/config"
 	"github.com/AutomationMK/bookings/internal/handlers"
+	"github.com/AutomationMK/bookings/internal/helpers"
 	"github.com/AutomationMK/bookings/internal/models"
 	"github.com/AutomationMK/bookings/internal/render"
 
@@ -74,6 +75,8 @@ func run() error {
 
 	// give render acess to our app config var
 	render.NewTemplate(&app)
+	// give helpers access to app config var
+	helpers.NewHelpers(&app)
 
 	return nil
 }
