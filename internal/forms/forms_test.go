@@ -1,7 +1,6 @@
 package forms
 
 import (
-	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
@@ -32,8 +31,7 @@ func TestForm_Valid(t *testing.T) {
 }
 
 func TestForm_Required(t *testing.T) {
-	r := httptest.NewRequest("POST", "/some-route", nil)
-	form := New(r.PostForm)
+	form := New(url.Values{})
 
 	form.Required("a", "b", "c")
 	if form.Valid() {
@@ -45,10 +43,7 @@ func TestForm_Required(t *testing.T) {
 	postedData.Add("b", "a")
 	postedData.Add("c", "a")
 
-	r, _ = http.NewRequest("POST", "/some-route", nil)
-
-	r.PostForm = postedData
-	form = New(r.PostForm)
+	form = New(postedData)
 	form.Required("a", "b", "c")
 	if !form.Valid() {
 		t.Error("shows does not have required fields when it should")
