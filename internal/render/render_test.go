@@ -67,3 +67,11 @@ func getSession() (*http.Request, error) {
 func TestNewTemplate(t *testing.T) {
 	NewTemplate(app)
 }
+
+func TestCreateTemplateCache(t *testing.T) {
+	pathToTemplates = "./../../templates"
+	_, err := CreateTemplateCache()
+	if err != nil {
+		t.Error(err)
+	}
+}
