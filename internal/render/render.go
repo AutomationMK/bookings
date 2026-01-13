@@ -2,6 +2,7 @@ package render
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"html/template"
 	"log"
@@ -49,6 +50,7 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	t, ok := tc[tmpl]
 	if !ok {
 		log.Fatal("Could not get template from template cache")
+		return errors.New("can't get template from cache")
 	}
 
 	// hold bytes and try to execute in order to check
@@ -57,13 +59,15 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	td = AddDefaultData(td, r)
 	err := t.Execute(buf, td)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
+		return err
 	}
 
 	// render the template
 	_, err = buf.WriteTo(w)
 	if err != nil {
 		log.Println(err)
+		return err
 	}
 
 	return nil
