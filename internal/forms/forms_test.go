@@ -108,3 +108,31 @@ func TestForm_MinLength(t *testing.T) {
 		t.Error("has length smaller than minimum length but still passed")
 	}
 }
+
+func TestForm_IsEmail(t *testing.T) {
+	// add dummy post data to test
+	postedData := url.Values{}
+	postedData.Add("good_email", "johnsmith@example.com")
+	postedData.Add("bad_email", "johnsmith@")
+
+	// create a test post request with encoded post data
+	r := httptest.NewRequest(http.MethodPost, "/submit", strings.NewReader(postedData.Encode()))
+
+	// set request header for form handling
+	r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	// populate r.Form and r.PostForm with url.Values
+	r.ParseForm()
+
+	// create *Form to use for testing
+	form := New(r.PostForm)
+
+	form.IsEmail("good_email")
+	form.IsEmail("bad_email")
+
+	if form.Errors.Get("good_email") != "" {
+		t.Error("has good email but has an error")
+	}
+	if form.Errors.Get("bad_email") == "" {
+		t.Error("has bad email but has no error")
+	}
+}
