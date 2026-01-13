@@ -20,6 +20,7 @@ var portNumber = ":8080"
 var app config.AppConfig
 var session *scs.SessionManager
 var infoLog *log.Logger
+var errorLog *log.Logger
 
 func main() {
 	err := run()
@@ -44,6 +45,9 @@ func run() error {
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "Error\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
 
 	// specify special structs that will be stored in the session
 	gob.Register(models.Reservation{})
