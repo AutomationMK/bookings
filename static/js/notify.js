@@ -10,7 +10,7 @@ export default class Notice {
             "beforeend",
             `
             <div id="${id}" class="flex w-screen h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
-                <h2 class="text-2xl font-bold"></h2>
+                <h2 class="text md:text-lg lg:text-xl font-bold"></h2>
             </div>
             `,
         );
