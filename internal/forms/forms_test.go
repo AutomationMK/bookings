@@ -21,8 +21,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestForm_Valid(t *testing.T) {
-	r := httptest.NewRequest("POST", "/some-route", nil)
-	form := New(r.PostForm)
+	form := New(url.Values{})
 
 	isValid := form.Valid()
 	if !isValid {
