@@ -90,6 +90,9 @@ func TestForm_MinLength(t *testing.T) {
 	if form.MinLength("a", len(postValue)+1) {
 		t.Error("has length smaller than minimum length but still passed")
 	}
+	if form.MinLength("x", 10) {
+		t.Error("passed with non-existent field")
+	}
 }
 
 func TestForm_IsEmail(t *testing.T) {
