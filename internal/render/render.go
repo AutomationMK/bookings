@@ -65,6 +65,8 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	if err != nil {
 		log.Println(err)
 	}
+
+	return nil
 }
 
 // createTemplateCache loops though all template files
