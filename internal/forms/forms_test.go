@@ -61,22 +61,14 @@ func TestForm_Has(t *testing.T) {
 	postedData := url.Values{}
 	postedData.Add("a", "test")
 
-	// create a test post request with encoded post data
-	r := httptest.NewRequest(http.MethodPost, "/submit", strings.NewReader(postedData.Encode()))
-
-	// set request header for form handling
-	r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	// populate r.Form and r.PostForm with url.Values
-	r.ParseForm()
-
 	// create *Form to use for testing
-	form := New(r.PostForm)
+	form := New(postedData)
 
 	// test both cases of if a field does or does not exist
-	if !form.Has("a", r) {
+	if !form.Has("a") {
 		t.Error("shows field not existing but it should")
 	}
-	if form.Has("b", r) {
+	if form.Has("b") {
 		t.Error("shows field existing but in should not")
 	}
 }
