@@ -37,3 +37,18 @@ type Restrictions struct {
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }
+
+// Reservations holds reservation data
+type Reservations struct {
+	ID            int
+	FirstName     string
+	LastName      string
+	Email         string
+	Phone         string
+	ArrivalDate   time.Time
+	DepartureDate time.Time
+	RoomID        int
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	Room          Rooms
+}
