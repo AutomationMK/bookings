@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict bJWxbYYCoYT9fO23KlvQxTmm9dXqgbuX10vsgQHQrV5jdSwwI0QC2fHOvz31Nfk
+\restrict 4b8XNCPc9JBR6bk12SV76NXDmeBPO7DFS7fTbULhQa0G56H6yaAfahejXoEqgdb
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -312,6 +312,27 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: room_restrictions_arrival_date_departure_date_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX room_restrictions_arrival_date_departure_date_idx ON public.room_restrictions USING btree (arrival_date, departure_date);
+
+
+--
+-- Name: room_restrictions_reservation_id_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX room_restrictions_reservation_id_idx ON public.room_restrictions USING btree (reservation_id);
+
+
+--
+-- Name: room_restrictions_room_id_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX room_restrictions_room_id_idx ON public.room_restrictions USING btree (room_id);
+
+
+--
 -- Name: schema_migration_version_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -361,5 +382,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict bJWxbYYCoYT9fO23KlvQxTmm9dXqgbuX10vsgQHQrV5jdSwwI0QC2fHOvz31Nfk
+\unrestrict 4b8XNCPc9JBR6bk12SV76NXDmeBPO7DFS7fTbULhQa0G56H6yaAfahejXoEqgdb
 
