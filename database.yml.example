@@ -1,0 +1,8 @@
+development:
+  dialect: postgres
+  database: bookings
+  user: postgres
+  password: 12345678
+  host: 127.0.0.1
+  port: 5431
+  pool: 5
