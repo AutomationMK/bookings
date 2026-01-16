@@ -8,7 +8,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
-    "watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+    "watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "docker:up": "docker compose -f ./docker-compose.yml -p bookings up -d",
+    "docker:down": "docker compose -f ./docker-compose.yml -p bookings down"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.18",
