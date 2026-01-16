@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict piYXIvgHkzZ6FHaRXSE8tonSFhZCW1yNMtGkCIF0FeVxEou7JsBkX2RDMOdh5Us
+\restrict mccbtUKSXcdGkJV02FKoNX61IR0gVwPIUVgW1yT7Tc2LGNVJIWo31xj5UaJngJR
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -327,6 +327,14 @@ ALTER TABLE ONLY public.reservations
 
 
 --
+-- Name: room_restrictions room_restrictions_reservations_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.room_restrictions
+    ADD CONSTRAINT room_restrictions_reservations_id_fk FOREIGN KEY (reservation_id) REFERENCES public.reservations(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: room_restrictions room_restrictions_restrictions_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -346,5 +354,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict piYXIvgHkzZ6FHaRXSE8tonSFhZCW1yNMtGkCIF0FeVxEou7JsBkX2RDMOdh5Us
+\unrestrict mccbtUKSXcdGkJV02FKoNX61IR0gVwPIUVgW1yT7Tc2LGNVJIWo31xj5UaJngJR
 
