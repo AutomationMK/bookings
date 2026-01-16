@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict e9rXoOGncpu9LM2bCtpoOehFfi595AEwrFcMBLaoDkggMsPnZ6qXDpSTwDf6gLY
+\restrict x7Dyttmuk2hygHuplhn7B40gPzKPy3X9PkgqZtWNu3xlEbrkfN1yYUcDwugy2tB
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -319,8 +319,16 @@ CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USIN
 
 
 --
+-- Name: reservations reservations_rooms_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reservations
+    ADD CONSTRAINT reservations_rooms_id_fk FOREIGN KEY (room_id) REFERENCES public.rooms(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict e9rXoOGncpu9LM2bCtpoOehFfi595AEwrFcMBLaoDkggMsPnZ6qXDpSTwDf6gLY
+\unrestrict x7Dyttmuk2hygHuplhn7B40gPzKPy3X9PkgqZtWNu3xlEbrkfN1yYUcDwugy2tB
 
