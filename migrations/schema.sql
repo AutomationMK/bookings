@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict mccbtUKSXcdGkJV02FKoNX61IR0gVwPIUVgW1yT7Tc2LGNVJIWo31xj5UaJngJR
+\restrict bJWxbYYCoYT9fO23KlvQxTmm9dXqgbuX10vsgQHQrV5jdSwwI0QC2fHOvz31Nfk
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -319,6 +319,13 @@ CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USIN
 
 
 --
+-- Name: users_email_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX users_email_idx ON public.users USING btree (email);
+
+
+--
 -- Name: reservations reservations_rooms_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -354,5 +361,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict mccbtUKSXcdGkJV02FKoNX61IR0gVwPIUVgW1yT7Tc2LGNVJIWo31xj5UaJngJR
+\unrestrict bJWxbYYCoYT9fO23KlvQxTmm9dXqgbuX10vsgQHQrV5jdSwwI0QC2fHOvz31Nfk
 
