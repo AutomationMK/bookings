@@ -10,3 +10,5 @@
 static/css/output.css
 coverage.out
 /db-data
+docker-compose.yml
+database.yml
