@@ -21,3 +21,11 @@ type Users struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+// Rooms holds room data
+type Rooms struct {
+	ID        int
+	RoomName  string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
