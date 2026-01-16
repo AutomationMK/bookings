@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 4b8XNCPc9JBR6bk12SV76NXDmeBPO7DFS7fTbULhQa0G56H6yaAfahejXoEqgdb
+\restrict 5wKnG7fuONruOfQdgSweF4zdKXeTt0o1ZTwcoir6vrresDbPt8tqZyHCdVMIejl
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -312,6 +312,20 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: reservations_email_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX reservations_email_idx ON public.reservations USING btree (email);
+
+
+--
+-- Name: reservations_last_name_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX reservations_last_name_idx ON public.reservations USING btree (last_name);
+
+
+--
 -- Name: room_restrictions_arrival_date_departure_date_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -382,5 +396,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 4b8XNCPc9JBR6bk12SV76NXDmeBPO7DFS7fTbULhQa0G56H6yaAfahejXoEqgdb
+\unrestrict 5wKnG7fuONruOfQdgSweF4zdKXeTt0o1ZTwcoir6vrresDbPt8tqZyHCdVMIejl
 
