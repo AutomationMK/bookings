@@ -59,7 +59,7 @@ func getRoutes() http.Handler {
 	NewHandlers(repo)
 
 	// give render acess to our app config var
-	render.NewTemplate(&app)
+	render.NewRenderer(&app)
 
 	mux := chi.NewRouter()
 
