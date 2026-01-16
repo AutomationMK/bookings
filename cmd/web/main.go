@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/config"
+	"github.com/AutomationMK/bookings/internal/driver"
 	"github.com/AutomationMK/bookings/internal/handlers"
 	"github.com/AutomationMK/bookings/internal/helpers"
 	"github.com/AutomationMK/bookings/internal/models"
@@ -24,10 +25,11 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.SQL.Close()
 
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
@@ -40,7 +42,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// change this to true when in production
 	app.InProduction = false
 
@@ -52,6 +54,9 @@ func run() error {
 
 	// specify special structs that will be stored in the session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 	// initialize a session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -61,16 +66,24 @@ func run() error {
 
 	app.Session = session
 
+	// connect to database
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5431 dbname=bookings user=postgres password=12345678")
+	if err != nil {
+		log.Fatal("Cannot connect to database! Dying...")
+	}
+	log.Println("Connected to database...")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
 	// give render acess to our app config var
@@ -78,5 +91,5 @@ func run() error {
 	// give helpers access to app config var
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }
