@@ -1,5 +1,51 @@
 package dbrepo
 
+import (
+	"context"
+	"time"
+
+	"github.com/AutomationMK/bookings/internal/models"
+)
+
 func (m *postgresDBRepo) AllUsers() bool {
 	return true
+}
+
+// InsertReservation inserts all info from a Reservation model
+// into the reservations table
+func (m *postgresDBRepo) InsertReservation(res models.Reservation) error {
+	// create a context that limits the sql connection to 3 sec
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `
+		INSERT INTO reservations (
+			first_name,
+			last_name,
+			email,
+			phone,
+			arrival_date,
+			departure_date,
+			room_id,
+			created_at,
+			updated_at
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+
+	// add Reservation model items and execute the query
+	_, err := m.DB.ExecContext(ctx, stmt,
+		res.FirstName,
+		res.LastName,
+		res.Email,
+		res.Phone,
+		res.ArrivalDate,
+		res.DepartureDate,
+		res.RoomID,
+		time.Now(),
+		time.Now(),
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
