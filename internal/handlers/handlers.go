@@ -39,13 +39,13 @@ func NewHandlers(r *Repository) {
 
 // Home is the home page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
 // About is the about page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	// send the data to the template
-	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "about.page.tmpl", &models.TemplateData{})
 }
 
 // Reserve handles the make-reservation page
@@ -54,7 +54,7 @@ func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]any)
 	data["reservation"] = emptyReservation
 
-	render.RenderTemplate(w, r, "reservation.page.tmpl", &models.TemplateData{
+	render.Template(w, r, "reservation.page.tmpl", &models.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	})
@@ -85,7 +85,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		data := make(map[string]any)
 		data["reservation"] = reservation
 
-		render.RenderTemplate(w, r, "reservation.page.tmpl", &models.TemplateData{
+		render.Template(w, r, "reservation.page.tmpl", &models.TemplateData{
 			Form: form,
 			Data: data,
 		})
@@ -110,14 +110,14 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	data := make(map[string]any)
 	data["reservation"] = reservation
 
-	render.RenderTemplate(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
+	render.Template(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
 		Data: data,
 	})
 }
 
 // Availability handles the search-availability page
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
 
 // PostAvailability handles post data from search-availability page
@@ -152,20 +152,20 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 // Contact handles the contact page
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "contact.page.tmpl", &models.TemplateData{})
 }
 
 // Rooms handles the Rooms page
 func (m *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "rooms.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "rooms.page.tmpl", &models.TemplateData{})
 }
 
 // Deluxe handles the Deluxe room page
 func (m *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "deluxe-room.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "deluxe-room.page.tmpl", &models.TemplateData{})
 }
 
 // Premium handles the Premium suite page
 func (m *Repository) Premium(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "premium-suite.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "premium-suite.page.tmpl", &models.TemplateData{})
 }
