@@ -87,7 +87,7 @@ func run() (*driver.DB, error) {
 	handlers.NewHandlers(repo)
 
 	// give render acess to our app config var
-	render.NewTemplate(&app)
+	render.NewRenderer(&app)
 	// give helpers access to app config var
 	helpers.NewHelpers(&app)
 
