@@ -121,7 +121,7 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 	var rooms []models.Room
 
 	stmt := `
-		SELECT r.id, r.name
+		SELECT r.id, r.room_name
 		FROM rooms AS r
 		WHERE r.id NOT IN (
 			SELECT rr.room_id
