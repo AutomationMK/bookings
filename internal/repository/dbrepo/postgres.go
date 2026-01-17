@@ -112,3 +112,42 @@ func (m *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time,
 
 	return false, nil
 }
+
+// SearchAvailabityForALLRooms returns a slice of available rooms if any
+func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var rooms []models.Room
+
+	stmt := `
+		SELECT r.id, r.name
+		FROM rooms AS r
+		WHERE r.id NOT IN (
+			SELECT rr.room_id
+			FROM room_restrictions AS rr
+			WHERE
+				$1 < rr.departure_date AND
+				$2 > rr.arrival_date
+		);`
+
+	rows, err := m.DB.QueryContext(ctx, stmt, start, end)
+	if err != nil {
+		return rooms, err
+	}
+
+	for rows.Next() {
+		var room models.Room
+		err := rows.Scan(&room.ID, &room.RoomName)
+		if err != nil {
+			return rooms, err
+		}
+		rooms = append(rooms, room)
+	}
+
+	if err = rows.Err(); err != nil {
+		return rooms, err
+	}
+
+	return rooms, nil
+}
