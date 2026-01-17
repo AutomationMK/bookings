@@ -61,7 +61,7 @@ func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	stmt := `
 		INSERT INTO room_restrictions (
 			arrival_date,
-			end_date,
+			departure_date,
 			room_id,
 			reservation_id,
 			created_at,
