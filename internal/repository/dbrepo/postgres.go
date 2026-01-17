@@ -13,10 +13,12 @@ func (m *postgresDBRepo) AllUsers() bool {
 
 // InsertReservation inserts all info from a Reservation model
 // into the reservations table
-func (m *postgresDBRepo) InsertReservation(res models.Reservation) error {
+func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) {
 	// create a context that limits the sql connection to 3 sec
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
+
+	var newID int
 
 	stmt := `
 		INSERT INTO reservations (
@@ -33,7 +35,7 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) error {
 		RETURNING id`
 
 	// add Reservation model items and execute the query
-	_, err := m.DB.ExecContext(ctx, stmt,
+	err := m.DB.QueryRowContext(ctx, stmt,
 		res.FirstName,
 		res.LastName,
 		res.Email,
@@ -43,10 +45,10 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) error {
 		res.RoomID,
 		time.Now(),
 		time.Now(),
-	)
+	).Scan(&newID)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return newID, nil
 }
