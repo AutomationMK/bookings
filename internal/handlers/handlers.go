@@ -101,7 +101,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 
 	form := forms.New(r.PostForm)
 
-	form.Required("first_name", "last_name", "email")
+	form.Required("first_name", "last_name", "email", "arrival_date", "departure_date", "room_id")
 	form.MinLength("first_name", 3)
 	form.IsEmail("email")
 
