@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict acpdGTshyu594jBPZdS5hKh1HKcrmDFrFqroD3eYFAhS7siUnIQ29sbX8wAbZsL
+\restrict qjQrGzUBdIKmfm2hZUxOLf1QFMrMLj7aclLhffJc7pw2FNpCBPghM3i9yXNznCh
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -110,7 +110,7 @@ CREATE TABLE public.room_restrictions (
     arrival_date date NOT NULL,
     departure_date date NOT NULL,
     room_id integer NOT NULL,
-    reservation_id integer NOT NULL,
+    reservation_id integer,
     restriction_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -396,5 +396,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict acpdGTshyu594jBPZdS5hKh1HKcrmDFrFqroD3eYFAhS7siUnIQ29sbX8wAbZsL
+\unrestrict qjQrGzUBdIKmfm2hZUxOLf1QFMrMLj7aclLhffJc7pw2FNpCBPghM3i9yXNznCh
 
