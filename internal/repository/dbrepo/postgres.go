@@ -29,7 +29,8 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) error {
 			room_id,
 			created_at,
 			updated_at
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+		RETURNING id`
 
 	// add Reservation model items and execute the query
 	_, err := m.DB.ExecContext(ctx, stmt,
