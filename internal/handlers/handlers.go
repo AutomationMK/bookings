@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,6 +14,7 @@ import (
 	"github.com/AutomationMK/bookings/internal/render"
 	"github.com/AutomationMK/bookings/internal/repository"
 	"github.com/AutomationMK/bookings/internal/repository/dbrepo"
+	"github.com/go-chi/chi"
 )
 
 // Repository is the repository type
@@ -197,7 +197,19 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(fmt.Sprintf("start date is %s and end date is %s", ad, dd)))
+	data := make(map[string]interface{})
+	data["rooms"] = rooms
+
+	res := models.Reservation{
+		ArrivalDate:   arrivalDate,
+		DepartureDate: departureDate,
+	}
+
+	m.App.Session.Put(r.Context(), "reservation", res)
+
+	render.Template(w, r, "available-rooms.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 type jsonResponse struct {
@@ -240,4 +252,23 @@ func (m *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
 // Premium handles the Premium suite page
 func (m *Repository) Premium(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "premium-suite.page.tmpl", &models.TemplateData{})
+}
+
+func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.RoomID = roomID
+
+	m.App.Session.Put(r.Context(), "reservation", res)
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
