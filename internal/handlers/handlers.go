@@ -77,16 +77,19 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	arrivalDate, err := time.Parse(layout, ad)
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 	departureDate, err := time.Parse(layout, dd)
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	// convert room_id to integer
 	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	reservation := models.Reservation{
@@ -119,6 +122,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	newReservationID, err := m.DB.InsertReservation(reservation)
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	restriction := models.RoomRestriction{
