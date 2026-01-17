@@ -10,7 +10,8 @@
     "build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
     "watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
     "docker:up": "docker compose -f ./docker-compose.yml -p bookings up -d",
-    "docker:down": "docker compose -f ./docker-compose.yml -p bookings down"
+    "docker:down": "docker compose -f ./docker-compose.yml -p bookings down",
+    "docker:psql": "docker exec -u postgres -it bookings_app psql -d bookings"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.18",
