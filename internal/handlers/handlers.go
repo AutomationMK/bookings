@@ -52,13 +52,30 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reserve handles the make-reservation page
 func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
-	var emptyReservation models.Reservation
+	// grab reservation from the session
+	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		m.App.ErrorLog.Println("cannot get item from session")
+		m.App.Session.Put(r.Context(), "error", "You need to check for available rooms before making a reservation")
+		http.Redirect(w, r, "/search-availability", http.StatusTemporaryRedirect)
+		return
+	}
+	// add the reservation to template data any map
 	data := make(map[string]any)
-	data["reservation"] = emptyReservation
+	data["reservation"] = res
+
+	// reformat the date.Time to string
+	ad := res.ArrivalDate.Format("1/2/2006")
+	dd := res.DepartureDate.Format("1/2/2006")
+	// add the date strings to template data string map
+	stringMap := make(map[string]string)
+	stringMap["arrival_date"] = ad
+	stringMap["departure_date"] = dd
 
 	render.Template(w, r, "reservation.page.tmpl", &models.TemplateData{
-		Form: forms.New(nil),
-		Data: data,
+		Form:      forms.New(nil),
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
