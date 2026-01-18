@@ -7,6 +7,7 @@
 {{define "content"}}
 <script type="module">
     import Modal from "/static/js/modal.js";
+    import Notice from "/static/js/notify.js";
 
     let modal = new Modal();
     modal.addHtml(`
@@ -14,7 +15,7 @@
             class="absolute top-2/5 -translate-y-2/4 left-2/4 -translate-x-2/4 container px-4 rounded-md flex justify-center">
             <form id="check-availability-form"
                 action="#" method="POST"
-                class="relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20">
+                class="notice-box relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20">
                 <button class="modal-close-btn absolute flex flex-col justify-center py-1 top-4 right-5 w-6 h-6 rounded-md before:bg-stone-800 after:w-full after:h-0.5 sm:h-10 sm:w-10 sm:py-2 after:bg-stone-800 before:w-full before:h-0.5 before:rotate-45 before:translate-y-0.5 after:-rotate-45 border-2 border-stone-800 hover:before:scale-75 before:ease-in-out before:duration-300 before:rounded-full after:rounded-full hover:after:scale-75 after:ease-in-out after:duration-300"></button>
                 <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold">Search for Availability
                 </h2>
@@ -68,7 +69,8 @@
                 if (data.ok) {
                     console.log("room is available");
                 } else {
-                    console.log("room is not available");
+                    let error = new Notice(".notice-box", "error", "w-full absolute bottom-1 translate-y-full rounded-b-md");
+                    error.notify("Room is not available");
                 }
             });
     });
