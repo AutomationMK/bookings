@@ -5,13 +5,25 @@
     class="flex flex-col items-center justify-center container mx-auto px-4 gap-10 py-10 min-h-[calc(100vh-5.5rem)] h-fit">
 
     {{$res := index .Data "reservation"}}
+    {{$arrivalDate := index .StringMap "arrival_date"}}
+    {{$departureDate := index .StringMap "departure_date"}}
 
     <form action="/make-reservation" method="POST"
         class="grid justify-items-center lg:grid-cols-2 bg-amber-100 w-full max-w-6xl gap-4 p-8 rounded-md shadow-md shadow-stone-800/20">
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+        <input type="hidden" name="arrival_date" value="{{$arrivalDate}}">
+        <input type="hidden" name="departure_date" value="{{$departureDate}}">
+        <input type="hidden" name="room_id" value="{{$res.RoomID}}">
+
         <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold">
-            Make Reservation
+            Reservation
         </h2>
+        <h3 class="text-lg md:text-xl lg:text-2xl lg:col-span-full text-stone-700 text-center">
+            From {{$arrivalDate}} to {{$departureDate}}
+        </h3>
+        <p class="text md:text-md lg:text-lg lg:col-span-full text-stone-700 text-center">
+            Fill in the following info below to make the reservation
+        </p>
         <div class="flex flex-col gap-2 justify-end items-center">
             {{with .Form.Errors.Get "first_name"}}
             <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
@@ -96,49 +108,6 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 justify-end items-center">
-            {{with .Form.Errors.Get "arrival_date"}}
-            <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
-            {{end}}
-            <div {{with .Form.Errors.Get "arrival_date" }}
-                class="grid sm:grid-cols-[3fr_5fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md is-invalid"
-                {{else}}
-                class="grid sm:grid-cols-[3fr_5fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20"
-                {{end}}>
-                <div
-                    class="flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4 border-stone-500">
-                    <label for="arrival_date" class="text-lg text-stone-800">
-                        Arrival date
-                    </label>
-                </div>
-                <div class="flex justify-center p-2 sm:p-4">
-                    <input type="text" name="arrival_date" id="arrival_date" placeholder="MM/DD/YYYY"
-                        value="{{$res.ArrivalDate}}" class="text-lg text-stone-800 w-full">
-                </div>
-            </div>
-        </div>
-        <div class="flex flex-col gap-2 justify-end items-center">
-            {{with .Form.Errors.Get "departure_date"}}
-            <p class="px-4 py-2 bg-red-100 rounded text-red-500 col-span-full">{{.}}</p>
-            {{end}}
-            <div {{with .Form.Errors.Get "departure_date" }}
-                class="grid sm:grid-cols-[3fr_5fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md is-invalid"
-                {{else}}
-                class="grid sm:grid-cols-[3fr_5fr] w-full h-fit items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20"
-                {{end}}>
-                <div
-                    class="flex justify-center w-full p-2 border-b-3 sm:border-b-0 sm:border-r-3 sm:p-4 border-stone-500">
-                    <label for="departure_date" class="text-lg text-stone-800">
-                        Departure date
-                    </label>
-                </div>
-                <div class="flex justify-center p-2 sm:p-4">
-                    <input type="text" name="departure_date" id="departure_date" placeholder="MM/DD/YYYY"
-                        value="{{$res.ArrivalDate}}" class="text-lg text-stone-800 w-full">
-                </div>
-            </div>
-        </div>
-        <input type="hidden" name="room_id" value="1">
         <button type="submit"
             class="bg-stone-700 border-3 border-stone-700 lg:col-span-full rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">
             Submit Reservation
