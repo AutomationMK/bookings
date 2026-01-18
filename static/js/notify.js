@@ -9,8 +9,8 @@ export default class Notice {
         this.msgBox.insertAdjacentHTML(
             "beforeend",
             `
-            <div id="${id}" class="flex w-screen h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
-                <h2 class="text md:text-lg lg:text-xl font-bold"></h2>
+            <div id="${id}" class="flex mx-auto w-screen h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
+                <h2 class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>
             </div>
             `,
         );
