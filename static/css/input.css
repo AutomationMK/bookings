@@ -132,6 +132,10 @@
         @apply text-xs sm:text-base lg:text-lg text-stone-400;
     }
 
+    .date_box-fade {
+        @apply flex items-center justify-center p-1 bg-stone-300;
+    }
+
     /********** date picker styles **********/
     .hide-modal {
         @apply opacity-0;
