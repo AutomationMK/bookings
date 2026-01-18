@@ -57,7 +57,7 @@
         let form = document.querySelector("#check-availability-form");
         let formData = new FormData(form);
         formData.append("csrf_token", "{{.CSRFToken}}");
-        console.log(formData);
+        formData.append("room_id", "2");
 
         fetch('/search-availability-json', {
             method: "POST",
@@ -65,9 +65,11 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                console.log(data.ok);
-                console.log(data.message);
+                if (data.ok) {
+                    console.log("room is available");
+                } else {
+                    console.log("room is not available");
+                }
             });
     });
 </script>
