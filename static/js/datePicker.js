@@ -6,6 +6,7 @@ class Cal {
     inputBox;
     nextMonth;
     prevMonth;
+    realDate;
     startDay;
     endDay;
 
@@ -23,13 +24,14 @@ class Cal {
         this.endDay = null;
 
         this.curMonth = new Date();
+        this.realDate = new Date();
         this.inputBox = inputBox;
 
         this.curMonth.setDate(1);
 
         this.prevMonth = new Date();
-        this.nextMonth = new Date();
         this.#decMonth(this.prevMonth);
+        this.nextMonth = new Date();
         this.#incMonth(this.nextMonth);
 
         this.#makeCal(this.prevMonth, "beforeend");
@@ -76,18 +78,17 @@ class Cal {
         const curCalendar = this.inputBox.querySelector(
             `.calendar[data-month="${this.curMonth.getMonth()}"]`,
         );
-
-        const prevCalendar = this.inputBox.querySelector(
-            `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
-        );
+        curCalendar.style.transform = `translateX(0%)`;
 
         const nextCalendar = this.inputBox.querySelector(
             `.calendar[data-month="${this.nextMonth.getMonth()}"]`,
         );
-
-        curCalendar.style.transform = `translateX(0%)`;
-        prevCalendar.style.transform = `translateX(${100 * -1}%)`;
         nextCalendar.style.transform = `translateX(${100 * 1}%)`;
+
+        const prevCalendar = this.inputBox.querySelector(
+            `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
+        );
+        prevCalendar.style.transform = `translateX(${100 * -1}%)`;
     }
 
     selectDate(e) {
@@ -98,6 +99,11 @@ class Cal {
             date = new Date(dateData);
         } else {
             date = new Date(dateData);
+        }
+
+        if (this.realDate.getTime() > date.getTime()) {
+            // don't allow dates lower than realDate to be selected
+            return;
         }
 
         const inputTextStart =
@@ -246,6 +252,7 @@ class Cal {
     nextCal() {
         this.resetDateHandlers();
         this.resetButtons();
+
         const prevCalendar = this.inputBox.querySelector(
             `.calendar[data-month="${this.prevMonth.getMonth()}"]`,
         );
@@ -265,6 +272,13 @@ class Cal {
 
     // move to previous cal
     prevCal() {
+        if (
+            this.prevMonth.getFullYear() < this.realDate.getFullYear() &&
+            this.prevMonth.getMonth() > this.realDate.getMonth()
+        ) {
+            return;
+        }
+
         this.resetDateHandlers();
         this.resetButtons();
         const nextCalendar = this.inputBox.querySelector(
@@ -397,12 +411,40 @@ class Cal {
         let dateStr = curDate.toLocaleDateString(undefined, "YYYY-MM-DD");
         for (let i = 0; i < numberOfDates; i++) {
             dateStr = curDate.toLocaleDateString(undefined, "YYYY-MM-DD");
-            if (curDate.getMonth() !== date.getMonth()) {
+            if (
+                curDate.getMonth() !== date.getMonth() &&
+                curDate.getTime() >= this.realDate.getTime()
+            ) {
                 calendar.insertAdjacentHTML(
                     "beforeend",
                     `
                     <div class="date_box" data-date="${dateStr}">
                         <p class="date_text-fade">
+                            ${curDate.getDate()}
+                        </p>
+                    </div>
+`,
+                );
+            } else if (
+                curDate.getMonth() !== date.getMonth() &&
+                curDate.getTime() < this.realDate.getTime()
+            ) {
+                calendar.insertAdjacentHTML(
+                    "beforeend",
+                    `
+                    <div class="date_box-fade" data-date="${dateStr}">
+                        <p class="date_text-fade">
+                            ${curDate.getDate()}
+                        </p>
+                    </div>
+`,
+                );
+            } else if (curDate.getTime() < this.realDate.getTime()) {
+                calendar.insertAdjacentHTML(
+                    "beforeend",
+                    `
+                    <div class="date_box-fade" data-date="${dateStr}">
+                        <p class="date_text">
                             ${curDate.getDate()}
                         </p>
                     </div>
