@@ -60,6 +60,15 @@ func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/search-availability", http.StatusTemporaryRedirect)
 		return
 	}
+
+	room, err := m.DB.GetRoomByID(res.RoomID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.Room.RoomName = room.RoomName
+
 	// add the reservation to template data any map
 	data := make(map[string]any)
 	data["reservation"] = res
