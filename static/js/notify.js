@@ -36,7 +36,7 @@ export default class Notice {
                 this.noticeEl.classList.remove("notify-open");
                 this.noticeEl.classList.add("notify-close");
                 this.noticeEl.classList.remove(`${this.msgType}-msg`);
-                this.messageEl.innerHTML = "";
+                this.noticeEl.innerHTML = "";
             }, timeout);
         }
     }
