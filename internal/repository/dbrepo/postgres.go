@@ -160,7 +160,7 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	var room models.Room
 
 	stmt := `
-		SELECT id, room_name, created_at, updated_at
+		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links
 		FROM rooms
 		WHERE id = $1;`
 
@@ -170,6 +170,12 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 		&room.RoomName,
 		&room.CreatedAt,
 		&room.UpdatedAt,
+		&room.BedType,
+		&room.RoomArea,
+		&room.RoomView,
+		&room.RoomDescription,
+		&room.RoomFeatures,
+		&room.PhotoLinks,
 	)
 
 	if err != nil {
