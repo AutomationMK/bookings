@@ -69,15 +69,30 @@
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
+                    if (available.messageEl !== null) {
+                        available.noticeEl.classList.remove("notify-open");
+                        available.noticeEl.classList.add("notify-close");
+                        available.noticeEl.innerHTML = "";
+                    }
+                    if (error.messageEl !== null) {
+                        error.noticeEl.classList.remove("notify-open");
+                        error.noticeEl.classList.add("notify-close");
+                        error.noticeEl.innerHTML = "";
+                    }
                     available.addMsgEl(`
                     <h2 id="msg" class="px-4 md:text-lg lg:text-xl font-bold text-center"></h2>
-                    <a href="#" class="border-3 border-green-900 rounded-md py-2 px-4 shadow-md scale-103 hover:shadow-none hover:scale-100 transition">Book Now</a>`)
+                    <a href="/book-room?id=${data.room_id}&ad=${data.arrival_date}&dd=${data.departure_date}" class="border-3 border-green-900 rounded-md py-2 px-4 shadow-md scale-103 hover:shadow-none hover:scale-100 transition">Book Now</a>`)
                     available.notify("Room is Available")
                 } else {
                     if (available.messageEl !== null) {
                         available.noticeEl.classList.remove("notify-open");
                         available.noticeEl.classList.add("notify-close");
                         available.noticeEl.innerHTML = "";
+                    }
+                    if (error.messageEl !== null) {
+                        error.noticeEl.classList.remove("notify-open");
+                        error.noticeEl.classList.add("notify-close");
+                        error.noticeEl.innerHTML = "";
                     }
                     error.addMsgEl(`<h2 id="msg" class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
                     error.notify("Room is not available");
