@@ -285,17 +285,46 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	w.Write(out)
 }
 
+// BookRoom takes url parameters and builds reservation session
+// user is redirected to the /make-reservation route
 func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
-	// grab id, ad, and dd get parameters
-	ID, err := strconv.Atoi(r.URL.Query().Get("id"))
+	roomID, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	arrivalDate := r.URL.Query().Get("ad")
-	departureDate := r.URL.Query().Get("dd")
+	ad := r.URL.Query().Get("ad")
+	dd := r.URL.Query().Get("dd")
 
-	log.Println(ID, arrivalDate, departureDate)
+	layout := "1/2/2006"
+	arrivalDate, err := time.Parse(layout, ad)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	departureDate, err := time.Parse(layout, dd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	var res models.Reservation
+
+	room, err := m.DB.GetRoomByID(roomID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.Room.RoomName = room.RoomName
+	res.RoomID = roomID
+	res.ArrivalDate = arrivalDate
+	res.DepartureDate = arrivalDate
+
+	m.App.Session.Put(r.Context(), "reservation", res)
+
+	log.Println(roomID, arrivalDate, departureDate)
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
 
 // Contact handles the contact page
