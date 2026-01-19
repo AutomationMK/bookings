@@ -16,10 +16,16 @@ type User struct {
 
 // Room holds room data
 type Room struct {
-	ID        int
-	RoomName  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID              int
+	RoomName        string
+	BedType         string
+	RoomArea        int
+	RoomView        string
+	RoomDescription string
+	RoomFeatures    []string
+	PhotoLinks      []string
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 }
 
 // Restriction holds restriction data
