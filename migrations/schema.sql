@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict qjQrGzUBdIKmfm2hZUxOLf1QFMrMLj7aclLhffJc7pw2FNpCBPghM3i9yXNznCh
+\restrict DPIfZSgckdvK288qCyoBEnpM7YcudhLbM9NPFgTai4RDLvkUClsDNLNhIiRHD2C
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -149,7 +149,13 @@ CREATE TABLE public.rooms (
     id integer NOT NULL,
     room_name character varying(255) DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    bed_type character varying(255) DEFAULT ''::character varying NOT NULL,
+    room_area integer DEFAULT 0 NOT NULL,
+    room_view character varying(255) DEFAULT ''::character varying NOT NULL,
+    room_description character varying(255) DEFAULT ''::character varying NOT NULL,
+    room_features character varying[] DEFAULT ARRAY[''::text] NOT NULL,
+    photo_links character varying[] DEFAULT ARRAY[''::text] NOT NULL
 );
 
 
@@ -396,5 +402,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict qjQrGzUBdIKmfm2hZUxOLf1QFMrMLj7aclLhffJc7pw2FNpCBPghM3i9yXNznCh
+\unrestrict DPIfZSgckdvK288qCyoBEnpM7YcudhLbM9NPFgTai4RDLvkUClsDNLNhIiRHD2C
 

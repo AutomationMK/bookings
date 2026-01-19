@@ -1,0 +1,6 @@
+drop_column("rooms", "bed_type")
+drop_column("rooms", "room_area")
+drop_column("rooms", "room_view")
+drop_column("rooms", "room_description")
+drop_column("rooms", "room_features")
+drop_column("rooms", "photo_links")

@@ -1,0 +1,6 @@
+add_column("rooms", "bed_type", "string", {"default": ""})
+add_column("rooms", "room_area", "integer", {"default": 0})
+add_column("rooms", "room_view", "string", {"default": ""})
+add_column("rooms", "room_description", "string", {"default": ""})
+add_column("rooms", "room_features", "[]string", {"default_raw": "ARRAY['']"})
+add_column("rooms", "photo_links", "[]string", {"default_raw": "ARRAY['']"})
