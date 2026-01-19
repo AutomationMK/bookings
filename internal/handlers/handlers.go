@@ -347,6 +347,7 @@ func (m *Repository) Premium(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "premium-suite.page.tmpl", &models.TemplateData{})
 }
 
+// ChooseRoom displays the available rooms with the given date range
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
