@@ -127,8 +127,16 @@ class Cal {
                 return;
             } else {
                 if (this.endDay === null) {
-                    this.endDay = new Date(date);
+                    if (this.startDay.getTime() > date.getTime()) {
+                        this.endDay = new Date(this.startDay);
+                        this.startDay = new Date(date);
+                    } else {
+                        this.endDay = new Date(date);
+                    }
                 } else {
+                    this.endDay = null;
+                    this.startDay = new Date(date);
+                    /*
                     dateDifStart = Math.abs(
                         this.startDay.getTime() - date.getTime(),
                     );
@@ -141,6 +149,7 @@ class Cal {
                     } else if (dateDifStart > dateDifEnd) {
                         this.endDay = date;
                     }
+                    */
                 }
             }
         }
