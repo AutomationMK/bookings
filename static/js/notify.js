@@ -11,17 +11,15 @@ export default class Notice {
         this.msgBox.insertAdjacentHTML(
             "beforeend",
             `
-            <div id="${type}" class="${style} flex mx-auto h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
-                <h2 class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>
+            <div id="${type}" class="${style} flex items-center gap-2 mx-auto h-fit justify-center ease-in-out duration-500 notify-close overflow-hidden">
             </div>
             `,
         );
 
-        this.noticeEl = this.msgBox.querySelector(`#${type}`);
-        this.messageEl = this.noticeEl.querySelector("h2");
+        this.noticeEl = this.msgBox.querySelector(`#${this.msgType}`);
     }
 
-    notify(msg) {
+    notify(msg, timeout = 0) {
         this.noticeEl.classList.remove("notify-close");
         this.noticeEl.classList.add("notify-open");
         if (
@@ -33,11 +31,18 @@ export default class Notice {
         }
         this.messageEl.innerHTML = `${msg}`;
 
-        setTimeout(() => {
-            this.noticeEl.classList.remove("notify-open");
-            this.noticeEl.classList.add("notify-close");
-            this.noticeEl.classList.remove(`${this.msgType}-msg`);
-            this.messageEl.innerHTML = "";
-        }, 5000);
+        if (timeout > 0) {
+            setTimeout(() => {
+                this.noticeEl.classList.remove("notify-open");
+                this.noticeEl.classList.add("notify-close");
+                this.noticeEl.classList.remove(`${this.msgType}-msg`);
+                this.messageEl.innerHTML = "";
+            }, timeout);
+        }
+    }
+
+    addMsgEl(html) {
+        this.noticeEl.insertAdjacentHTML("beforeend", `${html}`);
+        this.messageEl = this.noticeEl.querySelector("#msg");
     }
 }
