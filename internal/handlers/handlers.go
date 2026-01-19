@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -320,11 +319,10 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	res.Room.RoomName = room.RoomName
 	res.RoomID = roomID
 	res.ArrivalDate = arrivalDate
-	res.DepartureDate = arrivalDate
+	res.DepartureDate = departureDate
 
 	m.App.Session.Put(r.Context(), "reservation", res)
 
-	log.Println(roomID, arrivalDate, departureDate)
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
 
