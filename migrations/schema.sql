@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict DPIfZSgckdvK288qCyoBEnpM7YcudhLbM9NPFgTai4RDLvkUClsDNLNhIiRHD2C
+\restrict KaQ1vm8eYBEe9mbsaMweO4m6qHh2ORSA9TnBWk7TD7AHZss3f2t0VKLhGBPRDLG
 
 -- Dumped from database version 18.1 (Debian 18.1-1.pgdg13+2)
 -- Dumped by pg_dump version 18.1
@@ -402,5 +402,5 @@ ALTER TABLE ONLY public.room_restrictions
 -- PostgreSQL database dump complete
 --
 
-\unrestrict DPIfZSgckdvK288qCyoBEnpM7YcudhLbM9NPFgTai4RDLvkUClsDNLNhIiRHD2C
+\unrestrict KaQ1vm8eYBEe9mbsaMweO4m6qHh2ORSA9TnBWk7TD7AHZss3f2t0VKLhGBPRDLG
 
