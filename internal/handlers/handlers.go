@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -282,6 +283,19 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
+}
+
+func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+	// grab id, ad, and dd get parameters
+	ID, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	arrivalDate := r.URL.Query().Get("ad")
+	departureDate := r.URL.Query().Get("dd")
+
+	log.Println(ID, arrivalDate, departureDate)
 }
 
 // Contact handles the contact page
