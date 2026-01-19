@@ -24,8 +24,9 @@
     {{with .Flash}}
     <script type="module">
         import Notice from "/static/js/notify.js";
-        let flash = new Notice(".msg-box", "flash");
-        flash.notify("{{.}}");
+        let flash = new Notice(".msg-box", "success");
+        flash.addMsgEl(`<h2 id="msg" class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
+        flash.notify("{{.}}", 5000);
     </script>
     {{end}}
 
@@ -33,7 +34,8 @@
     <script type="module">
         import Notice from "/static/js/notify.js";
         let warning = new Notice(".msg-box", "warning");
-        warning.notify("{{.}}");
+        warning.addMsgEl(`<h2 id="msg" class="msg container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
+        warning.notify("{{.}}", 5000);
     </script>
     {{end}}
 
@@ -41,7 +43,8 @@
     <script type="module">
         import Notice from "/static/js/notify.js";
         let error = new Notice(".msg-box", "error");
-        error.notify("{{.}}");
+        error.addMsgEl(`<h2 id="msg" class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
+        error.notify("{{.}}", 5000);
     </script>
     {{end}}
 
