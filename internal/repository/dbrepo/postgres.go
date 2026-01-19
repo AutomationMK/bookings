@@ -184,3 +184,47 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 
 	return room, nil
 }
+
+// GetAllRooms returns all rooms in the database or an error if encountered
+func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var rooms []models.Room
+
+	stmt := `
+		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links
+		FROM rooms;`
+
+	rows, err := m.DB.QueryContext(ctx, stmt)
+	if err != nil {
+		return rooms, err
+	}
+
+	for rows.Next() {
+		var room models.Room
+		err := rows.Scan(
+			&room.ID,
+			&room.RoomName,
+			&room.CreatedAt,
+			&room.UpdatedAt,
+			&room.BedType,
+			&room.RoomArea,
+			&room.RoomView,
+			&room.RoomDescription,
+			&room.RoomFeatures,
+			&room.PhotoLinks,
+		)
+		if err != nil {
+			return rooms, err
+		}
+		rooms = append(rooms, room)
+	}
+
+	if err = rows.Err(); err != nil {
+		return rooms, err
+	}
+
+	return rooms, nil
+
+}
