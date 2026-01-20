@@ -2,7 +2,6 @@ package dbrepo
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/models"
@@ -190,7 +189,6 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 func (m *postgresDBRepo) GetRoomByRoute(route string) (models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	log.Println(route)
 
 	var room models.Room
 
