@@ -355,6 +355,24 @@ func (m *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "rooms.page.tmpl", &models.TemplateData{})
 }
 
+// Room displays the room based on the route name
+func (m *Repository) Room(w http.ResponseWriter, r *http.Request) {
+	roomParam := chi.URLParam(r, "roomName")
+	roomRoute := "/rooms/" + roomParam
+	room, err := m.DB.GetRoomByRoute(roomRoute)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]any)
+	data["room"] = room
+
+	render.Template(w, r, "room.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
+}
+
 // Deluxe handles the Deluxe room page
 func (m *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "deluxe-room.page.tmpl", &models.TemplateData{})
