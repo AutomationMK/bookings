@@ -2,6 +2,7 @@ package dbrepo
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/models"
@@ -189,13 +190,14 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 func (m *postgresDBRepo) GetRoomByRoute(route string) (models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
+	log.Println(route)
 
 	var room models.Room
 
 	stmt := `
 		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links, room_route
 		FROM rooms
-		WHERE id = $1;`
+		WHERE room_route = $1;`
 
 	row := m.DB.QueryRow(ctx, stmt, route)
 	err := row.Scan(
