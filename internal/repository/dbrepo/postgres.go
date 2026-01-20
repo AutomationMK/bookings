@@ -35,7 +35,7 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) 
 		RETURNING id`
 
 	// add Reservation model items and execute the query
-	err := m.DB.QueryRowContext(ctx, stmt,
+	err := m.DB.QueryRow(ctx, stmt,
 		res.FirstName,
 		res.LastName,
 		res.Email,
@@ -69,7 +69,7 @@ func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 			restriction_id
 		) VALUES($1, $2, $3, $4, $5, $6, $7);`
 
-	_, err := m.DB.ExecContext(ctx, stmt,
+	_, err := m.DB.Exec(ctx, stmt,
 		r.ArrivalDate,
 		r.DepartureDate,
 		r.RoomID,
@@ -101,7 +101,7 @@ func (m *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time,
 
 	var numRows int
 
-	err := m.DB.QueryRowContext(ctx, stmt, roomID, start, end).Scan(&numRows)
+	err := m.DB.QueryRow(ctx, stmt, roomID, start, end).Scan(&numRows)
 	if err != nil {
 		return false, err
 	}
@@ -131,7 +131,7 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 				$2 > rr.arrival_date
 		);`
 
-	rows, err := m.DB.QueryContext(ctx, stmt, start, end)
+	rows, err := m.DB.Query(ctx, stmt, start, end)
 	if err != nil {
 		return rooms, err
 	}
@@ -164,7 +164,7 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 		FROM rooms
 		WHERE id = $1;`
 
-	row := m.DB.QueryRowContext(ctx, stmt, id)
+	row := m.DB.QueryRow(ctx, stmt, id)
 	err := row.Scan(
 		&room.ID,
 		&room.RoomName,
@@ -196,7 +196,7 @@ func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
 		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links
 		FROM rooms;`
 
-	rows, err := m.DB.QueryContext(ctx, stmt)
+	rows, err := m.DB.Query(ctx, stmt)
 	if err != nil {
 		return rooms, err
 	}
@@ -215,6 +215,7 @@ func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
 			&room.RoomFeatures,
 			&room.PhotoLinks,
 		)
+		room.RoomRoute = ""
 		if err != nil {
 			return rooms, err
 		}
