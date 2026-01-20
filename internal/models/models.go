@@ -26,6 +26,7 @@ type Room struct {
 	PhotoLinks      []string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
+	RoomRoute       string
 }
 
 // Restriction holds restriction data
