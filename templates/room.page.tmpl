@@ -1,0 +1,165 @@
+{{template "base" .}}
+
+{{define "js"}}
+<script type="module" src="/static/js/modal.js"></script>
+{{end}}
+
+{{define "content"}}
+
+{{$room := index .Data "room"}}
+<script type="module">
+    import Modal from "/static/js/modal.js";
+    import Notice from "/static/js/notify.js";
+
+    let modal = new Modal();
+    modal.addHtml(`
+        <div
+            class="absolute top-2/5 -translate-y-2/4 left-2/4 -translate-x-2/4 container px-4 rounded-md flex justify-center">
+            <form id="check-availability-form"
+                action="#" method="POST"
+                class="notice-box relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20">
+                <button class="modal-close-btn absolute flex flex-col justify-center py-1 top-4 right-5 w-6 h-6 rounded-md before:bg-stone-800 after:w-full after:h-0.5 sm:h-10 sm:w-10 sm:py-2 after:bg-stone-800 before:w-full before:h-0.5 before:rotate-45 before:translate-y-0.5 after:-rotate-45 border-2 border-stone-800 hover:before:scale-75 before:ease-in-out before:duration-300 before:rounded-full after:rounded-full hover:after:scale-75 after:ease-in-out after:duration-300"></button>
+                <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold">Search for Availability
+                </h2>
+                <div
+                    class="date_picker group grid grid-cols-[1fr_20px_1fr] px-4 py-4 w-full h-fit items-center justify-items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
+                    <label for="arrival_date" class="sm:text-lg text-stone-800">
+                        Arrival date
+                    </label>
+                    <p class="text-lg text-stone-800">-</p>
+                    <label for="departure_date" class="sm:text-lg text-stone-800">
+                        Departure date
+                    </label>
+                    <input required readonly type="text" name="arrival_date" id="arrival_date" placeholder="MM/DD/YYYY"
+                        class="start-date-input sm:text-lg text-stone-800 w-full text-center">
+                    <p class="text-lg text-stone-800">-</p>
+                    <input required readonly type="text" name="departure_date" id="departure_date" placeholder="MM/DD/YYYY"
+                        class="end-date-input sm:text-lg text-stone-800 w-full text-center">
+                    <div class="calendar_box"></div>
+                </div>
+                <button type="submit"
+                    class="check-btn bg-stone-700 border-3 border-stone-700 lg:col-span-full rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">
+                    Check Availability
+                </button>
+            </form>
+        </div>
+    `)
+
+    document.querySelector(".book-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.open();
+    });
+    document.querySelector(".modal-close-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.close();
+    });
+
+    let available = new Notice(".notice-box", "success", "w-full absolute bottom-1 translate-y-full rounded-b-md");
+    let error = new Notice(".notice-box", "error", "w-full absolute bottom-1 translate-y-full rounded-b-md");
+    document.querySelector(".check-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+
+        let form = document.querySelector("#check-availability-form");
+        let formData = new FormData(form);
+        formData.append("csrf_token", "{{.CSRFToken}}");
+        formData.append("room_id", "{{$room.ID}}");
+
+        fetch('/search-availability-json', {
+            method: "POST",
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    if (available.messageEl !== null) {
+                        available.noticeEl.classList.remove("notify-open");
+                        available.noticeEl.classList.add("notify-close");
+                        available.noticeEl.innerHTML = "";
+                    }
+                    if (error.messageEl !== null) {
+                        error.noticeEl.classList.remove("notify-open");
+                        error.noticeEl.classList.add("notify-close");
+                        error.noticeEl.innerHTML = "";
+                    }
+                    available.addMsgEl(`
+                    <h2 id="msg" class="px-4 md:text-lg lg:text-xl font-bold text-center"></h2>
+                    <a href="/book-room?id=${data.room_id}&ad=${data.arrival_date}&dd=${data.departure_date}" class="border-3 border-green-900 rounded-md py-2 px-4 shadow-md scale-103 hover:shadow-none hover:scale-100 transition">Book Now</a>`)
+                    available.notify("Room is Available")
+                } else {
+                    if (available.messageEl !== null) {
+                        available.noticeEl.classList.remove("notify-open");
+                        available.noticeEl.classList.add("notify-close");
+                        available.noticeEl.innerHTML = "";
+                    }
+                    if (error.messageEl !== null) {
+                        error.noticeEl.classList.remove("notify-open");
+                        error.noticeEl.classList.add("notify-close");
+                        error.noticeEl.innerHTML = "";
+                    }
+                    error.addMsgEl(`<h2 id="msg" class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
+                    error.notify("Room is not available");
+                }
+            });
+    });
+</script>
+<script defer src="/static/js/datePicker.js"></script>
+<div class="fixed hide-modalbox h-screen w-screen modalbox z-20"></div>
+<section class="flex flex-col gap-10 items-center pb-20">
+    <div class="slider relative h-full w-full max-w-4xl overflow-hidden rounded-b-md shadow-lg shadow-stone-800/20">
+        <!-- slide -->
+        {{range $index, $photo := $room.PhotoLinks}}
+        {{if eq $index 0}}
+        <figure class="slide h-fit w-fit">
+            <img src="{{.}}" alt="{{$room.RoomName}} image {{$index}}" class="h-full w-full object-contain">
+        </figure>
+        {{else}}
+        <figure class="slide -translate-y-full absolute h-full w-full">
+            <img src="{{.}}" alt="{{$room.RoomName}} image {{$index}}" class="h-full w-full object-contain">
+        </figure>
+        {{end}}
+        {{end}}
+        <!-- slide buttons -->
+        <div class="absolute top-0 h-full w-full">
+            <div class="slide_btn slide_btn-left group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="slide_btn_logo">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+            </div>
+            <div class="slide_btn slide_btn-right group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="slide_btn_logo">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </div>
+        </div>
+        <div class="dots"></div>
+    </div>
+    <div class="container mx-auto px-4 grid justify-items-center gap-6 md:grid-cols-2">
+        <h2 class="text-2xl md:text-3xl lg:text-4xl text-stone-800 font-bold text-center">
+            {{$room.RoomName}} | {{$room.BedType}}
+        </h2>
+        <button
+            class="book-btn flex items-center w-fit px-4 py-2 text-lg lg:text-2xl text-amber-200 font-bold bg-stone-700 border-3 border-stone-700 rounded-md hover:text-stone-700 hover:bg-transparent transition">
+            Book Room
+        </button>
+        <div class="md:col-span-full xl:col-span-1 grid gap-2 lg:gap-4">
+            <h3 class="text-lg text-stone-800 font-semibold md:text-xl lg:text-2xl text-center">
+                {{$room.RoomArea}} sq ft / {{$room.RoomView}} View
+            </h3>
+            <p class="text-stone-700 text-center md:text-lg lg:text-2xl">
+                {{$room.RoomDescription}}
+            </p>
+        </div>
+        <ul
+            class="grid md:col-span-full xl:col-span-1 md:place-content-around md:grid-cols-2 gap-y-2 gap-x-4 [&_li]:list-disc [&_li]:ml-6">
+            <h3 class="md:col-span-full text-lg text-stone-800 font-semibold md:text-xl lg:text-2xl">
+                Room features
+            </h3>
+            {{range $room.RoomFeatures}}
+            <li>{{.}}</li>
+            {{end}}
+        </ul>
+    </div>
+</section>
+{{end}}
