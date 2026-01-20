@@ -193,7 +193,7 @@ func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
 	var rooms []models.Room
 
 	stmt := `
-		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links
+		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links, room_route
 		FROM rooms;`
 
 	rows, err := m.DB.Query(ctx, stmt)
@@ -214,8 +214,8 @@ func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
 			&room.RoomDescription,
 			&room.RoomFeatures,
 			&room.PhotoLinks,
+			&room.RoomRoute,
 		)
-		room.RoomRoute = ""
 		if err != nil {
 			return rooms, err
 		}
