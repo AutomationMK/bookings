@@ -42,7 +42,18 @@ func NewHandlers(r *Repository) {
 
 // Home is the home page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "home.page.tmpl", &models.TemplateData{})
+	rooms, err := m.DB.GetAllRooms()
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	// add the reservation to template data any map
+	data := make(map[string]any)
+	data["rooms"] = rooms
+
+	render.Template(w, r, "home.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // About is the about page handler
