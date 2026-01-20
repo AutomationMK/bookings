@@ -121,7 +121,7 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 	var rooms []models.Room
 
 	stmt := `
-		SELECT r.id, r.room_name
+		SELECT r.id, r.room_name, r.created_at, r.updated_at, r.bed_type, r.room_area, r.room_view, r.room_description, r.room_features, r.photo_links, r.room_route
 		FROM rooms AS r
 		WHERE r.id NOT IN (
 			SELECT rr.room_id
@@ -138,7 +138,19 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 
 	for rows.Next() {
 		var room models.Room
-		err := rows.Scan(&room.ID, &room.RoomName)
+		err := rows.Scan(
+			&room.ID,
+			&room.RoomName,
+			&room.CreatedAt,
+			&room.UpdatedAt,
+			&room.BedType,
+			&room.RoomArea,
+			&room.RoomView,
+			&room.RoomDescription,
+			&room.RoomFeatures,
+			&room.PhotoLinks,
+			&room.RoomRoute,
+		)
 		if err != nil {
 			return rooms, err
 		}
