@@ -41,12 +41,11 @@ func NewHandlers(r *Repository) {
 	Repo = r
 }
 
-// Home is the home page handler
-func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+// getRoomsData is a helper function to get all rooms to use with template data
+func (m *Repository) getRoomsData() ([]models.Room, error) {
 	rooms, err := m.DB.GetAllRooms()
 	if err != nil {
-		helpers.ServerError(w, err)
-		return
+		return nil, err
 	}
 
 	// create route for each room
@@ -54,9 +53,18 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 		stringRoute := strings.Replace(strings.ToLower(room.RoomName), " ", "-", -1)
 		rooms[i].RoomRoute = stringRoute
 	}
+	return rooms, nil
+}
 
-	// add the reservation to template data any map
+// Home is the home page handler
+func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	// add the rooms to template data any map
 	data := make(map[string]any)
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 	data["rooms"] = rooms
 
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{
@@ -66,8 +74,18 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
 // About is the about page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+	// add the rooms to template data any map
+	data := make(map[string]any)
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
 	// send the data to the template
-	render.Template(w, r, "about.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "about.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // Reserve handles the make-reservation page
@@ -102,6 +120,14 @@ func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["arrival_date"] = ad
 	stringMap["departure_date"] = dd
+
+	// add the reservation to template data any map
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
 
 	render.Template(w, r, "reservation.page.tmpl", &models.TemplateData{
 		Form:      forms.New(nil),
@@ -139,11 +165,18 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		data := make(map[string]any)
 		data["reservation"] = reservation
 
+		// add the rooms to template data any map
+		rooms, err := m.getRoomsData()
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
+		data["rooms"] = rooms
+
 		render.Template(w, r, "reservation.page.tmpl", &models.TemplateData{
 			Form: form,
 			Data: data,
 		})
-		return
 	}
 
 	newReservationID, err := m.DB.InsertReservation(reservation)
@@ -193,6 +226,14 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	stringMap["arrival_date"] = ad
 	stringMap["departure_date"] = dd
 
+	// add the rooms to template data any map
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
+
 	render.Template(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
 		Data:      data,
 		StringMap: stringMap,
@@ -201,7 +242,17 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 
 // Availability handles the search-availability page
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "search-availability.page.tmpl", &models.TemplateData{})
+	// add the rooms to template data any map
+	data := make(map[string]any)
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
+	render.Template(w, r, "search-availability.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // PostAvailability handles post data from search-availability page
@@ -221,21 +272,21 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rooms, err := m.DB.SearchAvailabilityForAllRooms(arrivalDate, departureDate)
+	roomsAvail, err := m.DB.SearchAvailabilityForAllRooms(arrivalDate, departureDate)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	if len(rooms) == 0 {
+	if len(roomsAvail) == 0 {
 		// no availability
 		m.App.Session.Put(r.Context(), "error", "No availability")
 		http.Redirect(w, r, "/search-availability", http.StatusSeeOther)
 		return
 	}
 
-	data := make(map[string]interface{})
-	data["rooms"] = rooms
+	data := make(map[string]any)
+	data["roomsAvail"] = roomsAvail
 
 	res := models.Reservation{
 		ArrivalDate:   arrivalDate,
@@ -243,6 +294,14 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m.App.Session.Put(r.Context(), "reservation", res)
+
+	// add the rooms to template data any map
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
 
 	render.Template(w, r, "available-rooms.page.tmpl", &models.TemplateData{
 		Data: data,
@@ -347,12 +406,30 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 
 // Contact handles the contact page
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	// add the rooms to template data any map
+	data := make(map[string]any)
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
 	render.Template(w, r, "contact.page.tmpl", &models.TemplateData{})
 }
 
 // Rooms handles the Rooms page
 func (m *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "rooms.page.tmpl", &models.TemplateData{})
+	// add the rooms to template data any map
+	data := make(map[string]any)
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
+	render.Template(w, r, "rooms.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // Room displays the room based on the route name
@@ -367,6 +444,14 @@ func (m *Repository) Room(w http.ResponseWriter, r *http.Request) {
 
 	data := make(map[string]any)
 	data["room"] = room
+
+	// add the rooms to template data any map
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
 
 	render.Template(w, r, "room.page.tmpl", &models.TemplateData{
 		Data: data,
