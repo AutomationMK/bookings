@@ -185,6 +185,40 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	return room, nil
 }
 
+// GetRoomByRoute gets room data from database by room_route
+func (m *postgresDBRepo) GetRoomByRoute(route string) (models.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var room models.Room
+
+	stmt := `
+		SELECT id, room_name, created_at, updated_at, bed_type, room_area, room_view, room_description, room_features, photo_links, room_route
+		FROM rooms
+		WHERE id = $1;`
+
+	row := m.DB.QueryRow(ctx, stmt, route)
+	err := row.Scan(
+		&room.ID,
+		&room.RoomName,
+		&room.CreatedAt,
+		&room.UpdatedAt,
+		&room.BedType,
+		&room.RoomArea,
+		&room.RoomView,
+		&room.RoomDescription,
+		&room.RoomFeatures,
+		&room.PhotoLinks,
+		&room.RoomRoute,
+	)
+
+	if err != nil {
+		return room, err
+	}
+
+	return room, nil
+}
+
 // GetAllRooms returns all rooms in the database or an error if encountered
 func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
