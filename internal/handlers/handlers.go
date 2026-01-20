@@ -423,7 +423,9 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data["rooms"] = rooms
-	render.Template(w, r, "contact.page.tmpl", &models.TemplateData{})
+	render.Template(w, r, "contact.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // Rooms handles the Rooms page
