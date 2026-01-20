@@ -46,12 +46,13 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	rooms, err := m.DB.GetAllRooms()
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	// create route for each room
-	var stringMap map[string]string
-	for _, room := range rooms {
-		stringMap[room.RoomName] = strings.Replace(strings.ToLower(room.RoomName), " ", "-", -1)
+	for i, room := range rooms {
+		stringRoute := strings.Replace(strings.ToLower(room.RoomName), " ", "-", -1)
+		rooms[i].RoomRoute = stringRoute
 	}
 
 	// add the reservation to template data any map
@@ -59,8 +60,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	data["rooms"] = rooms
 
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{
-		Data:      data,
-		StringMap: stringMap,
+		Data: data,
 	})
 }
 
