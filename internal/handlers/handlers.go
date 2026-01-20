@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/config"
@@ -47,12 +48,19 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 	}
 
+	// create route for each room
+	var stringMap map[string]string
+	for _, room := range rooms {
+		stringMap[room.RoomName] = strings.Replace(strings.ToLower(room.RoomName), " ", "-", -1)
+	}
+
 	// add the reservation to template data any map
 	data := make(map[string]any)
 	data["rooms"] = rooms
 
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{
-		Data: data,
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
