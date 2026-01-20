@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/gob"
 	"fmt"
 	"log"
@@ -29,7 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.SQL.Close()
+	defer db.SQL.Close(context.Background())
 
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
