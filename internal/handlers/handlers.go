@@ -293,6 +293,14 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 		DepartureDate: departureDate,
 	}
 
+	intMap := make(map[string]int)
+	roomCount, err := m.DB.GetRoomCount()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	intMap["roomCount"] = roomCount
+
 	m.App.Session.Put(r.Context(), "reservation", res)
 
 	// add the rooms to template data any map
@@ -304,7 +312,8 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	data["rooms"] = rooms
 
 	render.Template(w, r, "available-rooms.page.tmpl", &models.TemplateData{
-		Data: data,
+		Data:   data,
+		IntMap: intMap,
 	})
 }
 
