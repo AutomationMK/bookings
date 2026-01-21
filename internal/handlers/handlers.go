@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -154,8 +153,6 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 
 	layout := "1/2/2006"
 	arrivalDate, err := time.Parse(layout, ad)
-	log.Println(ad)
-	log.Println(dd)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse arrival date!")
 		m.App.ErrorLog.Println("Can't parse arrival date!")
