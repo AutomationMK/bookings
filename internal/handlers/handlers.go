@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 	"time"
@@ -344,7 +345,19 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	}
 
 	intMap := make(map[string]int)
-	roomCount, err := m.DB.GetRoomCount()
+	// check if test session exists and has a true value, this helps invoke
+	// a test error when testing this handler
+	var roomCount int
+	isTest, ok := m.App.Session.Get(r.Context(), "test").(bool)
+	if !ok {
+		isTest = false
+	}
+	if isTest {
+		roomCount = 0
+		err = errors.New("Test error for GetRowCount")
+	} else {
+		roomCount, err = m.DB.GetRowCount("rooms")
+	}
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't get room Count!")
 		m.App.ErrorLog.Println("Can't get room count!")
