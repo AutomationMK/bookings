@@ -143,6 +143,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		helpers.ServerError(w, errors.New("Can't get reservation data from session"))
+		http.Redirect(w, r, "/search-availability", http.StatusTemporaryRedirect)
 		return
 	}
 
