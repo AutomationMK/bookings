@@ -318,6 +318,123 @@ func TestRepository_ReservationSummary(t *testing.T) {
 	}
 }
 
+func TestRepository_PostAvailability(t *testing.T) {
+	// build a manual post request
+	reqBody := "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+
+	req, _ := http.NewRequest("POST", "/search-availability", strings.NewReader(reqBody))
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+	// tell test server that the request is a POST request
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(Repo.PostAvailability)
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("PostReservation handler returned http code %d instead of %d", rr.Code, http.StatusOK)
+	}
+
+	// test if the form can't be parsed
+	req, _ = http.NewRequest("POST", "/search-availability", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for missing post body", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for invalid arrival date
+	reqBody = "arrival_date=invalid"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+
+	req, _ = http.NewRequest("POST", "/search-availability", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for invalid arrival date", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for invalid departure date
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=invalid")
+
+	req, _ = http.NewRequest("POST", "/search-availability", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for invalid departure date", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for SearchAvailabilityForAllRooms error by having arrival_date equal departure_date
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/1/2050")
+
+	req, _ = http.NewRequest("POST", "/search-availability", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for SearchAvailabilityForAllRooms error", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for SearchAvailabilityForAllRooms having 0 length by having arrival_date after departure_date
+	reqBody = "arrival_date=1/2/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/1/2050")
+
+	req, _ = http.NewRequest("POST", "/search-availability", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for SearchAvailabilityForAllRooms error", rr.Code, http.StatusSeeOther)
+	}
+
+	// test for GetRowCount by invoking test session value as true
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+
+	req, _ = http.NewRequest("POST", "/search-availability", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	// implement a test session to true in order to invoke on error before
+	// checking if GetRoomCount has an error
+	session.Put(ctx, "test", true)
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for GetRowCount error", rr.Code, http.StatusTemporaryRedirect)
+	}
+}
+
 func getCtx(req *http.Request) context.Context {
 	ctx, err := session.Load(req.Context(), req.Header.Get("X-Session"))
 	if err != nil {
