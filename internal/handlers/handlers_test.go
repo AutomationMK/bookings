@@ -228,8 +228,8 @@ func TestRepository_PostReserve(t *testing.T) {
 
 	handler.ServeHTTP(rr, req)
 
-	if rr.Code != http.StatusOK {
-		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for invalid form data", rr.Code, http.StatusOK)
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for invalid form data", rr.Code, http.StatusSeeOther)
 	}
 }
 
