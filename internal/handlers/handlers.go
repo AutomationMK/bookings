@@ -204,6 +204,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		}
 		data["rooms"] = rooms
 
+		http.Error(w, "Form in PostReserve is not valid", http.StatusSeeOther)
 		render.Template(w, r, "reservation.page.tmpl", &models.TemplateData{
 			Form: form,
 			Data: data,
