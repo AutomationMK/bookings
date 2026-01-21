@@ -471,16 +471,6 @@ func (m *Repository) Room(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Deluxe handles the Deluxe room page
-func (m *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "deluxe-room.page.tmpl", &models.TemplateData{})
-}
-
-// Premium handles the Premium suite page
-func (m *Repository) Premium(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "premium-suite.page.tmpl", &models.TemplateData{})
-}
-
 // ChooseRoom displays the available rooms with the given date range
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
