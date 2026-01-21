@@ -184,7 +184,8 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 
 	newReservationID, err := m.DB.InsertReservation(reservation)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't insert reservation into database!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
