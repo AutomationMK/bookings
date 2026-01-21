@@ -95,7 +95,6 @@ func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 	// grab reservation from the session
 	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		m.App.ErrorLog.Println("cannot get item from session")
 		m.App.Session.Put(r.Context(), "error", "You need to check for available rooms before making a reservation")
 		http.Redirect(w, r, "/search-availability", http.StatusTemporaryRedirect)
 		return
