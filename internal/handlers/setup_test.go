@@ -50,7 +50,7 @@ func TestMain(m *testing.M) {
 
 	tc, err := CreateTestTemplateCache()
 	if err != nil {
-		log.Fatal("cannot create template cache")
+		log.Fatalf("cannot create template cache: %s", err)
 	}
 
 	app.TemplateCache = tc
