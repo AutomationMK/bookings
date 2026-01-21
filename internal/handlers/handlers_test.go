@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/AutomationMK/bookings/internal/models"
 )
@@ -272,6 +273,48 @@ func TestRepository_PostReserve(t *testing.T) {
 
 	if rr.Code != http.StatusTemporaryRedirect {
 		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for InsertRestriction error", rr.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestRepository_ReservationSummary(t *testing.T) {
+	reservation := models.Reservation{
+		FirstName:     "John",
+		LastName:      "Smith",
+		Email:         "john@smith.com",
+		Phone:         "123-123-4321",
+		ArrivalDate:   time.Now(),
+		DepartureDate: time.Now(),
+		RoomID:        1,
+		Room: models.Room{
+			ID:       1,
+			RoomName: "Test Room",
+		},
+	}
+
+	req, _ := http.NewRequest("GET", "/reservation-summary", nil)
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+
+	rr := httptest.NewRecorder()
+	session.Put(ctx, "reservation", reservation)
+
+	handler := http.HandlerFunc(Repo.ReservationSummary)
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("ReservationSummary handler returned http code %d instead of %d", rr.Code, http.StatusOK)
+	}
+
+	// test case where reservation is not in session
+	req, _ = http.NewRequest("GET", "/reservation-summary", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("ReservationSummary handler returned http code %d instead of %d when there is a no session error", rr.Code, http.StatusTemporaryRedirect)
 	}
 }
 
