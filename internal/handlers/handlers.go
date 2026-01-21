@@ -102,7 +102,8 @@ func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 
 	room, err := m.DB.GetRoomByID(res.RoomID)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't find room for reservation")
+		http.Redirect(w, r, "/search-availability", http.StatusTemporaryRedirect)
 		return
 	}
 
