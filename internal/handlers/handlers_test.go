@@ -210,6 +210,27 @@ func TestRepository_PostReserve(t *testing.T) {
 	if rr.Code != http.StatusTemporaryRedirect {
 		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for invalid room ID", rr.Code, http.StatusTemporaryRedirect)
 	}
+
+	// test for invalid form data when validating EX: first_name smaller than 3 characters
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "first_name=J")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "last_name=Smith")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "email=john@smith.com")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "phone=123-123-4321")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=1")
+
+	req, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for invalid form data", rr.Code, http.StatusOK)
+	}
 }
 
 func getCtx(req *http.Request) context.Context {
