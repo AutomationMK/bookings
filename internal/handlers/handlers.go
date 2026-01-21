@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -142,6 +143,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse form!")
+		m.App.ErrorLog.Println("Can't parse form!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
@@ -150,16 +152,20 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	ad := r.Form.Get("arrival_date")
 	dd := r.Form.Get("departure_date")
 
-	layout := "1/2/2026"
+	layout := "1/2/2006"
 	arrivalDate, err := time.Parse(layout, ad)
+	log.Println(ad)
+	log.Println(dd)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse arrival date!")
+		m.App.ErrorLog.Println("Can't parse arrival date!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	departureDate, err := time.Parse(layout, dd)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse departure date!")
+		m.App.ErrorLog.Println("Can't parse departure date!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
@@ -167,7 +173,8 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	// parse room ID
 	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	if err != nil {
-		m.App.Session.Put(r.Context(), "error", "Invalid data for room ID")
+		m.App.Session.Put(r.Context(), "error", "Invalid data for room ID!")
+		m.App.ErrorLog.Println("Invalid data for room ID!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
@@ -209,6 +216,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	newReservationID, err := m.DB.InsertReservation(reservation)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't insert reservation into database!")
+		m.App.ErrorLog.Println("Can't insert reservation into database!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
@@ -226,6 +234,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	err = m.DB.InsertRoomRestriction(restriction)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't insert room restriction!")
+		m.App.ErrorLog.Println("Can't insert room restriction!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
