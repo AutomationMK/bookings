@@ -23,14 +23,11 @@ var theTests = []struct {
 	params             []postData
 	expectedStatusCode int
 }{
-	//{"home", "/", "GET", []postData{}, http.StatusOK},
-	//{"about", "/about", "GET", []postData{}, http.StatusOK},
-	//{"contact", "/contact", "GET", []postData{}, http.StatusOK},
-	//{"rooms", "/rooms", "GET", []postData{}, http.StatusOK},
-	//{"deluxe-room", "/rooms/deluxe-room", "GET", []postData{}, http.StatusOK},
-	//{"premium-suite", "/rooms/premium-suite", "GET", []postData{}, http.StatusOK},
-	//{"search-availibility", "/search-availability", "GET", []postData{}, http.StatusOK},
-	//{"reservation", "/make-reservation", "GET", []postData{}, http.StatusOK},
+	{"home", "/", "GET", []postData{}, http.StatusOK},
+	{"about", "/about", "GET", []postData{}, http.StatusOK},
+	{"contact", "/contact", "GET", []postData{}, http.StatusOK},
+	{"rooms", "/rooms", "GET", []postData{}, http.StatusOK},
+	{"search-availibility", "/search-availability", "GET", []postData{}, http.StatusOK},
 	//{"post-search-availibility", "/search-availability", "POST", []postData{
 	//	{key: "arrive_date", value: "1/12/2026"},
 	//	{key: "departure_date", value: "1/14/2026"},
@@ -83,10 +80,10 @@ func TestHandlers(t *testing.T) {
 
 func TestRepository_Reserve(t *testing.T) {
 	reservation := models.Reservation{
-		RoomID: 8,
+		RoomID: 1,
 		Room: models.Room{
-			ID:       8,
-			RoomName: "Premium Suite",
+			ID:       1,
+			RoomName: "Test Room",
 		},
 	}
 
@@ -103,6 +100,30 @@ func TestRepository_Reserve(t *testing.T) {
 
 	if rr.Code != http.StatusOK {
 		t.Errorf("Reservation handler returned http code %d instead of %d", rr.Code, http.StatusOK)
+	}
+
+	// test case where reservation is not in session
+	req, _ = http.NewRequest("GET", "/make-reservation", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test case with non-existant room
+	req, _ = http.NewRequest("GET", "/make-reservation", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	rr = httptest.NewRecorder()
+	reservation.RoomID = 100
+	session.Put(ctx, "reservation", reservation)
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
 	}
 }
 
