@@ -39,7 +39,28 @@ func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roo
 // SearchAvailabityForALLRooms returns a slice of available rooms if any
 func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
 	var rooms []models.Room
-
+	// if the two dates are the same then return an error
+	if start.Equal(end) {
+		return rooms, errors.New("Test error in SearchAvailabilityForAllRooms")
+		// if start date is after end date then return empty slice
+	} else if start.After(end) {
+		return rooms, nil
+	}
+	// if end date is after start date then return non-zero size slice
+	room := models.Room{
+		ID:              1,
+		RoomName:        "Premium Suite",
+		BedType:         "King",
+		RoomArea:        123,
+		RoomView:        "Garden",
+		RoomDescription: "description",
+		RoomFeatures:    []string{"feature1"},
+		PhotoLinks:      []string{"photolink1.jpg"},
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
+		RoomRoute:       "/static/rooms/test",
+	}
+	rooms = append(rooms, room)
 	return rooms, nil
 }
 
