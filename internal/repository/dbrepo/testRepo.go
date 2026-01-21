@@ -14,6 +14,10 @@ func (m *testDBRepo) AllUsers() bool {
 // InsertReservation inserts all info from a Reservation model
 // into the reservations table
 func (m *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
+	// if room id is 2, then fail; otherwise pass
+	if res.RoomID == 2 {
+		return 0, errors.New("Test error in InsertReservation")
+	}
 	return 1, nil
 }
 
