@@ -5,7 +5,6 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/config"
@@ -48,11 +47,6 @@ func (m *Repository) getRoomsData() ([]models.Room, error) {
 		return nil, err
 	}
 
-	// create route for each room
-	for i, room := range rooms {
-		stringRoute := strings.Replace(strings.ToLower(room.RoomName), " ", "-", -1)
-		rooms[i].RoomRoute = stringRoute
-	}
 	return rooms, nil
 }
 
