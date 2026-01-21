@@ -299,18 +299,24 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	layout := "1/2/2006"
 	arrivalDate, err := time.Parse(layout, ad)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't parse arrival date!")
+		m.App.ErrorLog.Println("Can't parse arrival date!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	departureDate, err := time.Parse(layout, dd)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't parse departure date!")
+		m.App.ErrorLog.Println("Can't parse departure date!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
 	roomsAvail, err := m.DB.SearchAvailabilityForAllRooms(arrivalDate, departureDate)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't search available rooms!")
+		m.App.ErrorLog.Println("Can't search available rooms!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
@@ -332,7 +338,9 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	intMap := make(map[string]int)
 	roomCount, err := m.DB.GetRoomCount()
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't get room Count!")
+		m.App.ErrorLog.Println("Can't get room count!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	intMap["roomCount"] = roomCount
