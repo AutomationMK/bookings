@@ -11,8 +11,8 @@
     <form action="/make-reservation" method="POST"
         class="grid justify-items-center lg:grid-cols-2 bg-amber-100 w-full max-w-6xl gap-4 p-8 rounded-md shadow-md shadow-stone-800/20">
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-        <input type="hidden" name="arrival_date" value="{{$res.ArrivalDate}}">
-        <input type="hidden" name="departure_date" value="{{$res.DepartureDate}}">
+        <input type="hidden" name="arrival_date" value="{{$arrival_date}}">
+        <input type="hidden" name="departure_date" value="{{$departure_date}}">
         <input type="hidden" name="room_id" value="{{$res.RoomID}}">
 
         <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold text-center">
