@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"strconv"
 	"time"
@@ -140,13 +139,6 @@ func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 
 // PostReserve handles the posting of a reservation form
 func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
-	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
-	if !ok {
-		helpers.ServerError(w, errors.New("Can't get reservation data from session"))
-		http.Redirect(w, r, "/search-availability", http.StatusTemporaryRedirect)
-		return
-	}
-
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse form!")
@@ -154,10 +146,41 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reservation.FirstName = r.Form.Get("first_name")
-	reservation.LastName = r.Form.Get("last_name")
-	reservation.Email = r.Form.Get("email")
-	reservation.Phone = r.Form.Get("phone")
+	// parse date range
+	ad := r.Form.Get("arrival_date")
+	dd := r.Form.Get("departure_date")
+
+	layout := "1/2/2026"
+	arrivalDate, err := time.Parse(layout, ad)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't parse arrival date!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	departureDate, err := time.Parse(layout, dd)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't parse departure date!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	// parse room ID
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Invalid data for room ID")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	reservation := models.Reservation{
+		FirstName:     r.Form.Get("first_name"),
+		LastName:      r.Form.Get("last_name"),
+		Email:         r.Form.Get("email"),
+		Phone:         r.Form.Get("phone"),
+		ArrivalDate:   arrivalDate,
+		DepartureDate: departureDate,
+		RoomID:        roomID,
+	}
 
 	form := forms.New(r.PostForm)
 
