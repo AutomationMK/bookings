@@ -277,14 +277,14 @@ func (m *postgresDBRepo) GetAllRooms() ([]models.Room, error) {
 }
 
 // GetRoomCount gets the amont of rooms in the database
-func (m *postgresDBRepo) GetRoomCount() (int, error) {
+func (m *postgresDBRepo) GetRowCount(table string) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	stmt := `SELECT COUNT(*) FROM rooms`
+	stmt := `SELECT COUNT(*) FROM $1`
 
 	var count int
-	row := m.DB.QueryRow(ctx, stmt)
+	row := m.DB.QueryRow(ctx, stmt, table)
 	err := row.Scan(&count)
 
 	if err != nil {
