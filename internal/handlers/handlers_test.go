@@ -136,6 +136,19 @@ func TestRepository_PostReserve(t *testing.T) {
 	if rr.Code != http.StatusSeeOther {
 		t.Errorf("PostReservation handler returned http code %d instead of %d", rr.Code, http.StatusSeeOther)
 	}
+
+	// test if the form can't be parsed
+	req, _ = http.NewRequest("POST", "/make-reservation", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for missing post body", rr.Code, http.StatusTemporaryRedirect)
+	}
 }
 
 func getCtx(req *http.Request) context.Context {
