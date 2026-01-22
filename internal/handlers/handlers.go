@@ -532,7 +532,9 @@ func (m *Repository) Room(w http.ResponseWriter, r *http.Request) {
 	roomRoute := "/rooms/" + roomParam
 	room, err := m.DB.GetRoomByRoute(roomRoute)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Unable to get room!")
+		m.App.ErrorLog.Println("Unable to get room!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
