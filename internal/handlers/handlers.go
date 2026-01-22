@@ -453,8 +453,8 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	// parse room id from get query
 	roomID, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		m.App.Session.Put(context.Background(), "error", "Cannot parse get query!")
-		m.App.ErrorLog.Println("Cannot parse get query!")
+		m.App.Session.Put(context.Background(), "error", "Cannot parse room id from get query!")
+		m.App.ErrorLog.Println("Cannot parse room id get query!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
