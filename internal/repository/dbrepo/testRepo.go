@@ -33,7 +33,15 @@ func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 // SearchAvailabilityByDatesByRoomID returns true if the room is avalailable
 // returns false if not available
 func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
-	return false, nil
+	// if room id is 1 than return true
+	if roomID == 1 {
+		return true, nil
+		// if dates are the same then return an error
+	} else if start.Equal(end) {
+		return false, errors.New("Test error in SearchAvailabilityByDatesByRoomID")
+	} else {
+		return false, nil
+	}
 }
 
 // SearchAvailabityForALLRooms returns a slice of available rooms if any
