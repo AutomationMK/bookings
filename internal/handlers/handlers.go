@@ -356,7 +356,7 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 		roomCount = 0
 		err = errors.New("Test error for GetRowCount")
 	} else {
-		roomCount, err = m.DB.GetRowCount("rooms")
+		roomCount, err = m.DB.GetRoomCount()
 	}
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't get room Count!")

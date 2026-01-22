@@ -88,6 +88,6 @@ func (m *testDBRepo) GetAllRooms() ([]models.Room, error) {
 }
 
 // GetRoomCount gets the amont of rooms in the database
-func (m *testDBRepo) GetRowCount(table string) (int, error) {
+func (m *testDBRepo) GetRoomCount() (int, error) {
 	return 1, nil
 }
