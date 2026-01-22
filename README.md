@@ -32,6 +32,8 @@ Such as using tailwindcss for generating the styles of the website.
 * [nosurf](https://github.com/justinas/nosurf) v1.2.0 (for CSRF protection)
 * [tailwindcss](https://github.com/tailwindlabs/tailwindcss) v4.1.18 (as a css framework tool)
 * [govalidator](https://github.com/asaskevich/govalidator) v11.0.1 (for form validation)
+* [pgx](https://github.com/jackc/pgx) v5.8.0 (PostgreSql Driver)
+* [Go Simple Mail](https://github.com/xhit/go-simple-mail) v2.16.0 (for handling stmp email)
 
 ### Installing manually
 
