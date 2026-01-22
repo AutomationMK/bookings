@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -650,6 +651,182 @@ func TestRepository_ChooseRoom(t *testing.T) {
 
 	if rr.Code != http.StatusTemporaryRedirect {
 		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestRepository_AvailabilityJSON(t *testing.T) {
+	// first case - room is available
+	reqBody := "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=1")
+
+	// create request
+	req, _ := http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+	// get context with session
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+	// set the request header
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	// make handler for test handler
+	handler := http.HandlerFunc(Repo.AvailabilityJSON)
+	rr := httptest.NewRecorder()
+
+	handler.ServeHTTP(rr, req)
+
+	var j jsonResponse
+	err := json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response to see if room is available like it should
+	if !j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, true)
+	}
+	if j.Message != "" {
+		t.Errorf("AvailabilityJSON handler returned wrong json Message of %s instead of being empty", j.Message)
+	}
+
+	// second case - room is not available
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=2")
+	req, _ = http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	err = json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response to see if room is not available like it should
+	if j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, false)
+	}
+	if j.Message != "" {
+		t.Errorf("AvailabilityJSON handler returned wrong json Message of %s instead of being empty", j.Message)
+	}
+
+	// test for missing form data
+	req, _ = http.NewRequest("POST", "/search-availability-json", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	err = json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response if error message is present and OK is false
+	if j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, false)
+	}
+	if j.Message == "" {
+		t.Error("AvailabilityJSON handler returned empty json Message instead of having an error message")
+	}
+
+	// test for invalid arrival date
+	reqBody = "arrival_date=invalid"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=1")
+	req, _ = http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	err = json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response if error message is present and OK is false
+	if j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, false)
+	}
+	if j.Message == "" {
+		t.Error("AvailabilityJSON handler returned empty json Message instead of having an error message")
+	}
+
+	// test for invalid departure date
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=invalid")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=1")
+	req, _ = http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	err = json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response if error message is present and OK is false
+	if j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, false)
+	}
+	if j.Message == "" {
+		t.Error("AvailabilityJSON handler returned empty json Message instead of having an error message")
+	}
+
+	// test for invalid room ID
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/2/2050")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=invalid")
+	req, _ = http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	err = json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response if error message is present and OK is false
+	if j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, false)
+	}
+	if j.Message == "" {
+		t.Error("AvailabilityJSON handler returned empty json Message instead of having an error message")
+	}
+
+	// test for SearchAvailabilityByDatesByRoomID by invoking error
+	// with arrivol_date and departure_date the same
+	reqBody = "arrival_date=1/1/2050"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "departure_date=1/1/2050")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=2")
+	req, _ = http.NewRequest("POST", "/search-availability-json", strings.NewReader(reqBody))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	err = json.Unmarshal((rr.Body.Bytes()), &j)
+	if err != nil {
+		t.Error("Failed to parse json")
+	}
+
+	// check json response if error message is present and OK is false
+	if j.OK {
+		t.Errorf("AvailabilityJSON handler returned wrong json OK of %t instead of %t", j.OK, false)
+	}
+	if j.Message == "" {
+		t.Error("AvailabilityJSON handler returned empty json Message instead of having an error message")
 	}
 }
 
