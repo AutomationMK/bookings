@@ -470,8 +470,8 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	}
 	departureDate, err := time.Parse(layout, dd)
 	if err != nil {
-		m.App.Session.Put(r.Context(), "error", "Can't parse departure date!")
-		m.App.ErrorLog.Println("Can't parse departure date!")
+		m.App.Session.Put(r.Context(), "error", "Can't parse departure date from get query!")
+		m.App.ErrorLog.Println("Can't parse departure date from get query!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
