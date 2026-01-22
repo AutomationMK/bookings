@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/models"
+	"github.com/go-chi/chi"
 )
 
 type postData struct {
@@ -526,6 +527,45 @@ func TestRepository_BookRoom(t *testing.T) {
 	getQuery.Add("ad", "1/1/2050")
 	getQuery.Add("dd", "1/2/2050")
 	req.URL.RawQuery = getQuery.Encode()
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestRepository_Room(t *testing.T) {
+	roomName := "test"
+
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/rooms/%s", roomName), nil)
+	// create a chi context object
+	chiCtx := chi.NewRouteContext()
+	// add chi router context to request
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, chiCtx))
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+	chiCtx.URLParams.Add("roomName", fmt.Sprintf("%s", roomName))
+
+	rr := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(Repo.Room)
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusOK)
+	}
+
+	// test for invalid room route
+	roomName = "invalid"
+
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/rooms/%s", roomName), nil)
+	chiCtx = chi.NewRouteContext()
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, chiCtx))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	chiCtx.URLParams.Add("roomName", fmt.Sprintf("%s", roomName))
 
 	rr = httptest.NewRecorder()
 	handler.ServeHTTP(rr, req)
