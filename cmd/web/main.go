@@ -32,6 +32,9 @@ func main() {
 	}
 	defer db.SQL.Close(context.Background())
 
+	// make sure to close email channel
+	defer close(app.MailChan)
+
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
 	srv := &http.Server{
@@ -66,6 +69,10 @@ func run() (*driver.DB, error) {
 	session.Cookie.Secure = app.InProduction
 
 	app.Session = session
+
+	// initialize an email channel
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
 
 	// connect to database
 	log.Println("Connecting to database...")
