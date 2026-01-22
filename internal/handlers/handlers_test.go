@@ -571,6 +571,84 @@ func TestRepository_Room(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d for invalid room route", rr.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestRepository_ChooseRoom(t *testing.T) {
+	roomID := "1"
+
+	req, _ := http.NewRequest("GET", fmt.Sprintf("/choose-room/%s", roomID), nil)
+	// create a chi context object
+	chiCtx := chi.NewRouteContext()
+	// add chi router context to request
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, chiCtx))
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+	chiCtx.URLParams.Add("id", fmt.Sprintf("%s", roomID))
+
+	reservation := models.Reservation{
+		RoomID: 1,
+		Room: models.Room{
+			ID:       1,
+			RoomName: "Test Room",
+		},
+	}
+	session.Put(ctx, "reservation", reservation)
+
+	rr := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(Repo.ChooseRoom)
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusSeeOther)
+	}
+
+	// test for invalid room ID
+	roomID = "invalid"
+
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/choose-room/%s", roomID), nil)
+	// create a chi context object
+	chiCtx = chi.NewRouteContext()
+	// add chi router context to request
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, chiCtx))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	chiCtx.URLParams.Add("id", fmt.Sprintf("%s", roomID))
+
+	reservation = models.Reservation{
+		RoomID: 1,
+		Room: models.Room{
+			ID:       1,
+			RoomName: "Test Room",
+		},
+	}
+	session.Put(ctx, "reservation", reservation)
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for missing reservation session data
+	roomID = "1"
+
+	req, _ = http.NewRequest("GET", fmt.Sprintf("/choose-room/%s", roomID), nil)
+	// create a chi context object
+	chiCtx = chi.NewRouteContext()
+	// add chi router context to request
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, chiCtx))
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+	chiCtx.URLParams.Add("id", fmt.Sprintf("%s", roomID))
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
 		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
 	}
 }
