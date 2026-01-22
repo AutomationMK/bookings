@@ -67,7 +67,7 @@ func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]mode
 // GetRoomByID gets room data from database by room ID
 func (m *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 	var room models.Room
-	if id > 2 {
+	if id == 1001 {
 		return room, errors.New("Test error from GetRoomByID")
 	}
 	return room, nil
