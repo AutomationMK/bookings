@@ -77,6 +77,10 @@ func (m *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 func (m *testDBRepo) GetRoomByRoute(route string) (models.Room, error) {
 	var room models.Room
 
+	if route == "invalid" {
+		return room, errors.New("Test error from GetRoomByRoute")
+	}
+
 	return room, nil
 }
 
