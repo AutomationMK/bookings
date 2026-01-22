@@ -34,6 +34,9 @@ func main() {
 
 	// make sure to close email channel
 	defer close(app.MailChan)
+	// listen for emails
+	fmt.Println("Starting mail listener...")
+	listenForMail()
 
 	fmt.Printf("Starting application on port %s\n", portNumber)
 
