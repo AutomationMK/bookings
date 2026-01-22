@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -449,9 +450,12 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 // BookRoom takes url parameters and builds reservation session
 // user is redirected to the /make-reservation route
 func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+	// parse room id from get query
 	roomID, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(context.Background(), "error", "Cannot parse get query!")
+		m.App.ErrorLog.Println("Cannot parse get query!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	ad := r.URL.Query().Get("ad")
