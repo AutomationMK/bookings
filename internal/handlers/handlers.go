@@ -264,6 +264,21 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 	}
 	m.App.MailChan <- msg
 
+	// send notifications - second to property owner
+	htmlMessage = fmt.Sprintf(`
+		<strong>Reservation Notification</strong><br>
+		A reservation has been made for %s from %s to %s.
+		`, reservation.Room.RoomName, reservation.ArrivalDate.Format("1/2/2006"), reservation.DepartureDate.Format("1/2/2006"))
+
+	// send notifications
+	msg = models.MailData{
+		To:      "me@here.com",
+		From:    "me@here.com",
+		Subject: fmt.Sprintf("Reservation notification for %s", reservation.Room.RoomName),
+		Content: htmlMessage,
+	}
+	m.App.MailChan <- msg
+
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
