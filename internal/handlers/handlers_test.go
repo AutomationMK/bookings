@@ -28,20 +28,6 @@ var theTests = []struct {
 	{"contact", "/contact", http.StatusOK},
 	{"rooms", "/rooms", http.StatusOK},
 	{"search-availibility", "/search-availability", http.StatusOK},
-	//{"post-search-availibility", "/search-availability", "POST", []postData{
-	//	{key: "arrive_date", value: "1/12/2026"},
-	//	{key: "departure_date", value: "1/14/2026"},
-	//}, http.StatusOK},
-	//{"post-search-availibility-json", "/search-availability-json", "POST", []postData{
-	//	{key: "arrive_date", value: "1/12/2026"},
-	//	{key: "departure_date", value: "1/14/2026"},
-	//}, http.StatusOK},
-	//{"post-reservation", "/make-reservation", "POST", []postData{
-	//	{key: "first_name", value: "John"},
-	//	{key: "last_name", value: "smith"},
-	//	{key: "email", value: "johnSmith@ex.com"},
-	//	{key: "phone", value: "123-456-7890"},
-	//}, http.StatusOK},
 }
 
 func TestHandlers(t *testing.T) {
@@ -453,6 +439,99 @@ func TestRepository_PostAvailability(t *testing.T) {
 
 	if rr.Code != http.StatusTemporaryRedirect {
 		t.Errorf("PostReservation handler returned wrong http code %d instead of %d for GetRowCount error", rr.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestRepository_BookRoom(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/book-room", nil)
+	ctx := getCtx(req)
+	req = req.WithContext(ctx)
+
+	getQuery := req.URL.Query()
+	getQuery.Add("id", "1")
+	getQuery.Add("ad", "1/1/2050")
+	getQuery.Add("dd", "1/2/2050")
+	req.URL.RawQuery = getQuery.Encode()
+
+	rr := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(Repo.BookRoom)
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusSeeOther {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusSeeOther)
+	}
+
+	// test for invalid room id
+	req, _ = http.NewRequest("GET", "/book-room", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+
+	getQuery = req.URL.Query()
+	getQuery.Add("id", "invalid")
+	getQuery.Add("ad", "1/1/2050")
+	getQuery.Add("dd", "1/2/2050")
+	req.URL.RawQuery = getQuery.Encode()
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for invalid arrival date
+	req, _ = http.NewRequest("GET", "/book-room", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+
+	getQuery = req.URL.Query()
+	getQuery.Add("id", "1")
+	getQuery.Add("ad", "invalid")
+	getQuery.Add("dd", "1/2/2050")
+	req.URL.RawQuery = getQuery.Encode()
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for invalid departure date
+	req, _ = http.NewRequest("GET", "/book-room", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+
+	getQuery = req.URL.Query()
+	getQuery.Add("id", "1")
+	getQuery.Add("ad", "1/1/2050")
+	getQuery.Add("dd", "invalid")
+	req.URL.RawQuery = getQuery.Encode()
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test for GetRoomByID error
+	req, _ = http.NewRequest("GET", "/book-room", nil)
+	ctx = getCtx(req)
+	req = req.WithContext(ctx)
+
+	getQuery = req.URL.Query()
+	getQuery.Add("id", "1001")
+	getQuery.Add("ad", "1/1/2050")
+	getQuery.Add("dd", "1/2/2050")
+	req.URL.RawQuery = getQuery.Encode()
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusTemporaryRedirect {
+		t.Errorf("BookRoom handler returned wrong http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
 	}
 }
 
