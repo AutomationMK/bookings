@@ -481,7 +481,9 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 
 	room, err := m.DB.GetRoomByID(roomID)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Unable to get room!")
+		m.App.ErrorLog.Println("Unable to get room!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
