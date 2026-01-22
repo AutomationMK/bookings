@@ -97,12 +97,12 @@ func TestRepository_Reserve(t *testing.T) {
 		t.Errorf("Reservation handler returned http code %d instead of %d", rr.Code, http.StatusTemporaryRedirect)
 	}
 
-	// test case with non-existant room
+	// test case with GetRoomByID error
 	req, _ = http.NewRequest("GET", "/make-reservation", nil)
 	ctx = getCtx(req)
 	req = req.WithContext(ctx)
 	rr = httptest.NewRecorder()
-	reservation.RoomID = 100
+	reservation.RoomID = 1001
 	session.Put(ctx, "reservation", reservation)
 	handler.ServeHTTP(rr, req)
 
