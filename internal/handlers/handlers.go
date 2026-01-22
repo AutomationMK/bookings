@@ -177,6 +177,14 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	room, err := m.DB.GetRoomByID(roomID)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Unable to get room!")
+		m.App.ErrorLog.Println("Unable to get room!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
 	reservation := models.Reservation{
 		FirstName:     r.Form.Get("first_name"),
 		LastName:      r.Form.Get("last_name"),
@@ -185,6 +193,7 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		ArrivalDate:   arrivalDate,
 		DepartureDate: departureDate,
 		RoomID:        roomID,
+		Room:          room,
 	}
 
 	form := forms.New(r.PostForm)
