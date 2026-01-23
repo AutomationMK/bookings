@@ -103,3 +103,9 @@ func (m *testDBRepo) GetAllRooms() ([]models.Room, error) {
 func (m *testDBRepo) GetRoomCount() (int, error) {
 	return 1, nil
 }
+
+// GetUserByID returns a user by id
+func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
+	u := models.User{}
+	return u, nil
+}
