@@ -114,3 +114,11 @@ func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
 func (m *testDBRepo) UpdateUser(u models.User) error {
 	return nil
 }
+
+// Authenticate authenticates a user
+func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
+	var id int
+	var hashedPassword string
+
+	return id, hashedPassword, nil
+}
