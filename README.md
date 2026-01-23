@@ -21,7 +21,11 @@ backend features including the following backend methods...
 
 Anywhere along the way I implemented any personal changes on
 my end based on my own knowledge of web design/development.
-Such as using tailwindcss for generating the styles of the website.
+Such as
+
+* Using tailwindcss for generating the styles of the website
+* Using Maizzle to generate styled email templates
+* Docker for generating the PostgreSQL database
 
 ## Getting Started
 
@@ -34,6 +38,7 @@ Such as using tailwindcss for generating the styles of the website.
 * [govalidator](https://github.com/asaskevich/govalidator) v11.0.1 (for form validation)
 * [pgx](https://github.com/jackc/pgx) v5.8.0 (PostgreSql Driver)
 * [Go Simple Mail](https://github.com/xhit/go-simple-mail) v2.16.0 (for handling smtp email)
+* [Maizzle](https://github.com/maizzle/maizzle/tree/master) v5.4.0 (for email templating)
 
 ### Installing manually
 
