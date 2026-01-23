@@ -13,3 +13,4 @@ coverage.out
 docker-compose.yml
 database.yml
 /templates/emails/*
+/static/images/email/*
