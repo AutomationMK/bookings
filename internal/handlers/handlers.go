@@ -248,34 +248,45 @@ func (m *Repository) PostReserve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// send notifications - first to guest
-	htmlMessage := fmt.Sprintf(`
-		<strong>Reservation Confirmation</strong><br>
-		Dear %s:, <br>
-		This is confirmation for your reservation from %s to %s.
-		`, reservation.FirstName, reservation.ArrivalDate.Format("1/2/2006"), reservation.DepartureDate.Format("1/2/2006"))
+	data := make(map[string]any)
+	data["reservation"] = reservation
+	stringMap := make(map[string]string)
+	stringMap["arrival_date"] = reservation.ArrivalDate.Format("1/2/2006")
+	stringMap["departure_date"] = reservation.DepartureDate.Format("1/2/2006")
 
-	// send notifications
+	scheme := "http"
+	if r.TLS != nil {
+		scheme = "https"
+	}
+	hostname := scheme + "://" + r.Host
+
+	// send notifications - first to customer
 	msg := models.MailData{
-		To:      reservation.Email,
-		From:    "me@here.com",
-		Subject: fmt.Sprintf("Reservation Confirmation for %s", reservation.Room.RoomName),
-		Content: htmlMessage,
+		To:       reservation.Email,
+		From:     "me@here.com",
+		Subject:  fmt.Sprintf("Reservation Confirmation for %s", reservation.Room.RoomName),
+		Content:  "",
+		Template: "confirmation.page.tmpl",
+		TemplateData: models.TemplateEmailData{
+			Data:      data,
+			StringMap: stringMap,
+			Host:      hostname,
+		},
 	}
 	m.App.MailChan <- msg
 
-	// send notifications - second to property owner
-	htmlMessage = fmt.Sprintf(`
-		<strong>Reservation Notification</strong><br>
-		A reservation has been made for %s from %s to %s.
-		`, reservation.Room.RoomName, reservation.ArrivalDate.Format("1/2/2006"), reservation.DepartureDate.Format("1/2/2006"))
-
-	// send notifications
+	// send notifications - second to owner
 	msg = models.MailData{
-		To:      "me@here.com",
-		From:    "me@here.com",
-		Subject: fmt.Sprintf("Reservation notification for %s", reservation.Room.RoomName),
-		Content: htmlMessage,
+		To:       "me@here.com",
+		From:     "me@here.com",
+		Subject:  fmt.Sprintf("Reservation notification for %s", reservation.Room.RoomName),
+		Content:  "",
+		Template: "reservation-alert.page.tmpl",
+		TemplateData: models.TemplateEmailData{
+			Data:      data,
+			StringMap: stringMap,
+			Host:      hostname,
+		},
 	}
 	m.App.MailChan <- msg
 
