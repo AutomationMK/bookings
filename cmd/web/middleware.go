@@ -25,10 +25,9 @@ func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
 
-// Auth checks if a session has a logged in user
-// if not logged in then user is directed to log in
-// and redirected to the /user/login route otherwise
-// the handler function is passed to use the next handler
+// Auth checks if a session has a logged in user if not logged in then
+// user is directed to log in and redirected to the /user/login route
+// otherwise the handler function is passed to use the next handler
 func Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !helpers.IsAuthenticated(r) {
