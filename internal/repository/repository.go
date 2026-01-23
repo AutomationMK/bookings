@@ -16,4 +16,5 @@ type DatabaseRepo interface {
 	GetRoomByRoute(route string) (models.Room, error)
 	GetAllRooms() ([]models.Room, error)
 	GetRoomCount() (int, error)
+	GetUserByID(id int) (models.User, error)
 }

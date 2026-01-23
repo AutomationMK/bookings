@@ -293,3 +293,34 @@ func (m *postgresDBRepo) GetRoomCount() (int, error) {
 
 	return count, nil
 }
+
+// GetUserByID returns a user by id
+func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `
+		SELECT id, first_name, last_name, email, password, access_level, created_at, updated_at
+		FROM users
+		WHERE id = $1
+	`
+
+	row := m.DB.QueryRow(ctx, stmt, id)
+
+	var u models.User
+	err := row.Scan(
+		&u.ID,
+		&u.FirstName,
+		&u.LastName,
+		&u.Email,
+		&u.Password,
+		&u.AccessLevel,
+		&u.CreatedAt,
+		&u.UpdatedAt,
+	)
+	if err != nil {
+		return u, err
+	}
+
+	return u, nil
+}
