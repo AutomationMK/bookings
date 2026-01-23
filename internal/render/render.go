@@ -43,7 +43,7 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 		// get the template cache from the app config
 		tc = app.TemplateCache
 	} else {
-		tc, _ = CreateTemplateCache()
+		tc, _ = CreateTemplateCache("./templates")
 	}
 
 	// get requested template from cache
@@ -72,9 +72,38 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 	return nil
 }
 
+// Template renders templates using html/template
+func TemplateEmail(tmpl string, td *models.TemplateEmailData) (string, error) {
+	var tc map[string]*template.Template
+
+	if app.UseCache {
+		// get the template cache from the app config
+		tc = app.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache("./templates/emails")
+	}
+
+	// get requested template from cache
+	t, ok := tc[tmpl]
+	if !ok {
+		return "", errors.New("can't get template from cache")
+	}
+
+	// hold bytes and try to execute in order to check
+	// that the template was parsed but can't execute
+	buf := new(bytes.Buffer)
+	err := t.ExecuteTemplate(buf, tmpl, td)
+	if err != nil {
+		log.Fatal(err)
+		return "", err
+	}
+
+	return buf.String(), nil
+}
+
 // createTemplateCache loops though all template files
 // and creates a template cache to render
-func CreateTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache(pathToTemplates string) (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
 
 	// get all of the files named *.page.templ from ./templates
