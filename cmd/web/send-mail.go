@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/models"
+	"github.com/AutomationMK/bookings/internal/render"
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
@@ -33,7 +34,15 @@ func sendMsg(m models.MailData) {
 
 	email := mail.NewMSG()
 	email.SetFrom(m.From).AddTo(m.To).SetSubject(m.Subject)
-	email.SetBody(mail.TextHTML, m.Content)
+	if m.Template == "" {
+		email.SetBody(mail.TextHTML, m.Content)
+	} else {
+		msgToSend, err := render.TemplateEmail(m.Template, &m.TemplateData)
+		if err != nil {
+			log.Fatal(err)
+		}
+		email.SetBody(mail.TextHTML, msgToSend)
+	}
 
 	err = email.Send(client)
 	if err != nil {
