@@ -109,3 +109,8 @@ func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
 	u := models.User{}
 	return u, nil
 }
+
+// UpdateUser updates a user in the database
+func (m *testDBRepo) UpdateUser(u models.User) error {
+	return nil
+}
