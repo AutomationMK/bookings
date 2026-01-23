@@ -17,4 +17,5 @@ type DatabaseRepo interface {
 	GetAllRooms() ([]models.Room, error)
 	GetRoomCount() (int, error)
 	GetUserByID(id int) (models.User, error)
+	UpdateUser(u models.User) error
 }
