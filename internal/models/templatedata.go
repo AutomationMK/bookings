@@ -14,3 +14,12 @@ type TemplateData struct {
 	Error     string
 	Form      *forms.Form
 }
+
+// TemplateEmailData holds data sent from handlers to templates
+type TemplateEmailData struct {
+	StringMap map[string]string
+	IntMap    map[string]int
+	FloatMap  map[string]float32
+	Data      map[string]any
+	Host      string
+}
