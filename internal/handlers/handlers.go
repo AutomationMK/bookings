@@ -719,3 +719,17 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "flash", "Logged out successfully")
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
+
+func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
+	data := make(map[string]any)
+	// add the rooms to template data any map
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
+	render.Template(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
+}
