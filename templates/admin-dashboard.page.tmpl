@@ -1,5 +1,146 @@
 {{template "base" .}}
 
 {{define "content"}}
-<h1>This page is secure</h1>
+<section class="bg-amber-100 py-10">
+    <div class="container relative mx-auto h-96 border-4 border-stone-700 bg-white items-start rounded-md flex">
+        <div id="menu"
+            class="z-20 absolute flex flex-col border-r-3 border-b-3 border-stone-700 shadow-sm w-fit rounded-br-md duration-500 ease-in-out">
+            <div id="reservations"
+                class="tab flex items-center gap-3 px-4 py-2 bg-stone-700 text-amber-200 cursor-pointer">
+                <p>Reservations</p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
+                </svg>
+            </div>
+            <div id="users"
+                class="tab flex items-center gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
+                <p>Users</p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                </svg>
+            </div>
+        </div>
+        <div id="menu-bar"
+            class="border-2 border-stone-700 bg-stone-700 shadow-md p-1 m-2 w-10 h-8 rounded cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="h-full w-full text-amber-200">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+        </div>
+        <div id="dashboard" class="w-full h-full p-5"></div>
+    </div>
+</section>
+<script>
+    let mql = window.matchMedia("(max-width: 48rem)");
+
+    const menu = document.querySelector("#menu");
+    const menuBar = document.querySelector("#menu-bar");
+    const dashboard = document.querySelector("#dashboard");
+
+    let isOpen = false;
+
+    function showMenu() {
+        isOpen = true;
+        menu.classList.remove("hidden");
+        menu.classList.remove("hide-modal");
+        menu.classList.add("show-modal");
+        menuBar.classList.remove("show-modal");
+        menuBar.classList.add("hide-modal");
+    }
+
+    function hideMenu() {
+        isOpen = false
+        menu.classList.remove("show-modal");
+        menu.classList.add("hide-modal");
+        menuBar.classList.remove("hide-modal");
+        menuBar.classList.add("show-modal");
+        setTimeout(() => {
+            menu.classList.add("hidden");
+        }, 500)
+    }
+
+    function toggleMenu() {
+        if (isOpen) {
+            hideMenu();
+        } else {
+            showMenu();
+        }
+    }
+
+    if (mql.matches) {
+        menuBar.classList.remove("hidden");
+        menu.classList.add("absolute");
+
+        menu.classList.remove("show-modal");
+        menu.classList.add("hide-modal");
+        menuBar.classList.remove("hide-modal");
+        menuBar.classList.add("show-modal");
+
+        menuBar.addEventListener("click", toggleMenu);
+    } else {
+        menuBar.classList.add("hidden");
+        menu.classList.remove("absolute");
+
+        menu.classList.add("show-modal");
+        menu.classList.remove("hide-modal");
+
+        menuBar.removeEventListener("click", toggleMenu);
+    }
+
+    mql.addEventListener("change", (e) => {
+        if (e.matches) {
+            menuBar.classList.remove("hidden");
+            menu.classList.add("absolute");
+
+            menu.classList.remove("show-modal");
+            menu.classList.add("hide-modal");
+            menuBar.classList.remove("hide-modal");
+            menuBar.classList.add("show-modal");
+
+            menuBar.addEventListener("click", toggleMenu);
+        } else {
+            menuBar.classList.add("hidden");
+            menu.classList.remove("absolute");
+
+            menu.classList.add("show-modal");
+            menu.classList.remove("hide-modal");
+
+            menuBar.removeEventListener("click", toggleMenu);
+        }
+    });
+
+    const first = document.querySelector("#reservations");
+    fetch(`/admin/dashboard/fetch/${first.id}`)
+        .then(response => response.text())
+        .then(html => {
+            dashboard.innerHTML = html;
+        })
+        .catch(error => {
+            console.warn('Something went wrong:', error);
+        });
+
+    const tabs = document.querySelectorAll(".tab");
+
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", (e) => {
+            if (mql.matches) {
+                hideMenu();
+            }
+
+            fetch(`/admin/dashboard/fetch/${e.target.id}`)
+                .then(response => response.text())
+                .then(html => {
+                    dashboard.innerHTML = html;
+                })
+                .catch(error => {
+                    console.warn('Something went wrong:', error);
+                });
+        });
+    });
+</script>
 {{end}}
