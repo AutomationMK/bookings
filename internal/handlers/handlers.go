@@ -740,3 +740,10 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 	})
 }
+
+func (m *Repository) FetchUsers(w http.ResponseWriter, r *http.Request) {
+	data := make(map[string]any)
+	render.Template(w, r, "fetch-users.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
+}
