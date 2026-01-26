@@ -385,3 +385,46 @@ func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, 
 
 	return id, hashedPassword, nil
 }
+
+// GetAllReservations returns all rooms in the database or an error if encountered
+func (m *postgresDBRepo) GetAllReservations() ([]models.Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservations []models.Reservation
+
+	stmt := `
+		SELECT id, first_name, last_name, email, phone, arrival_date, departure_date, room_id, created_at, updated_at
+		FROM reservations;`
+
+	rows, err := m.DB.Query(ctx, stmt)
+	if err != nil {
+		return reservations, err
+	}
+
+	for rows.Next() {
+		var reservation models.Reservation
+		err := rows.Scan(
+			&reservation.ID,
+			&reservation.FirstName,
+			&reservation.LastName,
+			&reservation.Email,
+			&reservation.Phone,
+			&reservation.ArrivalDate,
+			&reservation.DepartureDate,
+			&reservation.RoomID,
+			&reservation.CreatedAt,
+			&reservation.UpdatedAt,
+		)
+		if err != nil {
+			return reservations, err
+		}
+		reservations = append(reservations, reservation)
+	}
+
+	if err = rows.Err(); err != nil {
+		return reservations, err
+	}
+
+	return reservations, nil
+}

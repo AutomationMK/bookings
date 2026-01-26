@@ -122,3 +122,10 @@ func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, erro
 
 	return id, hashedPassword, nil
 }
+
+// GetAllReservations returns all rooms in the database or an error if encountered
+func (m *testDBRepo) GetAllReservations() ([]models.Reservation, error) {
+	var reservations []models.Reservation
+
+	return reservations, nil
+}
