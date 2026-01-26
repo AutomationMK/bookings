@@ -733,3 +733,10 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 	})
 }
+
+func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
+	data := make(map[string]any)
+	render.Template(w, r, "fetch-reservations.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
+}
