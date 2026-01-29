@@ -8,13 +8,16 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/AutomationMK/bookings/internal/config"
 	"github.com/AutomationMK/bookings/internal/models"
 	"github.com/justinas/nosurf"
 )
 
-var functions = template.FuncMap{}
+var functions = template.FuncMap{
+	"printDate": PrintDate,
+}
 
 // var to hold AppConfig from main function
 var app *config.AppConfig
@@ -25,6 +28,11 @@ var pathToTemplates = "./templates"
 // NewTemplate sets the config for the template package
 func NewRenderer(a *config.AppConfig) {
 	app = a
+}
+
+// PrintDate returns a time.Time into a MM/DD/YYYY formated string
+func PrintDate(t time.Time) string {
+	return t.Format("1/2/2006")
 }
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
