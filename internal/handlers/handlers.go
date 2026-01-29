@@ -735,9 +735,36 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
+	reservations, err := m.DB.GetAllReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	stringMap := make(map[string]string)
+	for index, reservation := range reservations {
+		room, err := m.DB.GetRoomByID(reservation.RoomID)
+		if err != nil {
+			m.App.Session.Put(r.Context(), "error", "Unable to get room!")
+			m.App.ErrorLog.Println("Unable to get room!")
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
+		reservations[index].Room = room
+
+		// reformat the date.Time to string
+		ad := reservation.ArrivalDate.Format("1/2/2006")
+		dd := reservation.DepartureDate.Format("1/2/2006")
+		// add the date strings to template data string map
+		stringMap[fmt.Sprintf("%d_arrival_date", reservation.ID)] = ad
+		stringMap[fmt.Sprintf("%d_departure_date", reservation.ID)] = dd
+	}
+
 	data := make(map[string]any)
+	data["reservations"] = reservations
 	render.Template(w, r, "fetch-reservations.page.tmpl", &models.TemplateData{
-		Data: data,
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
