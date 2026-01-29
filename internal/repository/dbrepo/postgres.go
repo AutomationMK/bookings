@@ -394,8 +394,14 @@ func (m *postgresDBRepo) GetAllReservations() ([]models.Reservation, error) {
 	var reservations []models.Reservation
 
 	stmt := `
-		SELECT id, first_name, last_name, email, phone, arrival_date, departure_date, room_id, created_at, updated_at
-		FROM reservations;`
+		SELECT r.id, r.first_name, r.last_name, r.email, r.phone,
+			r.arrival_date, r.departure_date, r.room_id, r.created_at,
+			r.updated_at, rm.id, rm.room_name, rm.created_at,
+			rm.updated_at, rm.bed_type, rm.room_area, rm.room_view,
+			rm.room_description, rm.room_features, rm.photo_links, rm.room_route
+		FROM reservations AS r
+		LEFT JOIN rooms as rm on (r.room_id = rm.id)
+		ORDER by r.arrival_date ASC;`
 
 	rows, err := m.DB.Query(ctx, stmt)
 	if err != nil {
@@ -415,6 +421,17 @@ func (m *postgresDBRepo) GetAllReservations() ([]models.Reservation, error) {
 			&reservation.RoomID,
 			&reservation.CreatedAt,
 			&reservation.UpdatedAt,
+			&reservation.Room.ID,
+			&reservation.Room.RoomName,
+			&reservation.Room.CreatedAt,
+			&reservation.Room.UpdatedAt,
+			&reservation.Room.BedType,
+			&reservation.Room.RoomArea,
+			&reservation.Room.RoomView,
+			&reservation.Room.RoomDescription,
+			&reservation.Room.RoomFeatures,
+			&reservation.Room.PhotoLinks,
+			&reservation.Room.RoomRoute,
 		)
 		if err != nil {
 			return reservations, err
