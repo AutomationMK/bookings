@@ -734,6 +734,10 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "fetch-new-reservations.page.tmpl", &models.TemplateData{})
+}
+
 func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 	reservations, err := m.DB.GetAllReservations()
 	if err != nil {
