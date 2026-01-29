@@ -746,16 +746,7 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 	}
 
 	stringMap := make(map[string]string)
-	for index, reservation := range reservations {
-		room, err := m.DB.GetRoomByID(reservation.RoomID)
-		if err != nil {
-			m.App.Session.Put(r.Context(), "error", "Unable to get room!")
-			m.App.ErrorLog.Println("Unable to get room!")
-			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-			return
-		}
-		reservations[index].Room = room
-
+	for _, reservation := range reservations {
 		// reformat the date.Time to string
 		ad := reservation.ArrivalDate.Format("1/2/2006")
 		dd := reservation.DepartureDate.Format("1/2/2006")
