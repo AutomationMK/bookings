@@ -398,11 +398,75 @@ func (m *postgresDBRepo) GetAllReservations() ([]models.Reservation, error) {
 	stmt := `
 		SELECT r.id, r.first_name, r.last_name, r.email, r.phone,
 			r.arrival_date, r.departure_date, r.room_id, r.created_at,
+			r.updated_at, r.processed, rm.id, rm.room_name,
+			rm.created_at, rm.updated_at, rm.bed_type, rm.room_area,
+			rm.room_view, rm.room_description, rm.room_features,
+			rm.photo_links, rm.room_route
+		FROM reservations AS r
+		LEFT JOIN rooms as rm on (r.room_id = rm.id)
+		ORDER by r.arrival_date ASC;`
+
+	rows, err := m.DB.Query(ctx, stmt)
+	if err != nil {
+		return reservations, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var reservation models.Reservation
+		err := rows.Scan(
+			&reservation.ID,
+			&reservation.FirstName,
+			&reservation.LastName,
+			&reservation.Email,
+			&reservation.Phone,
+			&reservation.ArrivalDate,
+			&reservation.DepartureDate,
+			&reservation.RoomID,
+			&reservation.CreatedAt,
+			&reservation.UpdatedAt,
+			&reservation.Processed,
+			&reservation.Room.ID,
+			&reservation.Room.RoomName,
+			&reservation.Room.CreatedAt,
+			&reservation.Room.UpdatedAt,
+			&reservation.Room.BedType,
+			&reservation.Room.RoomArea,
+			&reservation.Room.RoomView,
+			&reservation.Room.RoomDescription,
+			&reservation.Room.RoomFeatures,
+			&reservation.Room.PhotoLinks,
+			&reservation.Room.RoomRoute,
+		)
+		if err != nil {
+			return reservations, err
+		}
+		reservations = append(reservations, reservation)
+	}
+
+	if err = rows.Err(); err != nil {
+		return reservations, err
+	}
+
+	return reservations, nil
+}
+
+// AllNewReservations returns all rooms in the database or an error if encountered
+func (m *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservations []models.Reservation
+
+	stmt := `
+		SELECT r.id, r.first_name, r.last_name, r.email, r.phone,
+			r.arrival_date, r.departure_date, r.room_id, r.created_at,
 			r.updated_at, rm.id, rm.room_name, rm.created_at,
 			rm.updated_at, rm.bed_type, rm.room_area, rm.room_view,
 			rm.room_description, rm.room_features, rm.photo_links, rm.room_route
 		FROM reservations AS r
 		LEFT JOIN rooms as rm on (r.room_id = rm.id)
+		WHERE r.processed = 0
 		ORDER by r.arrival_date ASC;`
 
 	rows, err := m.DB.Query(ctx, stmt)

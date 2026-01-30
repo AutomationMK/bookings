@@ -129,3 +129,10 @@ func (m *testDBRepo) GetAllReservations() ([]models.Reservation, error) {
 
 	return reservations, nil
 }
+
+// AllNewReservations returns all rooms in the database not processed or an error if encountered
+func (m *testDBRepo) AllNewReservations() ([]models.Reservation, error) {
+	var reservations []models.Reservation
+
+	return reservations, nil
+}
