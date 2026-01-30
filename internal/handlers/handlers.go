@@ -745,21 +745,10 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	stringMap := make(map[string]string)
-	for _, reservation := range reservations {
-		// reformat the date.Time to string
-		ad := reservation.ArrivalDate.Format("1/2/2006")
-		dd := reservation.DepartureDate.Format("1/2/2006")
-		// add the date strings to template data string map
-		stringMap[fmt.Sprintf("%d_arrival_date", reservation.ID)] = ad
-		stringMap[fmt.Sprintf("%d_departure_date", reservation.ID)] = dd
-	}
-
 	data := make(map[string]any)
 	data["reservations"] = reservations
 	render.Template(w, r, "fetch-reservations.page.tmpl", &models.TemplateData{
-		Data:      data,
-		StringMap: stringMap,
+		Data: data,
 	})
 }
 
