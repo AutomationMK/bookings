@@ -6,7 +6,7 @@
         <div id="menu"
             class="z-20 absolute flex flex-col border-r-3 border-b-3 border-stone-700 shadow-sm w-fit rounded-br-md duration-500 ease-in-out">
             <div id="new-reservations"
-                class="tab flex items-center gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
+                class="tab flex items-center justify-between gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
                 <p>New Reservations</p>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="h-8">
@@ -15,26 +15,26 @@
                 </svg>
             </div>
             <div id="reservations"
-                class="tab flex items-center gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
+                class="tab flex items-center justify-between gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
                 <p>All Reservations</p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m7.875 14.25 1.214 1.942a2.25 2.25 0 0 0 1.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 0 1 1.872 1.002l.164.246a2.25 2.25 0 0 0 1.872 1.002h2.092a2.25 2.25 0 0 0 1.872-1.002l.164-.246A2.25 2.25 0 0 1 16.954 9h4.636M2.41 9a2.25 2.25 0 0 0-.16.832V12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 0 1 .382-.632l3.285-3.832a2.25 2.25 0 0 1 1.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0 0 21.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+            </div>
+            <div id="reservation-calendar"
+                class="tab flex items-center justify-between gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
+                <p>Reservation Calendar</p>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="h-8">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
                 </svg>
             </div>
-            <div id="users"
-                class="tab flex items-center gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
-                <p>Users</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="h-8">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                </svg>
-            </div>
         </div>
         <div id="menu-bar"
-            class="border-2 border-stone-700 bg-stone-700 shadow-md p-1 m-2 w-10 h-8 rounded cursor-pointer">
+            class="absolute border-2 border-stone-700 bg-stone-700 shadow-md p-1 m-2 w-10 h-8 rounded cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="h-full w-full text-amber-200">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -118,8 +118,6 @@
 
             menu.classList.add("show-modal");
             menu.classList.remove("hide-modal");
-
-            menuBar.removeEventListener("click", toggleMenu);
         }
     });
 
