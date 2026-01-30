@@ -5,7 +5,7 @@
     <div class="container relative mx-auto min-h-96 border-4 border-stone-700 bg-white items-start rounded-md flex">
         <div id="menu"
             class="z-20 absolute flex flex-col border-r-3 border-b-3 border-stone-700 shadow-sm w-fit rounded-br-md duration-500 ease-in-out">
-            <a href="#" id="new-reservations"
+            <a href="#" id="new"
                 class="tab flex items-center justify-between gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
                 <p>New Reservations</p>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -14,7 +14,7 @@
                         d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
                 </svg>
             </a>
-            <a href="#" id="reservations"
+            <a href="#" id="all"
                 class="tab flex items-center justify-between gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
                 <p>All Reservations</p>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -23,7 +23,7 @@
                         d="m7.875 14.25 1.214 1.942a2.25 2.25 0 0 0 1.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 0 1 1.872 1.002l.164.246a2.25 2.25 0 0 0 1.872 1.002h2.092a2.25 2.25 0 0 0 1.872-1.002l.164-.246A2.25 2.25 0 0 1 16.954 9h4.636M2.41 9a2.25 2.25 0 0 0-.16.832V12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 0 1 .382-.632l3.285-3.832a2.25 2.25 0 0 1 1.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0 0 21.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
             </a>
-            <a href="#" id="reservation-calendar"
+            <a href="#" id="calendar"
                 class="tab flex items-center justify-between gap-3 px-4 py-2 bg-white text-stone-800 hover:bg-amber-100 cursor-pointer transition">
                 <p>Reservation Calendar</p>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -133,9 +133,9 @@
     }
 
 
-    const first = document.querySelector("#new-reservations");
+    const first = document.querySelector("#new");
     setTabActive(first);
-    fetch(`/admin/dashboard/fetch/${first.id}`)
+    fetch(`/admin/dashboard/reservations/${first.id}`)
         .then(response => response.text())
         .then(html => {
             dashboard.innerHTML = html;
@@ -156,7 +156,7 @@
 
             setTabActive(tab);
 
-            fetch(`/admin/dashboard/fetch/${e.target.id}`)
+            fetch(`/admin/dashboard/reservations/${e.target.id}`)
                 .then(response => response.text())
                 .then(html => {
                     dashboard.innerHTML = html;
