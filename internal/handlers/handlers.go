@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/AutomationMK/bookings/internal/config"
@@ -762,6 +763,34 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 	data["reservations"] = reservations
 	render.Template(w, r, "fetch-reservations.page.tmpl", &models.TemplateData{
 		Data: data,
+	})
+}
+
+func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request) {
+	exploded := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(exploded[5])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	src := exploded[4]
+
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	res, err := m.DB.GetReservationByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]any)
+	data["reservation"] = res
+
+	render.Template(w, r, "fetch-reservation.page.tmpl", &models.TemplateData{
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
