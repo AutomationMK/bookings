@@ -734,6 +734,7 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// AdminNewReservations sends response displaying all unprocessed reservations
 func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
 	reservations, err := m.DB.AllNewReservations()
 	if err != nil {
