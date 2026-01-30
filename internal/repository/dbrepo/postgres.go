@@ -512,3 +512,51 @@ func (m *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
 
 	return reservations, nil
 }
+
+// GetReservationByID returns a reservation based on the id
+// param and error if it occurs
+func (m *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservation models.Reservation
+	stmt := `
+		SELECT r.id, r.first_name, r.last_name, r.email, r.phone,
+			r.arrival_date, r.departure_date, r.room_id, r.created_at,
+			r.updated_at, rm.id, rm.room_name, rm.created_at,
+			rm.updated_at, rm.bed_type, rm.room_area, rm.room_view,
+			rm.room_description, rm.room_features, rm.photo_links, rm.room_route
+		FROM reservations AS r
+		LEFT JOIN rooms as rm on (r.room_id = rm.id)
+		WHERE r.id = $1`
+
+	row := m.DB.QueryRow(ctx, stmt, id)
+	err := row.Scan(
+		&reservation.ID,
+		&reservation.FirstName,
+		&reservation.LastName,
+		&reservation.Email,
+		&reservation.Phone,
+		&reservation.ArrivalDate,
+		&reservation.DepartureDate,
+		&reservation.RoomID,
+		&reservation.CreatedAt,
+		&reservation.UpdatedAt,
+		&reservation.Room.ID,
+		&reservation.Room.RoomName,
+		&reservation.Room.CreatedAt,
+		&reservation.Room.UpdatedAt,
+		&reservation.Room.BedType,
+		&reservation.Room.RoomArea,
+		&reservation.Room.RoomView,
+		&reservation.Room.RoomDescription,
+		&reservation.Room.RoomFeatures,
+		&reservation.Room.PhotoLinks,
+		&reservation.Room.RoomRoute,
+	)
+	if err != nil {
+		return reservation, err
+	}
+
+	return reservation, nil
+}
