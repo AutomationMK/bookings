@@ -750,6 +750,7 @@ func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request
 	})
 }
 
+// AdminNewReservations sends response displaying all reservations
 func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 	reservations, err := m.DB.GetAllReservations()
 	if err != nil {
