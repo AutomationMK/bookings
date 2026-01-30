@@ -35,11 +35,12 @@
         {{range $reservations}}
         <tr
             class="cursor-pointer hover:brightness-85 [&_td]:w-full [&_a]:py-2 [&_a]:block [&_a]:w-full [&_a]:text-center">
-            <td><a href="/admin/dashboard/reservation/{{.ID}}">{{.Room.RoomName}}</td>
-            <td><a href="/admin/dashboard/reservation/{{.ID}}">{{printDate .ArrivalDate}}</a></td>
-            <td><a href="/admin/dashboard/reservation/{{.ID}}">{{printDate .DepartureDate}}</a></td>
-            <td class="max-lg:hidden"><a href="/admin/dashboard/reservation/{{.ID}}">{{.Email}}</a></td>
-            <td class="max-xl:hidden"><a href="/admin/dashboard/reservation/{{.ID}}">{{.FirstName}} {{.LastName}}</a>
+            <td><a href="/admin/dashboard/reservations/all/{{.ID}}">{{.Room.RoomName}}</td>
+            <td><a href="/admin/dashboard/reservations/all/{{.ID}}">{{printDate .ArrivalDate}}</a></td>
+            <td><a href="/admin/dashboard/reservations/all/{{.ID}}">{{printDate .DepartureDate}}</a></td>
+            <td class="max-lg:hidden"><a href="/admin/dashboard/reservations/all/{{.ID}}">{{.Email}}</a></td>
+            <td class="max-xl:hidden"><a href="/admin/dashboard/reservations/all/{{.ID}}">{{.FirstName}}
+                    {{.LastName}}</a>
             </td>
         </tr>
         {{end}}
