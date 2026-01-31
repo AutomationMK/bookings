@@ -723,16 +723,23 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 
 // AdminDashboard sends a response displaying the admin dashboard
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
-	data := make(map[string]any)
+	uri := r.RequestURI
+
+	stringMap := make(map[string]string)
+	stringMap["uri"] = uri
+
 	// add the rooms to template data any map
 	rooms, err := m.getRoomsData()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
+	data := make(map[string]any)
 	data["rooms"] = rooms
+
 	render.Template(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{
-		Data: data,
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
