@@ -775,7 +775,7 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request) {
 	exploded := strings.Split(r.RequestURI, "/")
-	id, err := strconv.Atoi(exploded[5])
+	id, err := strconv.Atoi(exploded[6])
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
