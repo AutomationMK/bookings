@@ -725,6 +725,11 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	uri := r.RequestURI
 
+	if uri == "/admin/dashboard" {
+		http.Redirect(w, r, "/admin/dashboard/reservations/new", http.StatusSeeOther)
+		return
+	}
+
 	stringMap := make(map[string]string)
 	stringMap["uri"] = uri
 
