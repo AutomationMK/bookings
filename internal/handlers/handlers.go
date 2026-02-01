@@ -803,6 +803,7 @@ func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request
 	render.Template(w, r, "fetch-reservation.page.tmpl", &models.TemplateData{
 		Data:      data,
 		StringMap: stringMap,
+		Form:      forms.New(nil),
 	})
 }
 
