@@ -133,15 +133,26 @@
         el.classList.add('bg-white', 'text-stone-800', 'hover:bg-amber-100');
     }
 
+    function loadDashboard(path) {
+        fetch("/fetch" + path)
+            .then(res => res.text())
+            .then(html => {
+                dashboard.innerHTML = html;
 
-    fetch("/fetch{{$uri}}")
-        .then(response => response.text())
-        .then(html => {
-            dashboard.innerHTML = html;
-        })
-        .catch(error => {
-            console.warn('Something went wrong:', error);
-        });
+                tabs.forEach(tab => {
+                    tab.pathname === path
+                        ? setTabActive(tab)
+                        : setTabInactive(tab);
+                });
+            })
+            .catch(err => consele.warn("Something went wrong:", err));
+    }
+
+    loadDashboard("{{$uri}}");
+
+    window.addEventListener("popstate", () => {
+        loadDashboard(window.location.pathname);
+    });
 
     const tabs = document.querySelectorAll(".tab");
 
@@ -159,15 +170,19 @@
 
             setTabActive(tab);
 
-            fetch("/fetch" + tab.pathname)
-                .then(response => response.text())
-                .then(html => {
-                    dashboard.innerHTML = html;
-                })
-                .catch(error => {
-                    console.warn('Something went wrong:', error);
-                });
+            loadDashboard(tab.pathname);
+            history.pushState(null, "Dashboard - New", tab.href);
         });
+    });
+
+    dashboard.addEventListener("click", (e) => {
+        const link = e.target.closest("a.fetchLink");
+        if (!link) return;
+
+        e.preventDefault();
+
+        loadDashboard(link.pathname);
+        history.pushState(null, "", link.href);
     });
 </script>
 {{end}}
