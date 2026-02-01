@@ -14,7 +14,7 @@
         </div>
     </div>
     <h1 class="row-start-1 col-span-full text-stone-800 text-2xl font-bold text-center">
-        All Reservations
+        New Reservations
     </h1>
     <div class="flex items-center justify-between rounded border-2 border-stone-700 p-2 sm:col-span-2 shadow-md">
         <input type="text" placeholder="Search ..." class="text-stone-800 w-full">
@@ -35,11 +35,16 @@
         {{range $reservations}}
         <tr
             class="cursor-pointer hover:brightness-85 [&_td]:w-full [&_a]:py-2 [&_a]:block [&_a]:w-full [&_a]:text-center">
-            <td><a href="/admin/dashboard/reservations/new/{{.ID}}">{{.Room.RoomName}}</td>
-            <td><a href="/admin/dashboard/reservations/new/{{.ID}}">{{printDate .ArrivalDate}}</a></td>
-            <td><a href="/admin/dashboard/reservations/new/{{.ID}}">{{printDate .DepartureDate}}</a></td>
-            <td class="max-lg:hidden"><a href="/admin/dashboard/reservations/new/{{.ID}}">{{.Email}}</a></td>
-            <td class="max-xl:hidden"><a href="/admin/dashboard/reservations/new/{{.ID}}">{{.FirstName}}
+            <td><a href="/admin/dashboard/reservations/new/{{.ID}}" class="fetchLink">{{.Room.RoomName}}</td>
+            <td><a href="/admin/dashboard/reservations/new/{{.ID}}" class="fetchLink">{{printDate .ArrivalDate}}</a>
+            </td>
+            <td><a href="/admin/dashboard/reservations/new/{{.ID}}" class="fetchLink">{{printDate .DepartureDate}}</a>
+            </td>
+            <td class="max-lg:hidden"><a href="/admin/dashboard/reservations/new/{{.ID}}"
+                    class="fetchLink">{{.Email}}</a>
+            </td>
+            <td class="max-xl:hidden"><a href="/admin/dashboard/reservations/new/{{.ID}}"
+                    class="fetchLink">{{.FirstName}}
                     {{.LastName}}</a>
             </td>
         </tr>
