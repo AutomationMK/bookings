@@ -497,10 +497,3 @@ export default class Cal {
         leftBtn.removeEventListener("click", this.handlePrevCal);
     }
 }
-
-const datePickers = document.querySelectorAll(".date_picker");
-datePickers.forEach((datePicker) => {
-    const dateInputBox = datePicker.querySelector(".calendar_box");
-
-    let cal = new Cal(dateInputBox);
-});
