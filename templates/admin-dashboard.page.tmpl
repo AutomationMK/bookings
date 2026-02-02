@@ -1,5 +1,10 @@
 {{template "base" .}}
 
+{{define "js"}}
+<script type="module" src="/static/js/notify.js"></script>
+<script type="module" src="/static/js/datePicker.js"></script>
+{{end}}
+
 {{define "content"}}
 {{$uri := index .StringMap "uri"}}
 <section class="bg-amber-100 py-10">
@@ -45,7 +50,9 @@
         <div id="dashboard" class="w-full h-full p-5"></div>
     </div>
 </section>
-<script>
+<script type="module">
+    import Notice from "/static/js/notify.js";
+    import Cal from "/static/js/datePicker.js";
     let mql = window.matchMedia("(max-width: 48rem)");
 
     const menu = document.querySelector("#menu");
@@ -135,11 +142,18 @@
         el.removeAttribute("aria-current");
     }
 
+    const regex = new RegExp("\/admin\/dashboard\/reservations\/(new|all)\/\d?");
     function loadDashboard(path) {
         fetch("/fetch" + path)
             .then(res => res.text())
             .then(html => {
                 dashboard.innerHTML = html;
+
+                if (regex.test(path)) {
+                    document.dispatchEvent(
+                        new CustomEvent("dashboard:reservation-loaded", {detail: {path}})
+                    );
+                }
 
                 tabs.forEach(tab => {
                     tab.pathname === path
@@ -154,6 +168,64 @@
 
     window.addEventListener("popstate", () => {
         loadDashboard(window.location.pathname);
+    });
+
+    document.addEventListener("dashboard:reservation-loaded", (e) => {
+        let available = new Notice(".notice-box", "success", "w-full absolute bottom-1 translate-y-full rounded-b-md");
+        let error = new Notice(".notice-box", "error", "w-full absolute bottom-1 translate-y-full rounded-b-md");
+        document.querySelector(".check-btn").addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const templateData = document.querySelector("[data-tmpl]");
+
+            let form = document.querySelector("#check-availability-form");
+            let formData = new FormData(form);
+            formData.append("csrf_token", "{{.CSRFToken}}");
+            formData.append("room_id", templateData.dataset.roomID);
+
+            fetch('/search-availability-json', {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        if (available.messageEl !== null) {
+                            available.noticeEl.classList.remove("notify-open");
+                            available.noticeEl.classList.add("notify-close");
+                            available.noticeEl.innerHTML = "";
+                        }
+                        if (error.messageEl !== null) {
+                            error.noticeEl.classList.remove("notify-open");
+                            error.noticeEl.classList.add("notify-close");
+                            error.noticeEl.innerHTML = "";
+                        }
+                        available.addMsgEl(`
+                    <h2 id="msg" class="px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
+                        available.notify("Room is Available")
+                    } else {
+                        if (available.messageEl !== null) {
+                            available.noticeEl.classList.remove("notify-open");
+                            available.noticeEl.classList.add("notify-close");
+                            available.noticeEl.innerHTML = "";
+                        }
+                        if (error.messageEl !== null) {
+                            error.noticeEl.classList.remove("notify-open");
+                            error.noticeEl.classList.add("notify-close");
+                            error.noticeEl.innerHTML = "";
+                        }
+                        error.addMsgEl(`<h2 id="msg" class="container px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
+                        error.notify("Room is not available");
+                    }
+                });
+        });
+
+        const datePickers = document.querySelectorAll(".date_picker");
+        datePickers.forEach((datePicker) => {
+            const dateInputBox = datePicker.querySelector(".calendar_box");
+
+            let cal = new Cal(dateInputBox);
+        });
     });
 
     const tabs = document.querySelectorAll(".tab");
