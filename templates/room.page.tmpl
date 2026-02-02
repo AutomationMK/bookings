@@ -1,11 +1,6 @@
 {{template "base" .}}
 
-{{define "js"}}
-<script type="module" src="/static/js/modal.js"></script>
-{{end}}
-
 {{define "content"}}
-
 {{$room := index .Data "room"}}
 <script type="module">
     import Modal from "/static/js/modal.js";
@@ -101,8 +96,15 @@
                 }
             });
     });
+
+    import Cal from "/static/js/datePicker.js";
+    const datePickers = document.querySelectorAll(".date_picker");
+    datePickers.forEach((datePicker) => {
+        const dateInputBox = datePicker.querySelector(".calendar_box");
+
+        let cal = new Cal(dateInputBox);
+    });
 </script>
-<script defer src="/static/js/datePicker.js"></script>
 <div class="fixed hide-modalbox h-screen w-screen modalbox z-20"></div>
 <section class="flex flex-col gap-10 items-center pb-20">
     <div class="slider relative h-full w-full max-w-4xl overflow-hidden rounded-b-md shadow-lg shadow-stone-800/20">
