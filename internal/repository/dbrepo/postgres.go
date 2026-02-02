@@ -55,6 +55,41 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) 
 	return newID, nil
 }
 
+// UpdateReservation updates a reservation in the database
+func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `
+		UPDATE reservations SET
+			first_name = $1,
+			last_name = $2,
+			email = $3,
+			phone = $4,
+			update_at = $5,
+			arrival_date = $6,
+			departure_date = $7,
+			room_id = 8,
+	`
+
+	_, err := m.DB.Exec(ctx, stmt,
+		res.FirstName,
+		res.LastName,
+		res.Email,
+		res.Phone,
+		time.Now(),
+		res.ArrivalDate,
+		res.DepartureDate,
+		res.RoomID,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // InsertRoomRestriction adds a RoomRestriction model to the database
 func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
