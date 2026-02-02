@@ -800,6 +800,14 @@ func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request
 	data := make(map[string]any)
 	data["reservation"] = res
 
+	// add the rooms to template data any map
+	rooms, err := m.getRoomsData()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data["rooms"] = rooms
+
 	render.Template(w, r, "fetch-reservation.page.tmpl", &models.TemplateData{
 		Data:      data,
 		StringMap: stringMap,
