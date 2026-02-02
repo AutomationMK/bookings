@@ -104,6 +104,23 @@ func (m *postgresDBRepo) DeleteReservation(id int) error {
 	return nil
 }
 
+// UpdateProcessedForReservation updates the processed column in reservations table
+func (m *postgresDBRepo) UpdateProcessedForReservation(id, processed int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `
+		UPDATE reservations
+		SET processed = $1
+		WHERE id = $2`
+	_, err := m.DB.Exec(ctx, stmt, processed, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // InsertRoomRestriction adds a RoomRestriction model to the database
 func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

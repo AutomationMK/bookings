@@ -31,6 +31,11 @@ func (m *testDBRepo) DeleteReservation(id int) error {
 	return nil
 }
 
+// UpdateProcessedForReservation updates the processed column in reservations table
+func (m *testDBRepo) UpdateProcessedForReservation(id, processed int) error {
+	return nil
+}
+
 // InsertRoomRestriction adds a RoomRestriction model to the database
 func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	// if room id is 1000, then fail; otherwise pass
