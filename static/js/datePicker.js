@@ -1,7 +1,7 @@
 //////////////////////////////////////
 // Date Picker
 //////////////////////////////////////
-class Cal {
+export default class Cal {
     curMonth;
     inputBox;
     nextMonth;
