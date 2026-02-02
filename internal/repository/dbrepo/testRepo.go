@@ -26,6 +26,11 @@ func (m *testDBRepo) UpdateReservation(res models.Reservation) error {
 	return nil
 }
 
+// DeleteReservation deletes a reservation from the database by id
+func (m *testDBRepo) DeleteReservation(id int) error {
+	return nil
+}
+
 // InsertRoomRestriction adds a RoomRestriction model to the database
 func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	// if room id is 1000, then fail; otherwise pass

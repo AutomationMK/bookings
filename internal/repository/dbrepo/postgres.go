@@ -69,7 +69,7 @@ func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
 			update_at = $5,
 			arrival_date = $6,
 			departure_date = $7,
-			room_id = 8,
+			room_id = 8
 	`
 
 	_, err := m.DB.Exec(ctx, stmt,
@@ -83,6 +83,20 @@ func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
 		res.RoomID,
 	)
 
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// DeleteReservation deletes a reservation from the database by id
+func (m *postgresDBRepo) DeleteReservation(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `DELETE FROM reservations WHERE id = $1`
+	_, err := m.DB.Query(ctx, stmt, id)
 	if err != nil {
 		return err
 	}
