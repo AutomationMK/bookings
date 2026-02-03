@@ -177,6 +177,9 @@
             e.preventDefault();
 
             const templateData = document.querySelector("[data-tmpl]");
+            const arrivalDate = document.querySelector("#arrival_date");
+            const departureDate = document.querySelector("#departure_date");
+            const roomID = document.querySelector("#room_id");
 
             let form = document.querySelector("#check-availability-form");
             let formData = new FormData(form);
@@ -203,6 +206,10 @@
                         available.addMsgEl(`
                     <h2 id="msg" class="px-4 md:text-lg lg:text-xl font-bold text-center"></h2>`)
                         available.notify("Room is Available")
+
+                        arrivalDate.value = data.arrival_date;
+                        departureDate.value = data.departure_date;
+                        roomID.value = data.room_id;
                     } else {
                         if (available.messageEl !== null) {
                             available.noticeEl.classList.remove("notify-open");
