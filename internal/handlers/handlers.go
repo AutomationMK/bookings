@@ -786,7 +786,7 @@ func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	src := exploded[4]
+	src := exploded[5]
 
 	stringMap := make(map[string]string)
 	stringMap["src"] = src
