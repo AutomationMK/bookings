@@ -407,6 +407,7 @@ func (m *postgresDBRepo) UpdateUser(u models.User) error {
 			email = $3,
 			access_level = $4,
 			updated_at = $5
+		WHERE id = $6
 	`
 
 	_, err := m.DB.Exec(ctx, stmt,
@@ -415,6 +416,7 @@ func (m *postgresDBRepo) UpdateUser(u models.User) error {
 		u.Email,
 		u.AccessLevel,
 		time.Now(),
+		u.ID,
 	)
 
 	if err != nil {
