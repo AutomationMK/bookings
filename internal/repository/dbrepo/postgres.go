@@ -69,7 +69,8 @@ func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
 			update_at = $5,
 			arrival_date = $6,
 			departure_date = $7,
-			room_id = 8
+			room_id = $8
+		WHERE id = $9
 	`
 
 	_, err := m.DB.Exec(ctx, stmt,
@@ -81,6 +82,7 @@ func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
 		res.ArrivalDate,
 		res.DepartureDate,
 		res.RoomID,
+		res.ID,
 	)
 
 	if err != nil {
