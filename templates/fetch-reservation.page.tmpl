@@ -1,7 +1,7 @@
 {{$res := index .Data "reservation"}}
 <div data-tmpl data-roomID="{{$res.Room.ID}}"></div>
 <div class="flex flex-col items-center gap-5 justify-center h-full max-md:pt-8">
-    <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold text-center">
+    <h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl lg:col-span-full text-stone-700 font-bold text-center">
         Reservation ID: #{{$res.ID}} Details For {{$res.Room.RoomName}}
     </h2>
     <div class="h-full w-full max-w-3xl overflow-hidden rounded-md shadow-lg shadow-stone-800/20">
@@ -15,7 +15,8 @@
     </p>
     <form id="check-availability-form" action="#" method="POST"
         class="notice-box relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20 col-span-full mb-20">
-        <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold">Search for Update
+        <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold text-center">Search for
+            Update
             Availability
         </h2>
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
