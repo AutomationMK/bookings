@@ -29,11 +29,11 @@
             <label for="departure_date" class="sm:text-lg text-stone-800">
                 Departure date
             </label>
-            <input required readonly type="text" name="arrival_date" id="arrival_date" placeholder="MM/DD/YYYY"
+            <input required readonly type="text" name="arrival_date" id="arrival_date_json" placeholder="MM/DD/YYYY"
                 value="{{printDate $res.ArrivalDate}}"
                 class="start-date-input sm:text-lg text-stone-800 w-full text-center">
             <p class="text-lg text-stone-800">-</p>
-            <input required readonly type="text" name="departure_date" id="departure_date" placeholder="MM/DD/YYYY"
+            <input required readonly type="text" name="departure_date" id="departure_date_json" placeholder="MM/DD/YYYY"
                 value="{{printDate $res.DepartureDate}}"
                 class="end-date-input sm:text-lg text-stone-800 w-full text-center">
             <div class="calendar_box"></div>
@@ -61,10 +61,11 @@
             Check Availability
         </button>
     </form>
-    <form action="/make-reservation" method="POST" class="grid gap-4 justify-items-center xl:grid-cols-2 w-full h-full">
+    <form action="/update-reservation" method="POST"
+        class="grid gap-4 justify-items-center xl:grid-cols-2 w-full h-full">
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-        <input type="hidden" name="arrival_date" value="{{printDate $res.ArrivalDate}}">
-        <input type="hidden" name="departure_date" value="{{printDate $res.DepartureDate}}">
+        <input id="arrival_date" type="hidden" name="arrival_date" value="{{printDate $res.ArrivalDate}}">
+        <input id="departure_date" type="hidden" name="departure_date" value="{{printDate $res.DepartureDate}}">
         <input type="hidden" name="room_id" value="{{$res.RoomID}}">
         <div class="flex flex-col gap-2 justify-end items-center w-full">
             {{with .Form.Errors.Get "first_name"}}
