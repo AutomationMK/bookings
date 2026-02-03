@@ -2,66 +2,68 @@
 {{$src := index .StringMap "src"}}
 <div data-tmpl data-roomID="{{$res.Room.ID}}"></div>
 <div class="flex flex-col items-center gap-5 justify-center h-full max-md:pt-8">
-    <h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl lg:col-span-full text-stone-700 font-bold text-center">
-        Reservation ID: #{{$res.ID}} Details For {{$res.Room.RoomName}}
-    </h2>
-    <div class="h-full w-full max-w-3xl overflow-hidden rounded-md shadow-lg shadow-stone-800/20">
-        <figure class="slide h-fit w-fit">
-            <img src="{{index $res.Room.PhotoLinks 0}}" alt="{{$res.Room.RoomName}}"
-                class="h-full w-full object-contain">
-        </figure>
-    </div>
-    <p class="text md:text-md lg:text-lg xl:text-xl lg:col-span-full text-stone-700 text-center">
-        Change any of the following info below and submit to update the reservation
-    </p>
-    <form id="check-availability-form" action="#" method="POST"
-        class="notice-box relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20 col-span-full mb-20">
-        <h2 class="text-xl md:text-2xl lg:text-4xl lg:col-span-full text-stone-700 font-bold text-center">Search for
-            Update
-            Availability
+    <div class="grid lg:grid-cols-2 gap-6 items-center mb-20">
+        <h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl lg:col-span-full text-stone-700 font-bold text-center">
+            Reservation ID: #{{$res.ID}} Details For {{$res.Room.RoomName}}
         </h2>
-        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-        <div
-            class="date_picker group grid grid-cols-[1fr_20px_1fr] px-4 py-4 w-full h-fit items-center justify-items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
-            <label for="arrival_date" class="sm:text-lg text-stone-800">
-                Arrival date
-            </label>
-            <p class="text-lg text-stone-800">-</p>
-            <label for="departure_date" class="sm:text-lg text-stone-800">
-                Departure date
-            </label>
-            <input required readonly type="text" name="arrival_date" id="arrival_date_json" placeholder="MM/DD/YYYY"
-                value="{{printDate $res.ArrivalDate}}"
-                class="start-date-input sm:text-lg text-stone-800 w-full text-center">
-            <p class="text-lg text-stone-800">-</p>
-            <input required readonly type="text" name="departure_date" id="departure_date_json" placeholder="MM/DD/YYYY"
-                value="{{printDate $res.DepartureDate}}"
-                class="end-date-input sm:text-lg text-stone-800 w-full text-center">
-            <div class="calendar_box"></div>
+        <p class="text md:text-md lg:text-lg xl:text-xl lg:col-span-full text-stone-700 text-center">
+            Change any of the following info below and submit to update the reservation
+        </p>
+        <div class="h-fit w-full max-w-md overflow-hidden rounded-md shadow-lg shadow-stone-800/20 justify-self-center">
+            <figure class="slide h-fit w-fit">
+                <img src="{{index $res.Room.PhotoLinks 0}}" alt="{{$res.Room.RoomName}}"
+                    class="h-full w-full object-contain">
+            </figure>
         </div>
-        {{$rooms := index .Data "rooms"}}
-        {{with $rooms}}
-        <div class="relative inline-block w-full text-amber-200">
-            <label for="room_id"></label>
-            <select name="room_id" id="room_id_json"
-                class="appearance-none p-2 bg-stone-700 focus:outline-amber-200 rounded w-full sm:text-center shadow-md font-bold">
-                {{range $rooms}}
-                <option value="{{.ID}}">{{.RoomName}}</option>
-                {{end}}
-            </select>
-            <div class="pointer-events-none absolute top-1/2 -translate-y-1/2 right-0 px-3">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="h-6 stroke-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                </svg>
+        <form id="check-availability-form" action="#" method="POST"
+            class="notice-box relative grid justify-items-center bg-amber-100 w-full max-w-4xl gap-4 py-8 px-4 rounded-md shadow-md shadow-stone-800/20">
+            <h2 class="text-xl md:text-xl xl:text-3xl lg:col-span-full text-stone-700 font-bold text-center">Search for
+                Update
+                Availability
+            </h2>
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            <div
+                class="date_picker group grid grid-cols-[1fr_20px_1fr] px-4 py-4 w-full h-fit items-center justify-items-center bg-white border-3 border-stone-500 rounded-md shadow-md shadow-stone-800/20">
+                <label for="arrival_date" class="sm:text-lg text-stone-800">
+                    Arrival date
+                </label>
+                <p class="text-lg text-stone-800">-</p>
+                <label for="departure_date" class="sm:text-lg text-stone-800">
+                    Departure date
+                </label>
+                <input required readonly type="text" name="arrival_date" id="arrival_date_json" placeholder="MM/DD/YYYY"
+                    value="{{printDate $res.ArrivalDate}}"
+                    class="start-date-input sm:text-lg text-stone-800 w-full text-center">
+                <p class="text-lg text-stone-800">-</p>
+                <input required readonly type="text" name="departure_date" id="departure_date_json"
+                    placeholder="MM/DD/YYYY" value="{{printDate $res.DepartureDate}}"
+                    class="end-date-input sm:text-lg text-stone-800 w-full text-center">
+                <div class="calendar_box"></div>
             </div>
-        </div>
-        {{end}}
-        <button type="submit"
-            class="check-btn bg-stone-700 border-3 border-stone-700 lg:col-span-full rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">
-            Check Availability
-        </button>
-    </form>
+            {{$rooms := index .Data "rooms"}}
+            {{with $rooms}}
+            <div class="relative inline-block w-full text-amber-200">
+                <label for="room_id"></label>
+                <select name="room_id" id="room_id_json"
+                    class="appearance-none p-2 bg-stone-700 focus:outline-amber-200 rounded w-full sm:text-center shadow-md font-bold">
+                    {{range $rooms}}
+                    <option value="{{.ID}}">{{.RoomName}}</option>
+                    {{end}}
+                </select>
+                <div class="pointer-events-none absolute top-1/2 -translate-y-1/2 right-0 px-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="h-6 stroke-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </div>
+            </div>
+            {{end}}
+            <button type="submit"
+                class="check-btn bg-stone-700 border-3 border-stone-700 lg:col-span-full rounded-md text-amber-200 text-lg xl:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">
+                Check Availability
+            </button>
+        </form>
+    </div>
     <form action="/admin/dashboard/reservations/{{$src}}/{{$res.ID}}" method="POST"
         class="grid gap-4 justify-items-center xl:grid-cols-2 w-full h-full">
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
