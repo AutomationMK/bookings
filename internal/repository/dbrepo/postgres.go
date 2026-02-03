@@ -66,7 +66,7 @@ func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
 			last_name = $2,
 			email = $3,
 			phone = $4,
-			update_at = $5,
+			updated_at = $5,
 			arrival_date = $6,
 			departure_date = $7,
 			room_id = $8
