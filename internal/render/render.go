@@ -86,24 +86,28 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 // Template renders templates using html/template
 func TemplateEmail(tmpl string, td *models.TemplateEmailData) (string, error) {
 	var tc map[string]*template.Template
+	var err error
 
 	if app.UseCache {
 		// get the template cache from the app config
 		tc = app.TemplateCache
 	} else {
-		tc, _ = CreateTemplateCache("./templates/emails")
+		tc, err = CreateTemplateCache("./templates/emails")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	// get requested template from cache
 	t, ok := tc[tmpl]
 	if !ok {
-		return "", errors.New("can't get template from cache")
+		return "", fmt.Errorf("can't get template %s from cache", tmpl)
 	}
 
 	// hold bytes and try to execute in order to check
 	// that the template was parsed but can't execute
 	buf := new(bytes.Buffer)
-	err := t.ExecuteTemplate(buf, tmpl, td)
+	err = t.ExecuteTemplate(buf, tmpl, td)
 	if err != nil {
 		log.Fatal(err)
 		return "", err
