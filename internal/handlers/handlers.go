@@ -815,6 +815,166 @@ func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request
 	})
 }
 
+// AdminPostShowReservation updates a reservation and room_restriction
+// based on post form data
+func (m *Repository) AdminPostShowReservation(w http.ResponseWriter, r *http.Request) {
+	exploded := strings.Split(r.RequestURI, "/")
+	reservationID, err := strconv.Atoi(exploded[5])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	src := exploded[4]
+
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	err = r.ParseForm()
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't parse form!")
+		m.App.ErrorLog.Println("Can't parse form!")
+		http.Redirect(w, r, "/admin/dashboard", http.StatusTemporaryRedirect)
+		return
+	}
+
+	// parse date range
+	ad := r.Form.Get("arrival_date")
+	dd := r.Form.Get("departure_date")
+
+	layout := "1/2/2006"
+	arrivalDate, err := time.Parse(layout, ad)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't parse arrival date!")
+		m.App.ErrorLog.Println("Can't parse arrival date!")
+		http.Redirect(w, r, "/admin/dashboard", http.StatusTemporaryRedirect)
+		return
+	}
+	departureDate, err := time.Parse(layout, dd)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't parse departure date!")
+		m.App.ErrorLog.Println("Can't parse departure date!")
+		http.Redirect(w, r, "/admin/dashboard", http.StatusTemporaryRedirect)
+		return
+	}
+
+	// parse room ID
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Invalid data for room ID!")
+		m.App.ErrorLog.Println("Invalid data for room ID!")
+		http.Redirect(w, r, "/admin/dashboard", http.StatusTemporaryRedirect)
+		return
+	}
+
+	room, err := m.DB.GetRoomByID(roomID)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Unable to get room!")
+		m.App.ErrorLog.Println("Unable to get room!")
+		http.Redirect(w, r, "/admin/dashboard", http.StatusTemporaryRedirect)
+		return
+	}
+
+	reservation := models.Reservation{
+		ID:            reservationID,
+		FirstName:     r.Form.Get("first_name"),
+		LastName:      r.Form.Get("last_name"),
+		Email:         r.Form.Get("email"),
+		Phone:         r.Form.Get("phone"),
+		ArrivalDate:   arrivalDate,
+		DepartureDate: departureDate,
+		RoomID:        roomID,
+		Room:          room,
+	}
+
+	form := forms.New(r.PostForm)
+
+	form.Required("first_name", "last_name", "email")
+	form.MinLength("first_name", 3)
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]any)
+		data["reservation"] = reservation
+
+		// add the rooms to template data any map
+		rooms, err := m.getRoomsData()
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
+		data["rooms"] = rooms
+
+		m.App.Session.Put(r.Context(), "error", "Invalid form data!")
+		m.App.ErrorLog.Println("Invalid form data!")
+		http.Redirect(w, r, fmt.Sprintf("/admin/dashboard/reservations/%s/%d", src, reservationID), http.StatusSeeOther)
+		return
+	}
+
+	// update reservation in database
+	err = m.DB.UpdateReservation(reservation)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	// updote restriction in database
+	restriction := models.RoomRestriction{
+		ArrivalDate:   reservation.ArrivalDate,
+		DepartureDate: reservation.DepartureDate,
+		RoomID:        reservation.RoomID,
+		ReservationID: reservation.ID,
+		RestrictionID: 1,
+	}
+	err = m.DB.UpdateRoomRestriction(restriction)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	scheme := "http"
+	if r.TLS != nil {
+		scheme = "https"
+	}
+	hostname := scheme + "://" + r.Host
+
+	data := make(map[string]any)
+	data["reservation"] = reservation
+
+	// send notifications - first to customer
+	msg := models.MailData{
+		To:       reservation.Email,
+		From:     "me@here.com",
+		Subject:  fmt.Sprintf("Reservation Update for Reservation #%d", reservation.ID),
+		Content:  "",
+		Template: "reservation-user-update.page.tmpl",
+		TemplateData: models.TemplateEmailData{
+			Data:      data,
+			StringMap: stringMap,
+			Host:      hostname,
+		},
+	}
+	m.App.MailChan <- msg
+
+	// send notifications - second to owner
+	msg = models.MailData{
+		To:       "me@here.com",
+		From:     "me@here.com",
+		Subject:  fmt.Sprintf("Reservation Update for Reservation #%d", reservation.ID),
+		Content:  "",
+		Template: "reservation-admin-update.page.tmpl",
+		TemplateData: models.TemplateEmailData{
+			Data:      data,
+			StringMap: stringMap,
+			Host:      hostname,
+		},
+	}
+	m.App.MailChan <- msg
+
+	m.App.Session.Put(r.Context(), "flash", "Reservation updated sucessfully!")
+	http.Redirect(w, r, fmt.Sprintf("/admin/dashboard/reservations/%s", src), http.StatusSeeOther)
+}
+
 func (m *Repository) FetchUsers(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]any)
 	render.Template(w, r, "fetch-users.page.tmpl", &models.TemplateData{
