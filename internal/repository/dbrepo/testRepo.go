@@ -45,6 +45,11 @@ func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	return nil
 }
 
+// UpdateRoomRestriction updates the room restriction based on reservation_id
+func (m *testDBRepo) UpdateRoomRestriction(r models.RoomRestriction) error {
+	return nil
+}
+
 // SearchAvailabilityByDatesByRoomID returns true if the room is avalailable
 // returns false if not available
 func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
