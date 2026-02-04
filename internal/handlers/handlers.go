@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -780,16 +781,24 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request) {
 	exploded := strings.Split(r.RequestURI, "/")
-	id, err := strconv.Atoi(exploded[6])
+	idString := strings.Split(exploded[6], "?")[0]
+	id, err := strconv.Atoi(idString)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
 	src := exploded[5]
-
 	stringMap := make(map[string]string)
 	stringMap["src"] = src
+
+	formErrors := r.URL.Query()
+	form := forms.New(nil)
+	for key, values := range formErrors {
+		for _, error := range values {
+			form.Errors.Add(key, error)
+		}
+	}
 
 	res, err := m.DB.GetReservationByID(id)
 	if err != nil {
@@ -811,7 +820,7 @@ func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request
 	render.Template(w, r, "fetch-reservation.page.tmpl", &models.TemplateData{
 		Data:      data,
 		StringMap: stringMap,
-		Form:      forms.New(nil),
+		Form:      form,
 	})
 }
 
@@ -905,9 +914,17 @@ func (m *Repository) AdminPostShowReservation(w http.ResponseWriter, r *http.Req
 		}
 		data["rooms"] = rooms
 
+		query := url.Values{}
+		for errorKey, errors := range form.Errors {
+			for _, error := range errors {
+				query.Add(errorKey, error)
+			}
+		}
+		queryString := query.Encode()
+
 		m.App.Session.Put(r.Context(), "error", "Invalid form data!")
 		m.App.ErrorLog.Println("Invalid form data!")
-		http.Redirect(w, r, fmt.Sprintf("/admin/dashboard/reservations/%s/%d", src, reservationID), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/admin/dashboard/reservations/%s/%d?%s", src, reservationID, queryString), http.StatusSeeOther)
 		return
 	}
 
