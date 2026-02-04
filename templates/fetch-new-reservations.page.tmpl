@@ -1,10 +1,23 @@
 {{$reservations := index .Data "reservations"}}
-<div class="mb-4 grid gap-3 sm:grid-cols-3 w-full">
-    <div class="relative inline-block w-full text-amber-200">
+<div class="mb-4 grid gap-3 sm:grid-cols-4 w-full">
+    <div class="relative inline-block w-full text-amber-200 sm:col-span-2 lg:col-span-1">
         <select name="" id="filter-select"
-            class="appearance-none p-2 bg-stone-700 focus:outline-amber-200 rounded w-full sm:text-center shadow-md font-bold">
-            <option value="">This Month</option>
+            class="appearance-none p-2 bg-stone-700 focus:outline-amber-200 rounded w-full h-full text-center shadow-md font-bold">
+            <option value="">Date Range</option>
             <option value="">Next Month</option>
+        </select>
+        <div class="pointer-events-none absolute top-1/2 -translate-y-1/2 right-0 px-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="h-6 stroke-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+        </div>
+    </div>
+    <div class="relative inline-block w-full text-amber-200 sm:col-span-2 lg:col-span-1">
+        <select name="" id="filter-select"
+            class="appearance-none p-2 bg-stone-700 focus:outline-amber-200 rounded w-full h-full text-center shadow-md font-bold">
+            <option value="">Per Page</option>
+            <option value="">1</option>
         </select>
         <div class="pointer-events-none absolute top-1/2 -translate-y-1/2 right-0 px-3">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -16,7 +29,8 @@
     <h1 class="row-start-1 col-span-full text-stone-800 text-2xl font-bold text-center">
         New Reservations
     </h1>
-    <div class="flex items-center justify-between rounded border-2 border-stone-700 p-2 sm:col-span-2 shadow-md">
+    <div
+        class="flex items-center justify-between rounded border-2 border-stone-700 p-2 col-span-full lg:col-span-2 shadow-md">
         <input type="text" placeholder="Search ..." class="text-stone-800 w-full">
     </div>
 </div>
