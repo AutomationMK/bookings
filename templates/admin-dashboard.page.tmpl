@@ -145,14 +145,14 @@
         el.removeAttribute("aria-current");
     }
 
-    const regex = new RegExp("\/admin\/dashboard\/reservations\/(new|all)\/\d?");
+    const reservationRegex = new RegExp("\/admin\/dashboard\/reservations\/(new|all)\/\d?");
     function loadDashboard(path) {
         fetch("/fetch" + path)
             .then(res => res.text())
             .then(html => {
                 dashboard.innerHTML = html;
 
-                if (regex.test(path)) {
+                if (reservationRegex.test(path)) {
                     document.dispatchEvent(
                         new CustomEvent("dashboard:reservation-loaded", {detail: {path}})
                     );
