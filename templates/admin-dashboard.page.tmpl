@@ -238,7 +238,7 @@
         });
 
         const processBtn = document.querySelector("#process-btn");
-        let modal = new Modal();
+        let processModal = new Modal();
         modal.addHtml(`
             <section
                 class="absolute top-2/5 -translate-y-2/4 left-2/4 -translate-x-2/4 container px-4 rounded-md flex justify-center">
@@ -261,12 +261,12 @@
 
         processBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            modal.open();
+            processModal.open();
         });
 
         document.querySelector(".modal-close-btn").addEventListener("click", (e) => {
             e.preventDefault();
-            modal.close();
+            processModal.close();
         });
     });
 
