@@ -43,6 +43,7 @@ func routes(app *config.AppConfig) http.Handler {
 		mux.Post("/dashboard/reservations/{src}/{id}", handlers.Repo.AdminPostShowReservation)
 
 		mux.Get("/process-reservation/{src}/{id}", handlers.Repo.AdminProcessReservation)
+		mux.Get("/delete-reservation/{src}/{id}", handlers.Repo.AdminDeleteReservation)
 	})
 
 	mux.Route("/fetch/admin", func(mux chi.Router) {
