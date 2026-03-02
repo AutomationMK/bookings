@@ -154,13 +154,16 @@
                 </div>
             </div>
         </div>
-        <div class="flex items-center gap-3 lg:col-span-full">
-            <a href="/admin/dashboard/reservations/new"
+        <div class="flex flex-col sm:flex-row items-center gap-3 lg:col-span-full">
+            <a href="/admin/dashboard/reservations/{{$src}}"
                 class="fetchLink bg-stone-700 border-3 border-stone-700 rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">Cancel</a>
             <button type="submit"
                 class="bg-stone-700 border-3 border-stone-700 rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">
                 Submit Change
             </button>
+            <button type="button" id="process-btn" data-resid="{{$res.ID}}" data-src="{{$src}}"
+                class="bg-stone-700 border-3 border-stone-700 rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">Process
+                Reservation</button>
         </div>
     </form>
 </div>
