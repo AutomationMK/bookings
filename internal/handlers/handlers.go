@@ -779,6 +779,11 @@ func (m *Repository) FetchReservations(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// AdminReservationCalendar sends response displaying all unprocessed reservations
+func (m *Repository) AdminReservationCalendar(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "fetch-reservation-calendar.page.tmpl", &models.TemplateData{})
+}
+
 func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request) {
 	exploded := strings.Split(r.RequestURI, "/")
 	idString := strings.Split(exploded[6], "?")[0]
