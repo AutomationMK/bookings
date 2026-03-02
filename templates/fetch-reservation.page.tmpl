@@ -154,7 +154,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col sm:flex-row items-center gap-3 lg:col-span-full">
+        <div class="grid sm:grid-cols-2 justify-items-center items-center gap-3 lg:col-span-full">
             <a href="/admin/dashboard/reservations/{{$src}}"
                 class="fetchLink bg-stone-700 border-3 border-stone-700 rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">Cancel</a>
             <button type="submit"
@@ -163,6 +163,9 @@
             </button>
             <button type="button" id="process-btn" data-resid="{{$res.ID}}" data-src="{{$src}}"
                 class="bg-stone-700 border-3 border-stone-700 rounded-md text-amber-200 text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-stone-700 transition w-fit px-4 py-2">Process
+                Reservation</button>
+            <button type="button" id="delete-btn" data-resid="{{$res.ID}}" data-src="{{$src}}"
+                class="bg-red-500 border-3 border-red-500 rounded-md text-white text-lg md:text-xl lg:text-2xl font-bold hover:bg-transparent hover:text-red-500 transition w-fit px-4 py-2">Delete
                 Reservation</button>
         </div>
     </form>
