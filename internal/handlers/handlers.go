@@ -998,3 +998,13 @@ func (m *Repository) FetchUsers(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 	})
 }
+
+// AdminProcessReservation marks a reservation as processed
+func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	src := chi.URLParam(r, "id")
+	_ = m.DB.UpdateProcessedForReservation(id, 1)
+	m.App.Session.Put(r.Context(), "flash", "Reservation marked as processed")
+
+	http.Redirect(w, r, fmt.Sprintf("/admin/dashboard/reservations/%s", src), http.StatusSeeOther)
+}
