@@ -56,6 +56,8 @@
     import Modal from "/static/js/modal.js";
     import Notice from "/static/js/notify.js";
     import Cal from "/static/js/datePicker.js";
+    import Calendar from "/static/js/calendar.js";
+
     let mql = window.matchMedia("(max-width: 48rem)");
 
     const menu = document.querySelector("#menu");
@@ -146,6 +148,7 @@
     }
 
     const reservationRegex = new RegExp("\/admin\/dashboard\/reservations\/(new|all)\/\d?");
+    const calendarRegex = new RegExp("\/admin\/dashboard\/reservations\/calendar");
     function loadDashboard(path) {
         fetch("/fetch" + path)
             .then(res => res.text())
@@ -155,6 +158,12 @@
                 if (reservationRegex.test(path)) {
                     document.dispatchEvent(
                         new CustomEvent("dashboard:reservation-loaded", {detail: {path}})
+                    );
+                }
+
+                if (calendarRegex.test(path)) {
+                    document.dispatchEvent(
+                        new CustomEvent("dashboard:calendar-loaded", {detail: {path}})
                     );
                 }
 
@@ -300,6 +309,11 @@
             e.preventDefault();
             deleteModal.close();
         });
+    });
+
+    document.addEventListener("dashboard:calendar-loaded", (e) => {
+        const dateInputBox = document.querySelector(".cal-box");
+        let calendar = new Calendar(dateInputBox);
     });
 
     const tabs = document.querySelectorAll(".tab");
